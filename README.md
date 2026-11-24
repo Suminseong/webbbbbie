@@ -45,7 +45,7 @@ Playwright는 빌드된 브라우저 앱을 실행합니다. 기존 Chromium 계
 ## Gemini 텍스트 작업본
 
 ```sh
-npm run text:export -- --output WriterLife_TextResources_v0.1.0.csv
+npm run text:export -- --output WriterLife_TextResources_v0.2.0.csv --version v0.2.0
 npm run text:export -- --output next.csv --previous previous.xlsx
 npm run text:import -- --input revised.xlsx --dry-run --report review.json
 npm run text:import -- --input revised.xlsx --apply --report imported.json

@@ -52,7 +52,11 @@ async function writeDeliverable(path: string, content: string) {
 async function exportCopy(args: string[]) {
   const { values } = parseArgs({
     args,
-    options: { output: { type: "string" }, previous: { type: "string" } },
+    options: {
+      output: { type: "string" },
+      previous: { type: "string" },
+      version: { type: "string" },
+    },
   });
   if (!values.output) throw new Error("Pass --output <file.csv|file.json>.");
   const format = extname(values.output).toLowerCase();
@@ -64,7 +68,13 @@ async function exportCopy(args: string[]) {
   const categories: Record<string, number> = {};
   for (const row of rows)
     categories[row.category] = (categories[row.category] ?? 0) + 1;
-  const meta = { ...origin, total: rows.length, categories, changes };
+  const meta = {
+    ...origin,
+    version: values.version?.trim() || origin.version,
+    total: rows.length,
+    categories,
+    changes,
+  };
   const revision = origin.revision + (origin.dirty ? " + working copy" : "");
   await writeDeliverable(
     values.output,

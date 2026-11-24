@@ -1,7 +1,12 @@
 import { defaultContent } from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
 import { createAuthor, record, sum } from "./author";
-import { settle, updateContracts, updateDemand } from "./economy";
+import {
+  compactLedger,
+  settle,
+  updateContracts,
+  updateDemand,
+} from "./economy";
 import { applyEvent, originEvent, selectEvent } from "./events";
 import {
   envelopeSchema,
@@ -75,6 +80,7 @@ function copyForCommand(state: LifeState): LifeState {
     })),
     contracts: state.contracts.map((entry) => ({ ...entry })),
     ledger: [...state.ledger],
+    ledgerCarry: { ...state.ledgerCarry },
     flags: [...state.flags],
     eventLast: { ...state.eventLast },
     eventCount: { ...state.eventCount },
@@ -109,6 +115,8 @@ export function createEngine(
       works: [],
       contracts: [],
       ledger: [],
+      ledgerCarry: {},
+      ledgerSeq: 0,
       flags: [],
       eventLast: {},
       eventCount: {},
@@ -147,6 +155,7 @@ export function createEngine(
     updateContracts(state, content, day, events);
     const gained = resolveAudience(state, content, day);
     settle(state, content, day, events);
+    compactLedger(state, content, day);
     finishWorks(state, content, day, events);
     updateCondition(state, content, time);
     updateDemand(state);
@@ -316,6 +325,9 @@ export function createEngine(
             )) ||
           work.revenue.paid > work.revenue.accrued,
       ) ||
+      state.ledgerSeq < state.ledger.length ||
+      new Set(state.ledger.map((entry) => entry.id)).size !==
+        state.ledger.length ||
       state.contracts.some(
         (contract) =>
           !works.has(contract.workId) ||

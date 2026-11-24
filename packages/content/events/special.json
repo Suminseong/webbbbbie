@@ -1,0 +1,369 @@
+[
+  {
+    "id": "stats-refresh",
+    "category": "special",
+    "title": "통계창 새로고침",
+    "text": "5분마다 조회수를 확인하는 손가락.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      },
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "통계창 중독:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "통계창 중독",
+        "days": 10
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "ego-addiction",
+    "category": "special",
+    "title": "검색창의 필명",
+    "text": "필명을 검색하는 것이 하루 일과가 됐다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 45
+      },
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "에고서칭 중독:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "에고서칭 중독",
+        "days": 14
+      }
+    ]
+  },
+  {
+    "id": "art-disease",
+    "category": "special",
+    "title": "예술병의 속삭임",
+    "text": "‘조회수보다 중요한 게 있지 않나.’",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "insight",
+        "op": "gte",
+        "value": 55
+      },
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 58
+      }
+    ],
+    "choices": [
+      {
+        "id": "embrace",
+        "label": "문장에 공을 들인다",
+        "effects": [
+          {
+            "kind": "special",
+            "key": "예술병",
+            "days": 14
+          },
+          {
+            "kind": "quality",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "resist",
+        "label": "독자가 원하는 걸 쓴다",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "commercial",
+            "amount": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "big-author-disease",
+    "category": "special",
+    "title": "대작가병",
+    "text": "인터뷰 질문을 미리 상상하기 시작했다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 25
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "대작가병",
+        "days": 14
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "ending-itch",
+    "category": "special",
+    "title": "완결병",
+    "text": "결말이 눈앞에 아른거린다. 빨리 끝내고 싶다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 80
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "완결병",
+        "days": 12
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "awakening",
+    "category": "special",
+    "title": "각성",
+    "text": "오늘은 손이 머리보다 빠르다. 이런 날이 있다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 30,
+    "conditions": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 72
+      },
+      {
+        "key": "stress",
+        "op": "lte",
+        "value": 40
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "각성",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "naegeul-cure",
+    "category": "special",
+    "title": "칭찬 한 줄의 약효",
+    "text": "‘이 문장 진짜 좋아요.’ 그 한 줄로 내 글이 다시 읽힌다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 5,
+    "cooldown": 10,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "내글구려병:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "clearSpecial",
+        "key": "내글구려병"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "ego-detox",
+    "category": "special",
+    "title": "검색 금지령",
+    "text": "에고서칭 앱을 지울지 고민한다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "에고서칭 중독:true"
+      }
+    ],
+    "choices": [
+      {
+        "id": "delete",
+        "label": "앱을 지운다",
+        "effects": [
+          {
+            "kind": "clearSpecial",
+            "key": "에고서칭 중독"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -4
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "하루만 더",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "art-cured",
+    "category": "special",
+    "title": "예술병 완치",
+    "text": "공들인 회차의 조회수가 가장 낮았다. 정신이 번쩍 든다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "예술병:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "clearSpecial",
+        "key": "예술병"
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      }
+    ]
+  },
+  {
+    "id": "reward-shopping",
+    "category": "special",
+    "title": "보상심리 쇼핑",
+    "text": "‘이번 주 고생했으니까.’ 결제 버튼은 가볍다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 10,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "보상심리:true"
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 50000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -45000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  }
+]

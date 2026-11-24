@@ -39,11 +39,30 @@ function exposure(
     day >= contract.promotionStart &&
     day <= contract.promotionEnd
   );
+  // A slot's traffic is shared with competing works: one work receives
+  // trafficShare of it, scaled by its appeal (quality squared and the
+  // author's commercial sense), so ordinary works stay small (NFR-003, R-03).
+  const quality = work.quality / 100;
+  const appeal =
+    options.trafficShare *
+    quality *
+    quality *
+    (0.75 + state.author.abilities.commercial / 200);
   const fit =
+    appeal *
     (0.53 +
       work.tags.filter((tag) => platform.tags.includes(tag)).length * 0.13 +
       state.author.abilities[platform.strength] * 0.004) *
     (0.85 + rand(state.seed, day, stream.EXPOSURE, index) * 0.3);
+  // Backlist and organic discovery of an ended work fade hyperbolically with
+  // time since the ending and scale with its earned popularity (FR-READER-003).
+  const since = work.end ? day - work.end.day : 0;
+  const fade = ended
+    ? options.backlistHalfLife / (options.backlistHalfLife + Math.max(0, since))
+    : 1;
+  const popularity = ended
+    ? clamp(work.stats.favorites / options.backlistFavorites, 0.05, 1)
+    : 1;
   const eligible = {
     NEW: serializing && day - work.startDay <= options.newDays ? 1 : 0,
     UPDATE: serializing
@@ -71,12 +90,12 @@ function exposure(
       (loyalty.fandom +
         loyalty.expectation * (day - work.startDay < options.newDays ? 1 : 0)) /
       100,
-    ORGANIC: ended ? 0.25 : serializing ? 1 : 0.18,
+    ORGANIC: ended ? 0.25 * fade : serializing ? 1 : 0.18,
     BACKLIST:
       work.status === "COMPLETED" ||
       work.status === "RUSHED_END" ||
       work.status === "DROPPED"
-        ? content.policies.completionReach[work.status]
+        ? content.policies.completionReach[work.status] * fade * popularity
         : 0,
   };
   for (const channel of channels) {

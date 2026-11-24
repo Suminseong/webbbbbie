@@ -1,0 +1,757 @@
+[
+  {
+    "id": "ego-bad",
+    "category": "community",
+    "title": "검색하면 나오는 것들",
+    "text": "에고서칭 결과, 작품 제목보다 상처가 오래 남는다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 4,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 7
+      },
+      {
+        "kind": "special",
+        "key": "내글구려병",
+        "days": 4
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      }
+    ],
+    "targetBias": "views"
+  },
+  {
+    "id": "critique",
+    "category": "community",
+    "title": "감평글 알림",
+    "text": "고닉이 1화의 장단점을 짚었다. 세 번째 문장이 자꾸 눈에 걸린다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 1.68,
+    "cooldown": 5,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "take",
+        "label": "감평을 참고한다",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "evidence",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "오늘은 닫아 둔다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "network",
+    "category": "community",
+    "title": "흑망생이들의 단톡",
+    "text": "뻘글 두 개, 꿀팁 하나, 그리고 아직 닉네임으로만 아는 작가 한 명.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 7,
+    "cooldown": 5,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      },
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      }
+    ]
+  },
+  {
+    "id": "ai-bait",
+    "category": "community",
+    "title": "AI 집필 유혹",
+    "text": "‘딸깍하면 연참’이라는 글이 올라왔다. 댓글은 이미 전쟁터다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.12,
+    "cooldown": 18,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "close",
+        "label": "글을 닫는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "argue",
+        "label": "댓글에 한마디 남긴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "copy-discussion",
+    "category": "community",
+    "title": "표절 의혹 공론화",
+    "text": "비교글 캡처가 커뮤니티를 돌고 있다.",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 8,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "admit",
+        "label": "인정하고 작품을 내린다",
+        "effects": [
+          {
+            "kind": "transition",
+            "to": "TAKEN_DOWN"
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -14
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "침묵을 유지한다",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 12
+          },
+          {
+            "kind": "schedule",
+            "id": "takedown",
+            "delay": 3,
+            "window": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tip-post",
+    "category": "community",
+    "title": "꿀팁글 저장",
+    "text": "‘연재 초반 30화 구성법’ 글을 북마크했다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      },
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "critique-swap",
+    "category": "community",
+    "title": "감평 품앗이",
+    "text": "서로의 1화를 바꿔 읽기로 했다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "swap",
+        "label": "감평을 주고받는다",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 2
+          },
+          {
+            "kind": "evidence",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "부끄러워서 거절한다",
+        "effects": []
+      }
+    ]
+  },
+  {
+    "id": "black-envy",
+    "category": "community",
+    "title": "흑망생이 질투글",
+    "text": "‘저런 글이 왜 뜨지’라는 글에 내 작품이 언급됐다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 300
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "pen-name-found",
+    "category": "community",
+    "title": "필명 발각",
+    "text": "커뮤 닉네임과 필명이 같다는 걸 누군가 알아챘다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "admit",
+        "label": "쿨하게 인정한다",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "delete",
+        "label": "닉네임을 바꾼다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "flag",
+            "key": "nick_changed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "offline-meet",
+    "category": "community",
+    "title": "작가 오프 모임",
+    "text": "다들 마감 얘기만 한다. 이상하게 위로가 된다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 30,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 40000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -35000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -6
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "flame-war",
+    "category": "community",
+    "title": "커뮤 논란",
+    "text": "누가 먼저 시작했는지 아무도 모르는 싸움이 사흘째다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "watch",
+        "label": "눈팅만 한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "join",
+        "label": "한마디 거든다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 6
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "block-list",
+    "category": "community",
+    "title": "차단 목록 정리",
+    "text": "차단 버튼을 몇 번 눌렀더니 피드가 조용해졌다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -5
+      }
+    ]
+  },
+  {
+    "id": "shitpost-spree",
+    "category": "community",
+    "title": "뻘글 폭주",
+    "text": "새벽 두 시, 뻘글 세 개를 연달아 올렸다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "debut-congrats",
+    "category": "community",
+    "title": "고닉의 데뷔 축하",
+    "text": "같이 습작하던 고닉이 계약 소식을 올렸다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 30,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "contest-info",
+    "category": "community",
+    "title": "공모전 정보 공유",
+    "text": "누군가 공모전 일정표를 깔끔하게 정리해 올렸다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "ai-debate",
+    "category": "community",
+    "title": "AI 글쓰기 논쟁 2라운드",
+    "text": "‘결국 다 쓰게 될 거다’ 대 ‘그건 글이 아니다’.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "own",
+        "label": "내 문장으로 쓰겠다고 적는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 3
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "close",
+        "label": "탭을 닫는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "snipe-post",
+    "category": "community",
+    "title": "저격글",
+    "text": "익명 게시판에 내 작품을 콕 집은 글이 올라왔다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 500
+      }
+    ],
+    "choices": [
+      {
+        "id": "ignore",
+        "label": "읽지 않는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "read",
+        "label": "끝까지 읽는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 8
+          },
+          {
+            "kind": "evidence",
+            "amount": 1
+          },
+          {
+            "kind": "special",
+            "key": "내글구려병",
+            "days": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quit-community",
+    "category": "community",
+    "title": "커뮤 접기",
+    "text": "알림을 끄고 앱을 지울까 고민한다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "quit",
+        "label": "한 달 동안 접는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -6
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "정보는 필요하다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mentor",
+    "category": "community",
+    "title": "선배 작가의 쪽지",
+    "text": "‘초반 3화에 다 거세요.’ 짧은데 오래 남는다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 20,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.6
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  }
+]

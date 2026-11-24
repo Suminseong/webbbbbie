@@ -90,7 +90,9 @@ export function authorView(state: LifeState, content: Content) {
     condition: { ...author.condition },
     social: { ...author.social },
     states: author.specialStates.map((status) => ({
-      name: status.key,
+      name:
+        content.specials.find((item) => item.key === status.key)?.name ??
+        status.key,
       until: status.until,
     })),
     cash: author.cash,
@@ -228,6 +230,8 @@ export function ledgerView(state: LifeState) {
     debt: Math.max(0, -state.author.cash),
     accrued: sum(state.works.map((work) => work.revenue.accrued)),
     paid: sum(state.works.map((work) => work.revenue.paid)),
+    /** Totals of entries older than the retention window, by kind. */
+    carried: { ...state.ledgerCarry },
     entries: state.ledger.map((entry) => ({ ...entry })),
   };
 }

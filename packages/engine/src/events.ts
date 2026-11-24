@@ -100,11 +100,71 @@ function matches(
       actual = key + ":" + String((work?.flags ?? state.flags).includes(key));
       break;
     }
+    case "special": {
+      const key = String(rule.value).replace(/:(true|false)$/, "");
+      actual =
+        key +
+        ":" +
+        String(author.specialStates.some((entry) => entry.key === key));
+      break;
+    }
+    case "recognition":
+    case "reputation":
+    case "fandom":
+    case "expectation":
+      actual = author.social[rule.key];
+      break;
+    case "favorites":
+      actual = work?.stats.favorites;
+      break;
+    case "quality":
+      actual = work?.quality;
+      break;
+    case "stock":
+      actual = work?.stock;
+      break;
+    case "contracted":
+      actual = Number(!!work && !!activeContract(state, work, day));
+      break;
+    case "completedWorks":
+      actual = state.works.filter(
+        (item) => item.end?.reason === "COMPLETED",
+      ).length;
+      break;
+    case "totalWorks":
+      actual = state.works.length;
+      break;
+    case "multitask":
+      actual = author.traits.multitask;
+      break;
+    case "insight":
+      actual = author.abilities.insight;
+      break;
+    case "workAge":
+      actual = work ? day - work.startDay : undefined;
+      break;
   }
   if (rule.op === "eq") return actual === rule.value;
   if (typeof actual !== "number" || typeof rule.value !== "number")
     return false;
   return rule.op === "gte" ? actual >= rule.value : actual <= rule.value;
+}
+
+/** Transition targets of every effect an event can apply, cached per definition. */
+const transitionCache = new WeakMap<EventDef, Work["status"][]>();
+function transitionsOf(def: EventDef) {
+  let found = transitionCache.get(def);
+  if (!found) {
+    found = (
+      def.effects ??
+      def.choices?.flatMap((choice) => choice.effects) ??
+      []
+    )
+      .filter((effect) => effect.kind === "transition")
+      .map((effect) => (effect as { to: Work["status"] }).to);
+    transitionCache.set(def, found);
+  }
+  return found;
 }
 
 function eligibleTarget(
@@ -122,15 +182,7 @@ function eligibleTarget(
     return false;
   if (def.statuses && (!work || !def.statuses.includes(work.status)))
     return false;
-  const allEffects =
-    def.effects ?? def.choices?.flatMap((choice) => choice.effects) ?? [];
-  if (
-    work &&
-    allEffects.some(
-      (effect) =>
-        effect.kind === "transition" && !canTransition(work.status, effect.to),
-    )
-  )
+  if (work && transitionsOf(def).some((to) => !canTransition(work.status, to)))
     return false;
   return (
     (def.conditions ?? []).every((rule) =>
@@ -164,7 +216,11 @@ function eligibleEvent(
   const targets: Target[] = fixed
     ? [fixed]
     : def.scope === "WORK"
-      ? state.works.map((work) => ({ scope: "WORK", id: work.id }))
+      ? state.works
+          // Cheap status prefilter before the full condition check: most work
+          // events only concern serializing works, not the backlist.
+          .filter((work) => !def.statuses || def.statuses.includes(work.status))
+          .map((work) => ({ scope: "WORK", id: work.id }))
       : def.scope === "CONTRACT"
         ? state.contracts
             .filter(
@@ -202,6 +258,21 @@ export function originEvent(state: LifeState, content: Content): EventInstance {
   };
 }
 
+/** Relative chance of a candidate work becoming the event target (T-08). */
+function targetWeight(def: EventDef, work: Work | undefined) {
+  if (!work) return 1;
+  switch (def.targetBias) {
+    case "views":
+      return 1 + work.stats.views / 150;
+    case "newest":
+      return 1 + work.startDay / 30;
+    case "stock":
+      return 1 / (1 + work.stock);
+    default:
+      return 1;
+  }
+}
+
 export function selectEvent(
   state: LifeState,
   content: Content,
@@ -235,17 +306,37 @@ export function selectEvent(
         : regular.length
           ? regular
           : [{ def: fallback, targets: [noTarget("NONE")] }];
+  // C-08: regular choice events are damped right after a choice and boosted
+  // once the gap reaches choiceIntervalMax, steering the interval median
+  // toward choiceIntervalMin..Max without forbidding back-to-back choices.
+  const config = content.balance.events;
+  // No daily choice yet (the day-0 origin is not counted) means no damping.
+  const gap = day - (state.eventLast["choice:global"] ?? -10000);
+  const choiceFactor =
+    gap < config.choiceGapFloor
+      ? 0
+      : gap < config.choiceIntervalMin
+        ? 0.3
+        : gap >= config.choiceIntervalMax
+          ? 3
+          : 1;
+  const weightOf = (item: Candidate) =>
+    item.def.tier === "REGULAR" && item.def.choices
+      ? item.def.weight * choiceFactor
+      : item.def.weight;
+  const drawable = pool.some((item) => weightOf(item) > 0)
+    ? pool.filter((item) => weightOf(item) > 0)
+    : pool === regular
+      ? [{ def: fallback, targets: [noTarget("NONE")] }]
+      : pool;
   const one = weighted(
-    pool,
-    (item) => item.def.weight,
+    drawable,
+    weightOf,
     rand(state.seed, day, stream.EVENT, 0),
   );
   const target = weighted(
     one.targets,
-    (candidate) =>
-      one.def.id === "ego-bad"
-        ? 1 + (targetWork(state, candidate)?.stats.views ?? 0) / 150
-        : 1,
+    (candidate) => targetWeight(one.def, targetWork(state, candidate)),
     rand(state.seed, day, stream.TARGET, 0),
   );
   return {
@@ -374,6 +465,29 @@ function applyEffect(
       if (!flags.includes(effect.key)) flags.push(effect.key);
       break;
     }
+    case "ability":
+      author.abilities[effect.stat] = clamp(
+        author.abilities[effect.stat] + effect.amount,
+      );
+      break;
+    case "attachment":
+      if (work) work.attachment = clamp(work.attachment + effect.amount);
+      break;
+    case "consistency":
+      if (work) work.consistency = clamp(work.consistency + effect.amount);
+      break;
+    case "promotion":
+      if (work)
+        work.stats.promotionUntil = Math.max(
+          work.stats.promotionUntil,
+          day + effect.days,
+        );
+      break;
+    case "clearSpecial":
+      author.specialStates = author.specialStates.filter(
+        (item) => item.key !== effect.key,
+      );
+      break;
     case "schedule":
       if (
         !state.followUps.some(

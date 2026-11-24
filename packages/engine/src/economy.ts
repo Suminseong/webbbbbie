@@ -40,6 +40,14 @@ export function compactLedger(state: LifeState, content: Content, day: number) {
   state.ledger = keep < 0 ? [] : state.ledger.slice(keep);
 }
 
+/**
+ * Formats won amounts in log messages with comma grouping (13,048), matching
+ * the screen. Locale-independent so saved logs stay identical on every runtime.
+ */
+export function groupDigits(value: number) {
+  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export function activeContract(state: LifeState, work: Work, day: number) {
   return state.contracts.find(
     (contract) =>
@@ -187,7 +195,7 @@ export function settle(
       day,
       text("engine.log.payout", {
         work_title: displayWorkTitle(work.title),
-        amount: payout,
+        amount: groupDigits(payout),
       }),
       work.id,
     );

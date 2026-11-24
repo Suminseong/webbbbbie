@@ -1,0 +1,641 @@
+[
+  {
+    "id": "reader-fan",
+    "category": "reader",
+    "title": "첫 정주행 댓글",
+    "text": "닉네임이 낯익다. 1화부터 같은 사람이 따라왔다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 8,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "copy-comment",
+    "category": "reader",
+    "title": "기시감 있다는 댓글",
+    "text": "초반 전개를 어디선가 본 것 같다는 댓글이 달렸다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 12,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "path",
+        "op": "eq",
+        "value": "PLAGIARISM"
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "copied_exposed:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "copied_exposed"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 8
+      },
+      {
+        "kind": "schedule",
+        "id": "copy-discussion",
+        "delay": 2,
+        "window": 12
+      }
+    ]
+  },
+  {
+    "id": "fav-hundred",
+    "category": "reader",
+    "title": "선작 100 돌파",
+    "text": "선호작 숫자가 세 자리가 됐다. 캡처는 이미 했다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 100
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "fav-thousand",
+    "category": "reader",
+    "title": "선작 천",
+    "text": "알림이 무섭게 울린다. 이제는 무섭다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 1000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "drop-comment",
+    "category": "reader",
+    "title": "하차합니다",
+    "text": "‘여기까지 봤습니다. 하차합니다.’ 정중해서 더 아프다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 14,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.01
+      }
+    ]
+  },
+  {
+    "id": "typo-reader",
+    "category": "reader",
+    "title": "오탈자 제보",
+    "text": "독자가 오탈자 목록을 정리해 왔다. 고맙고 부끄럽다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "long-review",
+    "category": "reader",
+    "title": "장문 감상평",
+    "text": "내가 깔아 둔 복선을 독자가 하나하나 짚었다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 15
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      },
+      {
+        "kind": "evidence",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "fan-art",
+    "category": "reader",
+    "title": "팬아트 도착",
+    "text": "주인공이 이렇게 생겼을 줄은 나도 몰랐다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 300
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 6
+      },
+      {
+        "kind": "attachment",
+        "amount": 4
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "prediction-hit",
+    "category": "reader",
+    "title": "결말 예측 적중",
+    "text": "댓글이 다음 화 반전을 정확히 맞혔다. 고쳐야 하나.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "choices": [
+      {
+        "id": "twist",
+        "label": "반전을 다시 짠다",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 2
+          },
+          {
+            "kind": "consistency",
+            "amount": -4
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "예정대로 간다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "goguma-protest",
+    "category": "reader",
+    "title": "고구마 항의",
+    "text": "‘사이다 언제 나와요?’ 댓글이 줄줄이 달렸다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 21,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "choices": [
+      {
+        "id": "cider",
+        "label": "다음 화에 사이다를 당긴다",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": -3
+          },
+          {
+            "kind": "quality",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "hold",
+        "label": "빌드업을 지킨다",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "readerShock",
+            "amount": 0.02
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cider-reaction",
+    "category": "reader",
+    "title": "사이다 반응 폭발",
+    "text": "최신화 댓글창이 느낌표로 가득 찼다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 60
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      },
+      {
+        "kind": "promotion",
+        "days": 1
+      }
+    ]
+  },
+  {
+    "id": "rating-terror",
+    "category": "reader",
+    "title": "별점 테러",
+    "text": "하룻밤 사이에 별점 1점이 수십 개 붙었다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 200
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 7
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      },
+      {
+        "kind": "schedule",
+        "id": "terror-explain",
+        "delay": 1,
+        "window": 6
+      }
+    ]
+  },
+  {
+    "id": "terror-explain",
+    "category": "reader",
+    "title": "해명 요구 댓글",
+    "text": "‘작가님 입장 밝혀 주세요’ 테러의 이유는 아무도 모른다.",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "ignore",
+        "label": "무대응한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "notice",
+        "label": "짧은 공지를 올린다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 1
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binge-proof",
+    "category": "reader",
+    "title": "정주행 인증",
+    "text": "‘하루 만에 정주행했어요’ 인증글이 올라왔다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "schedule-question",
+    "category": "reader",
+    "title": "연재 주기 문의",
+    "text": "‘연재 요일이 언제예요?’ 같은 질문이 세 번째다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      },
+      {
+        "kind": "evidence",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "support-comment",
+    "category": "reader",
+    "title": "응원 후원 댓글",
+    "text": "작은 금액과 긴 응원이 함께 왔다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "fandom",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 5000
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "naming-reader",
+    "category": "reader",
+    "title": "독자 애칭 탄생",
+    "text": "독자들이 스스로 이름을 붙였다. 이제 ‘우리’가 생겼다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 500
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 4
+      },
+      {
+        "kind": "attachment",
+        "amount": 3
+      }
+    ]
+  }
+]

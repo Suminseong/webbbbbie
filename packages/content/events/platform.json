@@ -1,0 +1,444 @@
+[
+  {
+    "id": "takedown",
+    "category": "platform",
+    "title": "표절 적발로 비공개",
+    "text": "플랫폼에서 작품의 공개가 중단됐다.",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 10,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID",
+      "HIATUS",
+      "COMPLETED",
+      "RUSHED_END",
+      "DROPPED"
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "TAKEN_DOWN"
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -6
+      }
+    ]
+  },
+  {
+    "id": "today-best",
+    "category": "platform",
+    "title": "투베 진입",
+    "text": "투데이 베스트 하단에 내 제목이 걸렸다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 400
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "rank-drop",
+    "category": "platform",
+    "title": "랭킹 하락",
+    "text": "어제보다 열두 칸 내려갔다. 새로고침해도 같다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 200
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "special",
+        "key": "통계창 중독",
+        "days": 4
+      }
+    ]
+  },
+  {
+    "id": "new-feature-pick",
+    "category": "platform",
+    "title": "신작 기획전 선정",
+    "text": "플랫폼 신작 기획전 명단에 들어갔다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "lte",
+        "value": 20
+      },
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 55
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "contest-notice",
+    "category": "platform",
+    "title": "공모전 공지",
+    "text": "상금보다 ‘수상작 정식 연재’ 문구가 눈에 띈다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "choices": [
+      {
+        "id": "enter",
+        "label": "공모전에 출품한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "schedule",
+            "id": "contest-result",
+            "delay": 20,
+            "window": 10
+          }
+        ]
+      },
+      {
+        "id": "skip",
+        "label": "이번엔 넘긴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contest-result",
+    "category": "platform",
+    "title": "공모전 결과 발표",
+    "text": "결과 페이지를 세 번 새로고침했다.",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 5
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "maintenance",
+    "category": "platform",
+    "title": "플랫폼 서버 점검",
+    "text": "예약 연재가 점검 시간에 걸렸다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "policy-change",
+    "category": "platform",
+    "title": "정산 정책 변경 공지",
+    "text": "공지 맨 아래, 작은 글씨가 마음에 걸린다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 180,
+    "minDay": 60,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "slot-missing",
+    "category": "platform",
+    "title": "노출 누락",
+    "text": "분명 업데이트했는데 최신 목록에 안 보인다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "inquiry",
+        "label": "고객센터에 문의한다",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "그냥 기다린다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "banner",
+    "category": "platform",
+    "title": "추천 배너 노출",
+    "text": "메인 배너 한 칸에 표지가 걸렸다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 600
+      },
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 55
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "frequency-warning",
+    "category": "platform",
+    "title": "연재 주기 안내 메일",
+    "text": "‘연재 주기가 불규칙하면 노출에 불리할 수 있습니다.’",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 0.5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "cover-upload",
+    "category": "platform",
+    "title": "표지 교체",
+    "text": "새 표지를 올리고 썸네일을 몇 번이고 확인했다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 150000
+      }
+    ],
+    "choices": [
+      {
+        "id": "commission",
+        "label": "외주 표지를 맡긴다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -150000
+          },
+          {
+            "kind": "promotion",
+            "days": 3
+          },
+          {
+            "kind": "attachment",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "diy",
+        "label": "직접 만든다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          },
+          {
+            "kind": "attachment",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "platform-event",
+    "category": "platform",
+    "title": "독자 참여 이벤트",
+    "text": "플랫폼이 댓글 이벤트를 연다. 참여하면 노출이 조금 늘어난다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "join",
+        "label": "참여한다",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "넘긴다",
+        "effects": []
+      }
+    ]
+  }
+]

@@ -2,11 +2,15 @@
   {
     "seed": 42,
     "days": 180,
-    "sha256": "11415b49602dc0ff9ece05be693d686e9c31aa02f237a133fa5d55c06c5004f8"
+    "sha256": "f6531d7e4e009e75c6da63e0f05ee197296c946de440287ce5211fe3c63a4d72",
+    "rulesVersion": "0.2.0",
+    "reason": "rules 0.2.0: content v2 (145 events, categories, specials), backlist fade, traffic share, stress homeostasis, choice pacing, rest gap, ledger compaction"
   },
   {
     "seed": 712,
     "days": 120,
-    "sha256": "6c902a841c8679edc31c0ddbedc1de14df0e0d60d2e1b341e958a60b9c392387"
+    "sha256": "bb96455eafbfe839c9a82878e9f0c2b84476ca2d120f99ba245e896c5ef2b597",
+    "rulesVersion": "0.2.0",
+    "reason": "rules 0.2.0: content v2 (145 events, categories, specials), backlist fade, traffic share, stress homeostasis, choice pacing, rest gap, ledger compaction"
   }
 ]

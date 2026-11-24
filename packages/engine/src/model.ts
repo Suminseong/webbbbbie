@@ -212,6 +212,13 @@ export const stateSchema = z.object({
   works: z.array(work),
   contracts: z.array(contract),
   ledger: z.array(ledger),
+  /** Totals of ledger entries compacted out of `ledger`, by kind. */
+  ledgerCarry: z.record(
+    z.enum(["SALARY", "PAYOUT", "LIVING", "EVENT", "ADVANCE"]),
+    amount,
+  ),
+  /** Monotonic ledger ID counter; IDs stay unique after compaction. */
+  ledgerSeq: natural,
   flags: z.array(word),
   eventLast: z.record(natural),
   eventCount: z.record(natural),
@@ -248,8 +255,8 @@ export type ConditionStat = (typeof conditionKeys)[number];
 export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
-export const SCHEMA_VERSION = 1;
-export const RULES_VERSION = "0.1.0";
+export const SCHEMA_VERSION = 2;
+export const RULES_VERSION = "0.2.0";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];

@@ -1,0 +1,602 @@
+[
+  {
+    "id": "commute",
+    "category": "job",
+    "title": "출근길에 떠오른 소재",
+    "text": "지하철 손잡이를 잡고 메모했다. 퇴근하면 더 잘 쓸 수 있을까.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 5,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "side-gig",
+    "category": "job",
+    "title": "알바 공고가 떴다",
+    "text": "작업 시간을 조금 내주면 생활비 걱정을 덜 수 있다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2.24,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "unemployed"
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "알바를 시작한다",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "part_time"
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "이번 달은 원고에 집중한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "overtime",
+    "category": "job",
+    "title": "갑작스러운 야근",
+    "text": "퇴근 10분 전, 메일 한 통이 저녁을 가져갔다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 10,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "company-dinner",
+    "category": "job",
+    "title": "회식",
+    "text": "‘2차는 자율’이라는 말은 늘 거짓말이다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -2
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "annual-leave",
+    "category": "job",
+    "title": "연차 하루",
+    "text": "평일 낮의 카페는 원고 쓰기 좋은 곳이었다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -10
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "secret-writing",
+    "category": "job",
+    "title": "몰래 집필",
+    "text": "모니터 한쪽에 엑셀, 한쪽에 원고. 심장이 두 배로 뛴다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "job-offer",
+    "category": "job",
+    "title": "이직 제안",
+    "text": "연봉은 조금 오르고 야근은 많이 늘어난다는 회사.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 240,
+    "minDay": 90,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      }
+    ],
+    "choices": [
+      {
+        "id": "move",
+        "label": "정규직으로 옮긴다",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "employee"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "schedule",
+            "id": "new-job-adapt",
+            "delay": 7,
+            "window": 14
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "지금 일을 지킨다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new-job-adapt",
+    "category": "job",
+    "title": "새 직장 적응기",
+    "text": "업무를 배우느라 원고 창을 연 기억이 없다.",
+    "tier": "FOLLOW_UP",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 8
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "layoff",
+    "category": "job",
+    "title": "권고사직",
+    "text": "회의실로 불려 갔다. 짐은 생각보다 적었다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 120,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "job",
+        "id": "unemployed"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 10
+      },
+      {
+        "kind": "cash",
+        "amount": 1200000
+      }
+    ]
+  },
+  {
+    "id": "big-outsourcing",
+    "category": "job",
+    "title": "대형 외주",
+    "text": "외주 단가가 좋다. 마감도 지독하다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "freelance"
+      }
+    ],
+    "choices": [
+      {
+        "id": "take",
+        "label": "외주를 받는다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 800000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 12
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "원고를 택한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "exam-week",
+    "category": "job",
+    "title": "기말고사",
+    "text": "전공 책 사이에 플롯 노트가 끼어 있다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "student"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 8
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "store-owner",
+    "category": "job",
+    "title": "알바 사장님의 부탁",
+    "text": "‘이번 주만 마감까지 좀 부탁해.’",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      }
+    ],
+    "choices": [
+      {
+        "id": "help",
+        "label": "도와드린다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 60000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "원고 핑계를 댄다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "remote-work",
+    "category": "job",
+    "title": "재택근무 날",
+    "text": "출근길이 사라지니 원고 시간이 생겼다. 대신 침대가 가깝다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "leave-request",
+    "category": "job",
+    "title": "휴직을 고민하다",
+    "text": "작품 반응이 좋다. 잠깐 쉬어 볼까.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 180,
+    "minDay": 60,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      },
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1000000
+      }
+    ],
+    "choices": [
+      {
+        "id": "leave",
+        "label": "휴직계를 낸다",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "leave"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -6
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "아직은 버틴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "go-full-time",
+    "category": "job",
+    "title": "전업 선언",
+    "text": "정산서와 월급 명세서를 나란히 놓고 오래 봤다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 240,
+    "minDay": 90,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 6000000
+      }
+    ],
+    "any": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      },
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      },
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "leave"
+      }
+    ],
+    "choices": [
+      {
+        "id": "quit",
+        "label": "전업 작가가 된다",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "full_time_author"
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "겸업을 유지한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      }
+    ]
+  }
+]

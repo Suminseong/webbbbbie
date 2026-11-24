@@ -1,0 +1,463 @@
+[
+  {
+    "id": "forced-hiatus",
+    "category": "forced",
+    "title": "강제 휴재",
+    "text": "몸이 먼저 멈췄다. 공지창에 휴재 사유가 올라갔다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 16,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "any": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 57
+      },
+      {
+        "key": "fatigue",
+        "op": "gte",
+        "value": 81
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "HIATUS",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "ntr-drift",
+    "category": "forced",
+    "title": "NTR 드리프트",
+    "text": "복선보다 기분을 믿은 대가. 최신화 댓글이 한 방향으로 흐르기 시작했다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 8,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 63
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -15
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.27
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "rush-ending",
+    "category": "forced",
+    "title": "급완결 버튼",
+    "text": "아직 회수할 떡밥이 남았지만, 작가는 마지막 문장을 찍었다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 77
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 13
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "RUSHED_END"
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -8
+      }
+    ]
+  },
+  {
+    "id": "new-title-illness",
+    "category": "forced",
+    "title": "신작병",
+    "text": "완결 안 난 원고 탭 옆에 신작 폴더가 생겼다.",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 12,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 57
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "special",
+        "key": "신작병",
+        "days": 8
+      }
+    ]
+  },
+  {
+    "id": "forced-multi",
+    "category": "forced",
+    "title": "동시연재 선언",
+    "text": "‘하루가 48시간이면 된다’는 공지를 올려 버렸다.",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 10,
+    "cooldown": 0,
+    "minDay": 7,
+    "conditions": [
+      {
+        "key": "maxPublished",
+        "op": "gte",
+        "value": 5
+      },
+      {
+        "key": "activeWorks",
+        "op": "eq",
+        "value": 1
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "any": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 53
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 35
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "forced-comment-fight",
+    "category": "forced",
+    "title": "댓글 싸움",
+    "text": "작가 계정으로 단 답글이 캡처돼 돌기 시작했다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 64
+      },
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.05
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "forced-plot-reset",
+    "category": "forced",
+    "title": "전개 갈아엎기",
+    "text": "어제까지의 플롯 노트를 통째로 휴지통에 넣었다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 5,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 66
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -6
+      },
+      {
+        "kind": "consistency",
+        "amount": -10
+      },
+      {
+        "kind": "stock",
+        "amount": -3
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.08
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "forced-binge-writing",
+    "category": "forced",
+    "title": "밤샘 연참",
+    "text": "정신을 차려 보니 아침이고, 비축분이 세 화 늘었다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 5,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 82
+      },
+      {
+        "key": "health",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 12
+      }
+    ]
+  },
+  {
+    "id": "forced-notice-rant",
+    "category": "forced",
+    "title": "공지 폭주",
+    "text": "공지 한 줄로 끝낼 일을 세 문단으로 써 버렸다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 72
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -5
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -6
+      }
+    ]
+  },
+  {
+    "id": "forced-vanish",
+    "category": "forced",
+    "title": "잠수",
+    "text": "연락도 공지도 없이 일주일. 작가가 사라졌다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 80
+      },
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 72
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "HIATUS",
+        "days": 10
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -12
+      },
+      {
+        "kind": "social",
+        "stat": "completionTrust",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "forced-delete-stock",
+    "category": "forced",
+    "title": "비축분 통삭제",
+    "text": "‘이건 내 글이 아니야.’ 비축 폴더가 비었다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 5,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "내글구려병:true"
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 58
+      },
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": -99
+      },
+      {
+        "kind": "quality",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -6
+      }
+    ]
+  }
+]

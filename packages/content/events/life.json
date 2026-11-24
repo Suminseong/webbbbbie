@@ -1,0 +1,586 @@
+[
+  {
+    "id": "quiet-desk",
+    "category": "life",
+    "title": "아무도 안 찾는 오후",
+    "text": "통계창을 안 켜고 썼더니 오늘은 문장이 덜 밉다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 5,
+    "cooldown": 6,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "care",
+    "category": "life",
+    "title": "손목이 먼저 기권함",
+    "text": "키보드를 두드릴수록 손목이 시큰하다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2.24,
+    "cooldown": 8,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 85
+      }
+    ],
+    "choices": [
+      {
+        "id": "care",
+        "label": "진료를 받고 쉰다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -22000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 9
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -12
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "밀린 원고부터 쓴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fallback",
+    "category": "life",
+    "title": "평범한 하루",
+    "text": "오늘은 원고 창을 열고, 저녁에 닫았다.",
+    "tier": "FALLBACK",
+    "scope": "NONE",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": []
+  },
+  {
+    "id": "rainy-window",
+    "category": "life",
+    "title": "빗소리 작업",
+    "text": "창밖에 비가 오니 이상하게 문장이 잘 붙는다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 12,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "family-dinner",
+    "category": "life",
+    "title": "명절 잔소리",
+    "text": "‘그래서 그 소설은 돈이 되니?’ 숟가락이 무거워진다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 20,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "friend-wedding",
+    "category": "life",
+    "title": "친구 결혼식",
+    "text": "축의금 봉투를 쓰다가 내 작가 소개란을 떠올렸다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 15,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 60000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -50000
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "cold",
+    "category": "life",
+    "title": "목감기",
+    "text": "목소리는 안 나오는데 손가락은 멀쩡하다. 문제는 머리다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "walk",
+    "category": "life",
+    "title": "산책 플롯",
+    "text": "동네 한 바퀴 돌다가 막힌 회차의 해법이 떠올랐다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 10,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "sleep-in",
+    "category": "life",
+    "title": "알람 세 번 끔",
+    "text": "눈 떠 보니 점심이다. 몸은 개운한데 양심이 아프다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 14,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -8
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "checkup",
+    "category": "life",
+    "title": "건강검진 결과지",
+    "text": "‘거북목 의심’ 한 줄이 유난히 크게 보인다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 180,
+    "minDay": 30,
+    "choices": [
+      {
+        "id": "stretch",
+        "label": "스트레칭 루틴을 만든다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -3
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "label": "다음 검진 때 생각한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cat-keyboard",
+    "category": "life",
+    "title": "고양이가 키보드를 밟음",
+    "text": "‘ㅁㅁㅁㅁㅁㅁ’ 한 줄이 저장돼 있었다. 오늘은 그냥 웃는다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "moving",
+    "category": "life",
+    "title": "이사 준비",
+    "text": "박스 위에 노트북을 올려놓고 쓰는 하루.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 60,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 400000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -350000
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 10
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "birthday",
+    "category": "life",
+    "title": "생일 알림",
+    "text": "축하 메시지 사이에 ‘작가님 생일 축하해요’가 하나 섞여 있었다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 30,
+    "conditions": [
+      {
+        "key": "fandom",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "still-writing",
+    "category": "life",
+    "title": "‘아직도 소설 써?’",
+    "text": "오랜만에 만난 동창이 묻는다. 대답 대신 웃었다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 40,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "flu",
+    "category": "life",
+    "title": "독감",
+    "text": "열이 오르니 원고 창이 두 개로 보인다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 30,
+    "choices": [
+      {
+        "id": "rest",
+        "label": "푹 쉰다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -10
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "push",
+        "label": "약 먹고 쓴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gym",
+    "category": "life",
+    "title": "헬스장 등록",
+    "text": "체력이 필력이라는 말을 믿어 보기로 했다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 90000
+      }
+    ],
+    "choices": [
+      {
+        "id": "join",
+        "label": "3개월 등록한다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -90000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -4
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "label": "홈트 영상으로 버틴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cafe-noise",
+    "category": "life",
+    "title": "옆자리 대화",
+    "text": "카페 옆자리 연애 상담이 너무 웹소설 같아서 메모했다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "insomnia",
+    "category": "life",
+    "title": "잠 못 드는 밤",
+    "text": "누우면 다음 화 대사가 떠오른다. 일어나면 사라진다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 15,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 45
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "day-off",
+    "category": "life",
+    "title": "아무것도 안 하는 날",
+    "text": "오늘만큼은 원고도 통계도 열지 않기로 했다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 21,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -7
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  }
+]

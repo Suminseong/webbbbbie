@@ -1,6 +1,7 @@
 import type { Content, WorkStatus } from "@webbbbbie/content";
 import {
   activeWork,
+  specialModifiers,
   changeCondition,
   changeSocial,
   clamp,
@@ -93,8 +94,25 @@ export function prepareWorks(
   const { author } = state;
   const { writing } = content.balance;
   if (!state.works.some(activeWork) && author.startPath) {
-    const exposed = state.works.some((work) => work.status === "TAKEN_DOWN");
-    createWork(state, content, day, exposed ? "ORIGINAL" : author.startPath);
+    // After the last work ends the author rests for a seeded number of days
+    // before planning the next one (C-15 family, balance.life.rest*).
+    const lastEnd = Math.max(
+      -Infinity,
+      ...state.works.map((work) => work.end?.day ?? -Infinity),
+    );
+    const { restMin, restMax } = content.balance.life;
+    const rest =
+      lastEnd === -Infinity
+        ? 0
+        : restMin +
+          Math.floor(
+            rand(state.seed, lastEnd, stream.CREATION, 90) *
+              (restMax - restMin + 1),
+          );
+    if (day >= lastEnd + rest) {
+      const exposed = state.works.some((work) => work.status === "TAKEN_DOWN");
+      createWork(state, content, day, exposed ? "ORIGINAL" : author.startPath);
+    }
   }
   for (const work of state.works) {
     if (work.status === "PLANNING" && day > work.startDay) {
@@ -162,22 +180,23 @@ export function planRoutine(
     time.sleep - (push ? time.deadlinePressure + pressure - 1 : 0),
   );
   const free = time.day - work - time.living - sleep;
+  const special = specialModifiers(author, content);
   const community = Math.min(
     free,
-    time.communityMax,
+    time.communityMax + special.communityBonus,
     Math.floor(
       (author.traits.community * rand(state.seed, day, stream.ROUTINE, 2)) / 19,
     ),
   );
   const ego = Math.min(
     free - community,
-    time.egoMax,
+    time.egoMax + special.egoBonus,
     state.works.some((item) => item.published > 0)
       ? Math.floor(
           ((author.condition.stress + 30) *
             rand(state.seed, day, stream.ROUTINE, 3)) /
             25,
-        )
+        ) + special.egoBonus
       : 0,
   );
   const writing = allocateWriting(
@@ -206,6 +225,7 @@ export function writeAndPublish(
 ) {
   const { author } = state;
   const { writing } = content.balance;
+  const special = specialModifiers(author, content);
   let posted = 0;
   for (const [index, work] of state.works.entries()) {
     work.stats.publishedToday = 0;
@@ -242,7 +262,8 @@ export function writeAndPublish(
         allotted *
         (writing.base + writing.speedFactor * author.abilities.speed) *
         condition *
-        fit;
+        fit *
+        special.writing;
       const quality =
         (author.abilities.style + author.abilities.vocabulary + average + 105) /
         4;
@@ -360,6 +381,7 @@ export function updateCondition(
 ) {
   const { author } = state;
   const rules = content.balance.condition;
+  const special = specialModifiers(author, content);
   const allotted = sum(Object.values(routine.writing));
   const workload = routine.work + allotted;
   changeCondition(
@@ -385,13 +407,18 @@ export function updateCondition(
     missed * rules.missedStress +
       routine.ego * 0.32 +
       (routine.sleep < rules.healthySleep ? 0.6 : -rules.restStress) -
-      (traction ? rules.successStress : 0),
+      (traction ? rules.successStress : 0) +
+      special.stressDaily -
+      // Homeostasis: stress drifts back toward its baseline every day.
+      rules.stressPull * (author.condition.stress - rules.stressBaseline),
   );
   changeCondition(
     author,
     "drive",
     (routine.sleep - 12) * 0.2 +
       (traction ? 0.45 : -0.12) -
-      (author.condition.stress > 65 ? 0.6 : 0),
+      (author.condition.stress > 65 ? 0.6 : 0) +
+      special.driveDaily -
+      rules.drivePull * (author.condition.drive - rules.driveBaseline),
   );
 }

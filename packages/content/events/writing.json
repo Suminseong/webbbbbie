@@ -1,0 +1,596 @@
+[
+  {
+    "id": "chapter-buffer",
+    "category": "writing",
+    "title": "한 화 더 써 둠",
+    "text": "마감 전 저장 버튼을 누르니 비축분이 생겼다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 3,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "drop",
+    "category": "writing",
+    "title": "연중 고민",
+    "text": "비어 가는 비축과 쌓여 가는 댓글 사이에서 공지 문구를 고른다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2.24,
+    "cooldown": 12,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 7
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 40
+      }
+    ],
+    "choices": [
+      {
+        "id": "continue",
+        "label": "계속 시도한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "drop",
+        "label": "작품을 연중한다",
+        "effects": [
+          {
+            "kind": "transition",
+            "to": "DROPPED"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prologue-rewrite",
+    "category": "writing",
+    "title": "프롤로그 갈아엎기",
+    "text": "1화가 계속 거슬린다. 다시 쓰면 나아질까.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "choices": [
+      {
+        "id": "rewrite",
+        "label": "프롤로그를 새로 쓴다",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "지금은 앞으로 간다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "typo-storm",
+    "category": "writing",
+    "title": "오탈자 대잔치",
+    "text": "다시 읽어 보니 ‘했다’가 세 번 연속이다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "plot-memo-lost",
+    "category": "writing",
+    "title": "떡밥 메모 분실",
+    "text": "어느 회차에 깔았던 복선이었는지 기억이 안 난다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 50,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "setting-book",
+    "category": "writing",
+    "title": "설정집 정리",
+    "text": "흩어진 설정을 문서 하나로 모았다. 생각보다 구멍이 많다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 8
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "transcribe",
+    "category": "writing",
+    "title": "필사 한 시간",
+    "text": "좋아하는 작가의 문장을 따라 써 본다. 손이 기억하기를 바라며.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "style",
+        "amount": 0.6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "writers-block",
+    "category": "writing",
+    "title": "플롯 막힘",
+    "text": "다음 화로 넘어가는 다리가 무너졌다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "targetBias": "stock",
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "chain-posting",
+    "category": "writing",
+    "title": "연참 결심",
+    "text": "비축이 넉넉하다. 오늘 두 편을 올릴까?",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 4
+      }
+    ],
+    "choices": [
+      {
+        "id": "post",
+        "label": "연참한다",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -2
+          },
+          {
+            "kind": "promotion",
+            "days": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "save",
+        "label": "비축을 지킨다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "character-alive",
+    "category": "writing",
+    "title": "캐릭터가 혼자 움직임",
+    "text": "조연이 대사를 멋대로 고쳐 쓰기 시작했다. 나쁘지 않다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 2
+      },
+      {
+        "kind": "attachment",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "rhythm",
+    "category": "writing",
+    "title": "문장 리듬을 찾음",
+    "text": "소리 내 읽어 보니 문장이 숨을 쉰다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "vocabulary",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "title-change",
+    "category": "writing",
+    "title": "제목 변경 고민",
+    "text": "긴 제목이 유행이라는데, 내 제목은 너무 담백하다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "change",
+        "label": "제목을 바꾼다",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 3
+          },
+          {
+            "kind": "consistency",
+            "amount": -2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "그대로 간다",
+        "effects": [
+          {
+            "kind": "attachment",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chapter-length",
+    "category": "writing",
+    "title": "분량 조절",
+    "text": "5천 자를 넘겼다. 쪼갤까, 그냥 올릴까.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "split",
+        "label": "두 화로 나눈다",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": 1
+          },
+          {
+            "kind": "quality",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "whole",
+        "label": "한 번에 올린다",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "side-story",
+    "category": "writing",
+    "title": "외전 아이디어",
+    "text": "본편보다 외전이 더 재밌을 것 같은 위험한 예감.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "attachment",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "stock",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "last-minute",
+    "category": "writing",
+    "title": "마감 5분 전 업로드",
+    "text": "예약 버튼을 누르는 손이 떨렸다. 시계는 23시 55분.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 14,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      },
+      {
+        "kind": "quality",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "revision-hell",
+    "category": "writing",
+    "title": "퇴고 지옥",
+    "text": "고칠수록 처음 문장이 나았던 것 같다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 1
+      },
+      {
+        "kind": "stock",
+        "amount": -0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "cliche-twist",
+    "category": "writing",
+    "title": "클리셰 비틀기",
+    "text": "다들 아는 회귀물 공식을 반 바퀴 틀어 봤다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 2
+      },
+      {
+        "kind": "evidence",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "outline-day",
+    "category": "writing",
+    "title": "목차 다시 짜기",
+    "text": "결말까지 목차를 세우니 갈 길이 보인다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  }
+]

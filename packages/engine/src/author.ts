@@ -45,6 +45,27 @@ export function record(
   list.push({ type, day, message, workId });
 }
 
+/** Combined daily modifiers of the author's active special states (FR-STATE-002). */
+export function specialModifiers(author: Author, content: Content) {
+  const result = {
+    writing: 1,
+    stressDaily: 0,
+    driveDaily: 0,
+    egoBonus: 0,
+    communityBonus: 0,
+  };
+  for (const active of author.specialStates) {
+    const def = content.specials.find((item) => item.key === active.key);
+    if (!def) continue;
+    result.writing *= def.writing;
+    result.stressDaily += def.stressDaily;
+    result.driveDaily += def.driveDaily;
+    result.egoBonus += def.egoBonus;
+    result.communityBonus += def.communityBonus;
+  }
+  return result;
+}
+
 export function changeCondition(
   author: Author,
   stat: ConditionStat,

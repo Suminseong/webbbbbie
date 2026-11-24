@@ -6,7 +6,9 @@
     "startCash": 450000,
     "abilityMin": 24,
     "abilityMax": 86,
-    "maxActiveWorks": 4
+    "maxActiveWorks": 4,
+    "restMin": 6,
+    "restMax": 24
   },
   "time": {
     "day": 48,
@@ -48,7 +50,11 @@
     "missedThreshold": 7,
     "missedStress": 1,
     "restStress": 0.25,
-    "successStress": 0.45
+    "successStress": 0.45,
+    "stressPull": 0.04,
+    "stressBaseline": 25,
+    "drivePull": 0.03,
+    "driveBaseline": 55
   },
   "market": {
     "reach": 0.02,
@@ -58,7 +64,10 @@
     "newDays": 8,
     "returnDays": 3,
     "hotFavorites": 600,
-    "bestFavorites": 1400
+    "bestFavorites": 1400,
+    "backlistHalfLife": 90,
+    "backlistFavorites": 1400,
+    "trafficShare": 0.08
   },
   "economy": {
     "settlementDays": 30,
@@ -66,17 +75,19 @@
     "purchaseRate": 0.6,
     "authorShare": 0.6,
     "subscriptionWon": 3,
-    "livingExpense": 540000
+    "livingExpense": 540000,
+    "ledgerKeepDays": 365
   },
   "events": {
-    "forcedGlobalCooldown": 3,
+    "forcedGlobalCooldown": 5,
     "forcedSameCooldown": 14,
     "maxPriorityStreak": 3,
     "choiceIntervalMin": 7,
     "choiceIntervalMax": 14,
     "logKeep": 160,
     "summaryKeep": 45,
-    "eventHistoryKeep": 90
+    "eventHistoryKeep": 90,
+    "choiceGapFloor": 2
   },
   "aptitude": {
     "guessEvidence": 3,

@@ -74,6 +74,12 @@ const pathLabel = (key: string) =>
   sourceText("label.creation-path." + key.toLowerCase());
 const sided = (amount: number) => (amount < 0 ? String(amount) : "+" + amount);
 function conditionText(rule: Condition) {
+  if (rule.key === "targetFlag") {
+    const [flag, present] = String(rule.value).split(":");
+    const label =
+      flag === "copied_exposed" ? "표절 의혹 댓글 이력" : "대상 표식 " + flag;
+    return label + (present === "true" ? " 있음" : " 없음");
+  }
   const value =
     rule.key === "path"
       ? pathLabel(String(rule.value))
@@ -128,7 +134,7 @@ function effectText(effect: Effect): { description: string; tone: -1 | 0 | 1 } {
     case "origin":
       return {
         description:
-          pathLabel(effect.path) + "로 창작 경로 확정, 첫 작품 기획 생성",
+          "창작 경로 확정(" + pathLabel(effect.path) + "), 첫 작품 기획 생성",
         tone: 0,
       };
     case "transition":
@@ -232,7 +238,7 @@ function effectSummary(effects: readonly Effect[]) {
 }
 
 function eventFrame(event: EventDef) {
-  const when = event.minDay > 0 ? "최소 " + event.minDay + "일차." : "0일차.";
+  const when = event.minDay > 0 ? "최소 " + event.minDay + "일차." : "";
   const statuses = event.statuses?.map(workStatus).join(", ");
   const required = event.conditions?.map(conditionText).join(", ");
   const alternatives = event.any?.map(conditionText).join(" 또는 ");

@@ -1,4 +1,4 @@
-import { abilityKeys, channels } from "@webbbbbie/content";
+import { abilityKeys, channels, sourceText } from "@webbbbbie/content";
 import type {
   AptitudeKind,
   Channel,
@@ -232,7 +232,9 @@ export function relevantAptitudes(author: Author, work: Work) {
   );
 }
 
-const grades = ["낮음", "보통", "높음", "두드러짐"];
+const grades = ["low", "medium", "high", "standout"].map((grade) =>
+  sourceText("label.aptitude-grade." + grade),
+);
 function grade(value: number) {
   return Math.min(grades.length - 1, Math.floor(value / 25));
 }

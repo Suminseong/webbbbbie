@@ -4,6 +4,21 @@ import platformData from "../platforms.json";
 import worldData from "../world.json";
 import eventData from "../events.json";
 import policyData from "../policies.json";
+import { sourceText } from "./text";
+export {
+  appliedTexts,
+  displayName,
+  displayWorkTitle,
+  matchingText,
+  originalTexts,
+  sourceText,
+  text,
+  textIdPattern,
+  textIssue,
+  textTemplate,
+  variablesIn,
+} from "./text";
+export type { TextVariables } from "./text";
 
 export const abilityKeys = [
   "talent",
@@ -498,8 +513,53 @@ export function parseContent(input: unknown): Content {
 
 export const defaultContent = parseContent({
   balance: balanceData,
-  platforms: platformData,
-  world: worldData,
+  platforms: platformData.map((platform) => ({
+    ...platform,
+    name: sourceText(platform.name),
+    tags: platform.tags.map(sourceText),
+  })),
+  world: {
+    jobs: worldData.jobs.map((job) => ({ ...job, name: sourceText(job.name) })),
+    homes: worldData.homes.map((home) => ({
+      ...home,
+      name: sourceText(home.name),
+    })),
+    motives: worldData.motives.map((motive) => ({
+      ...motive,
+      text: sourceText(motive.text),
+    })),
+    penNames: worldData.penNames.map(sourceText),
+    works: worldData.works.map((work) => ({
+      ...work,
+      title: sourceText(work.title),
+      genre: sourceText(work.genre),
+      material: sourceText(work.material),
+      tags: work.tags.map(sourceText),
+    })),
+    companies: worldData.companies.map((company) => ({
+      ...company,
+      name: sourceText(company.name),
+      promise: sourceText(company.promise),
+    })),
+  },
   policies: policyData,
-  events: eventData,
+  events: eventData.map((event) => ({
+    ...event,
+    title: sourceText(event.title),
+    text: sourceText(event.text),
+    effects: event.effects?.map(originalSpecialKey),
+    choices: event.choices?.map((choice) => ({
+      ...choice,
+      label: sourceText(choice.label),
+      effects: choice.effects.map(originalSpecialKey),
+    })),
+  })),
 });
+
+function originalSpecialKey<T extends { kind: string; key?: string }>(
+  effect: T,
+): T {
+  return effect.kind === "special" && effect.key
+    ? { ...effect, key: sourceText(effect.key) }
+    : effect;
+}

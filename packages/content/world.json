@@ -2,49 +2,49 @@
   "jobs": [
     {
       "id": "unemployed",
-      "name": "백수",
+      "name": "entity.job.unemployed.name",
       "slots": 0,
       "income": 0,
       "irregularity": 0
     },
     {
       "id": "student",
-      "name": "학생",
+      "name": "entity.job.student.name",
       "slots": 12,
       "income": 220000,
       "irregularity": 0
     },
     {
       "id": "part_time",
-      "name": "알바",
+      "name": "entity.job.part_time.name",
       "slots": 10,
       "income": 780000,
       "irregularity": 0
     },
     {
       "id": "employee",
-      "name": "정규직",
+      "name": "entity.job.employee.name",
       "slots": 18,
       "income": 2150000,
       "irregularity": 0
     },
     {
       "id": "freelance",
-      "name": "프리랜서",
+      "name": "entity.job.freelance.name",
       "slots": 8,
       "income": 1130000,
       "irregularity": 4
     },
     {
       "id": "leave",
-      "name": "휴직",
+      "name": "entity.job.leave.name",
       "slots": 0,
       "income": 460000,
       "irregularity": 0
     },
     {
       "id": "full_time_author",
-      "name": "전업",
+      "name": "entity.job.full_time_author.name",
       "slots": 0,
       "income": 0,
       "irregularity": 0
@@ -52,108 +52,108 @@
   ],
   "homes": [
     {
-      "name": "원룸 책상",
+      "name": "entity.home.01.name",
       "comfort": 50,
       "expense": 0.9
     },
     {
-      "name": "본가 거실 옆방",
+      "name": "entity.home.02.name",
       "comfort": 59,
       "expense": 0.72
     },
     {
-      "name": "작업실 겸 반지하",
+      "name": "entity.home.03.name",
       "comfort": 36,
       "expense": 0.88
     },
     {
-      "name": "월세 오피스텔",
+      "name": "entity.home.04.name",
       "comfort": 65,
       "expense": 1.28
     }
   ],
   "motives": [
     {
-      "text": "내가 쓰면 이 결말보단 낫겠다는 생각",
+      "text": "entity.motive.01.text",
       "paths": ["ORIGINAL", "PARODY"]
     },
     {
-      "text": "월급 이외의 수입원이 급해짐",
+      "text": "entity.motive.02.text",
       "paths": ["ORIGINAL", "PLAGIARISM"]
     },
     {
-      "text": "최애의 외전이 영영 나오지 않음",
+      "text": "entity.motive.03.text",
       "paths": ["PARODY", "ORIGINAL"]
     },
     {
-      "text": "친구와 내기한 첫 인세",
+      "text": "entity.motive.04.text",
       "paths": ["ORIGINAL", "PARODY", "PLAGIARISM"]
     }
   ],
   "penNames": [
-    "마감전야",
-    "원고가안와",
-    "새벽보리",
-    "퇴근한망생",
-    "짤막한외전",
-    "봉인된키보드",
-    "오탈자수집가",
-    "연중은없다"
+    "entity.pen.01",
+    "entity.pen.02",
+    "entity.pen.03",
+    "entity.pen.04",
+    "entity.pen.05",
+    "entity.pen.06",
+    "entity.pen.07",
+    "entity.pen.08"
   ],
   "works": [
     {
-      "title": "회귀했더니 퇴근 5분 전",
-      "genre": "현대판타지",
-      "material": "회귀",
-      "tags": ["회귀", "대중성", "후킹"],
+      "title": "entity.work.01.title",
+      "genre": "entity.genre.01",
+      "material": "entity.material.01",
+      "tags": ["entity.tag.01", "entity.tag.02", "entity.tag.03"],
       "target": 58,
       "mask": 31
     },
     {
-      "title": "던전 공략팀의 사직서",
-      "genre": "헌터물",
-      "material": "던전",
-      "tags": ["성장", "소재", "연참"],
+      "title": "entity.work.02.title",
+      "genre": "entity.genre.02",
+      "material": "entity.material.02",
+      "tags": ["entity.tag.04", "entity.tag.05", "entity.tag.06"],
       "target": 53,
       "mask": 63
     },
     {
-      "title": "마왕의 독자 알림",
-      "genre": "판타지",
-      "material": "빙의",
-      "tags": ["서브컬처", "캐릭터", "연참"],
+      "title": "entity.work.03.title",
+      "genre": "entity.genre.03",
+      "material": "entity.material.03",
+      "tags": ["entity.tag.07", "entity.tag.08", "entity.tag.06"],
       "target": 45,
       "mask": 63
     },
     {
-      "title": "엑스트라가 계약 결혼을 거절함",
-      "genre": "로맨스판타지",
-      "material": "계약 결혼",
-      "tags": ["관계", "캐릭터", "후킹"],
+      "title": "entity.work.04.title",
+      "genre": "entity.genre.04",
+      "material": "entity.material.04",
+      "tags": ["entity.tag.09", "entity.tag.08", "entity.tag.03"],
       "target": 48,
       "mask": 31
     },
     {
-      "title": "검 끝에서 쓰는 완결 후기",
-      "genre": "무협",
-      "material": "복수",
-      "tags": ["장르문법", "완결", "성장"],
+      "title": "entity.work.05.title",
+      "genre": "entity.genre.05",
+      "material": "entity.material.05",
+      "tags": ["entity.tag.10", "entity.tag.11", "entity.tag.04"],
       "target": 67,
       "mask": 31
     },
     {
-      "title": "미궁 도서관의 야간 사서",
-      "genre": "판타지",
-      "material": "던전",
-      "tags": ["소재", "완결", "장르문법"],
+      "title": "entity.work.06.title",
+      "genre": "entity.genre.03",
+      "material": "entity.material.02",
+      "tags": ["entity.tag.05", "entity.tag.11", "entity.tag.10"],
       "target": 52,
       "mask": 27
     },
     {
-      "title": "외전에서 악역이 답장을 보냈다",
-      "genre": "로맨스판타지",
-      "material": "빙의",
-      "tags": ["서브컬처", "관계", "캐릭터"],
+      "title": "entity.work.07.title",
+      "genre": "entity.genre.04",
+      "material": "entity.material.03",
+      "tags": ["entity.tag.07", "entity.tag.09", "entity.tag.08"],
       "target": 38,
       "mask": 31
     }
@@ -161,33 +161,33 @@
   "companies": [
     {
       "id": "neulpom",
-      "name": "늘봄 매니지먼트",
+      "name": "entity.company.neulpom.name",
       "share": 0.71,
       "advance": 57000,
       "duration": 90,
-      "promise": "추천 배너 1회",
+      "promise": "entity.company.neulpom.promise",
       "honesty": 83,
       "skill": 65,
       "interference": 24
     },
     {
       "id": "letter",
-      "name": "열지 않은 편지 출판",
+      "name": "entity.company.letter.name",
       "share": 0.66,
       "advance": 92000,
       "duration": 120,
-      "promise": "편집 지원 및 앱 광고",
+      "promise": "entity.company.letter.promise",
       "honesty": 53,
       "skill": 82,
       "interference": 47
     },
     {
       "id": "rush",
-      "name": "질주 콘텐츠",
+      "name": "entity.company.rush.name",
       "share": 0.61,
       "advance": 130000,
       "duration": 90,
-      "promise": "정식 전환 프로모션",
+      "promise": "entity.company.rush.promise",
       "honesty": 29,
       "skill": 56,
       "interference": 79

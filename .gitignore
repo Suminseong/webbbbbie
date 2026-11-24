@@ -4,3 +4,5 @@ coverage/
 playwright-report/
 test-results/
 *.log
+packages/content/text-edits.ko.json.lock
+packages/content/text-edits.ko.json.*.tmp

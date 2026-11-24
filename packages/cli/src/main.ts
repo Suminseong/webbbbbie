@@ -11,6 +11,7 @@ import {
   serialize,
 } from "@webbbbbie/engine";
 import type { LifeState } from "@webbbbbie/engine";
+import { catalogRows } from "./text-catalog";
 
 function run(seed: number, days: number, decisions?: string[]): LifeState {
   let state = createLife(seed);
@@ -41,7 +42,9 @@ function validate() {
       data.platforms.length +
       " platforms, " +
       data.world.jobs.length +
-      " jobs.",
+      " jobs, " +
+      catalogRows().length +
+      " text resources.",
   );
 }
 
@@ -80,14 +83,21 @@ function profile() {
   );
 }
 
+function replayDigest(state: LifeState) {
+  // Preserve event ordering, targets and timestamps in the golden. UX wording
+  // can change independently of the simulation that emitted these events.
+  const log = state.log.map((entry) => ({ ...entry, message: "" }));
+  return createHash("sha256")
+    .update(serialize({ ...state, log }))
+    .digest("hex");
+}
+
 function golden() {
   const fixtures = JSON.parse(
     readFileSync(new URL("../golden.json", import.meta.url), "utf8"),
   ) as { seed: number; days: number; sha256: string }[];
   for (const { seed, days, sha256 } of fixtures) {
-    const actual = createHash("sha256")
-      .update(serialize(run(seed, days)))
-      .digest("hex");
+    const actual = replayDigest(run(seed, days));
     if (sha256 !== actual)
       throw new Error(
         "Golden mismatch: seed " + seed + ", day " + days + ", got " + actual,
@@ -121,7 +131,7 @@ if (command === "validate") {
         author: getAuthorView(state),
         works: getWorkViews(state),
         events: state.eventCount,
-        sha256: createHash("sha256").update(serialize(state)).digest("hex"),
+        sha256: replayDigest(state),
       },
       null,
       2,

@@ -1,4 +1,4 @@
-import { defaultContent } from "@webbbbbie/content";
+import { defaultContent, matchingText, text } from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
 import { createAuthor, record, sum } from "./author";
 import { settle, updateContracts, updateDemand } from "./economy";
@@ -165,7 +165,7 @@ export function createEngine(
     });
     if (state.summaries.length > keep.summaryKeep) state.summaries.shift();
     if (lifeEnd(state)) state.phase = "ENDED";
-    record(events, "DAY_CLOSED", day, day + "일차 마감");
+    record(events, "DAY_CLOSED", day, text("engine.log.day-closed", { day }));
   }
 
   function advance(state: LifeState, days = 1): AdvanceResult {
@@ -184,12 +184,18 @@ export function createEngine(
       const day = next.day + 1;
       const selected = selectEvent(next, content, day);
       const def = content.events.find((entry) => entry.id === selected.defId)!;
-      record(events, "DAY_STARTED", day, day + "일차");
-      record(events, "EVENT_SELECTED", day, def.title, selected.target.id);
+      const eventTitle = matchingText("event." + def.id + ".title", def.title);
+      record(
+        events,
+        "DAY_STARTED",
+        day,
+        text("engine.log.day-started", { day }),
+      );
+      record(events, "EVENT_SELECTED", day, eventTitle, selected.target.id);
       if (selected.choiceIds.length) {
         next.phase = "AWAITING_CHOICE";
         next.pending = selected;
-        record(events, "CHOICE_REQUIRED", day, def.title, selected.target.id);
+        record(events, "CHOICE_REQUIRED", day, eventTitle, selected.target.id);
         break;
       }
       closeDay(next, selected, null, events);
@@ -365,7 +371,14 @@ export function createEngine(
     getContractViews: (state: LifeState) => contractViews(state, content),
     getDailySummary: (state: LifeState, day = state.day) => {
       const result = state.summaries.find((item) => item.day === day);
-      return result ? structuredClone(result) : undefined;
+      if (!result) return undefined;
+      return {
+        ...structuredClone(result),
+        eventTitle: matchingText(
+          "event." + result.eventId + ".title",
+          result.eventTitle,
+        ),
+      };
     },
   };
 }

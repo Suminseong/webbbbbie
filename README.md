@@ -37,3 +37,16 @@ Playwright는 빌드된 브라우저 앱을 실행합니다. 기존 Chromium 계
 - docs — [기술 설계](docs/design.md) 및 [화면 연동 계약](docs/view-model.md).
 
 요구사항은 Notion의 v0.2 기준을 따릅니다. 편결·구독, 작품별 연재·통계, 다작, 강제 사건, 적성, 계약 및 경제의 초도 구현을 포함합니다. 콘텐츠 확장과 제품 밸런스, 시각 디자인 고도화는 후속 범위입니다. 인생 종료 정책은 현재 계속 진행입니다.
+
+## Gemini 텍스트 작업본
+
+```sh
+npm run text:export -- --output WriterLife_TextResources_v0.1.0.csv
+npm run text:export -- --output next.csv --previous previous.xlsx
+npm run text:import -- --input revised.xlsx --dry-run --report review.json
+npm run text:import -- --input revised.xlsx --apply --report imported.json
+```
+
+추출은 UTF-8 CSV 또는 JSON을 만들고 기준 커밋을 기록합니다. 이전 XLSX나 TEXTS 탭의 CSV를 넘기면 동일 원문의 제안과 상태를 보존하고 변경된 원문·맥락을 검토 대상으로 표시합니다. 반환본은 XLSX 또는 TEXTS 탭 CSV를 사용합니다. 추출과 보고서 경로는 새 파일을 지정합니다.
+
+빈 수정 셀은 그대로 유지합니다. 누락·중복 ID, 보호 열 변경, 변수 오류가 있는 행은 반영 보고서에 남깁니다. `--apply`는 검증에 통과한 행만 적용하며 거부 행이 있으면 종료 코드 2를 반환합니다. 저장하거나 기록한 과거 사건 문구는 당시 표시를 보존합니다. 적용 범위와 게임 화면은 PR에서 확인합니다. [공동 개발 지침](AGENTS.md)

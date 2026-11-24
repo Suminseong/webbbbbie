@@ -1,65 +1,77 @@
+import {
+  displayName,
+  displayWorkTitle,
+  matchingText,
+  text,
+} from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
 import { sum } from "./author";
 import type { LifeState, Work } from "./model";
 
 export const statusNames = {
-  PLANNING: "기획",
-  SERIAL_FREE: "무료 연재",
-  SERIAL_PAID: "유료 연재",
-  HIATUS: "휴재",
-  COMPLETED: "정상 완결",
-  RUSHED_END: "급완결",
-  DROPPED: "연중",
-  TAKEN_DOWN: "비공개",
+  PLANNING: text("label.work-status.planning"),
+  SERIAL_FREE: text("label.work-status.serial-free"),
+  SERIAL_PAID: text("label.work-status.serial-paid"),
+  HIATUS: text("label.work-status.hiatus"),
+  COMPLETED: text("label.work-status.completed"),
+  RUSHED_END: text("label.work-status.rushed-end"),
+  DROPPED: text("label.work-status.dropped"),
+  TAKEN_DOWN: text("label.work-status.taken-down"),
 };
 export const sourceNames = {
-  NEW: "신작",
-  UPDATE: "최신 업데이트",
-  HOT: "인기작",
-  BEST: "베스트",
-  OFFICIAL: "정식 연재",
-  PROMOTION: "프로모션",
-  COMMUNITY: "커뮤니티",
-  FANDOM: "기존 팬덤",
-  ORGANIC: "자연 유입",
-  BACKLIST: "정주행",
+  NEW: text("label.acquisition.new"),
+  UPDATE: text("label.acquisition.update"),
+  HOT: text("label.acquisition.hot"),
+  BEST: text("label.acquisition.best"),
+  OFFICIAL: text("label.acquisition.official"),
+  PROMOTION: text("label.acquisition.promotion"),
+  COMMUNITY: text("label.acquisition.community"),
+  FANDOM: text("label.acquisition.fandom"),
+  ORGANIC: text("label.acquisition.organic"),
+  BACKLIST: text("label.acquisition.backlist"),
 };
 export const abilityNames = {
-  talent: "영근",
-  style: "필력",
-  insight: "능지",
-  vocabulary: "어휘력",
-  commercial: "상업성",
-  speed: "집필 속도",
-  diligence: "성실성",
-  resilience: "멘탈 내구도",
+  talent: text("label.ability.talent"),
+  style: text("label.ability.style"),
+  insight: text("label.ability.insight"),
+  vocabulary: text("label.ability.vocabulary"),
+  commercial: text("label.ability.commercial"),
+  speed: text("label.ability.speed"),
+  diligence: text("label.ability.diligence"),
+  resilience: text("label.ability.resilience"),
 };
 export const conditionNames = {
-  health: "건강",
-  fatigue: "피로",
-  stress: "멘헤라",
-  drive: "창작 의욕",
+  health: text("label.condition.health"),
+  fatigue: text("label.condition.fatigue"),
+  stress: text("label.condition.stress"),
+  drive: text("label.condition.drive"),
 };
 export const ledgerNames = {
-  SALARY: "본업 수입",
-  PAYOUT: "작품 정산",
-  LIVING: "생활비",
-  EVENT: "사건 지출",
-  ADVANCE: "선인세",
+  SALARY: text("label.ledger.salary"),
+  PAYOUT: text("label.ledger.payout"),
+  LIVING: text("label.ledger.living"),
+  EVENT: text("label.ledger.event"),
+  ADVANCE: text("label.ledger.advance"),
 };
 export const aptitudeNames = {
-  GENRE: "장르",
-  MATERIAL: "소재",
-  TAG: "태그",
-  SCHEDULE: "연재 주기",
-  PLATFORM: "플랫폼",
+  GENRE: text("label.aptitude-kind.genre"),
+  MATERIAL: text("label.aptitude-kind.material"),
+  TAG: text("label.aptitude-kind.tag"),
+  SCHEDULE: text("label.aptitude-kind.schedule"),
+  PLATFORM: text("label.aptitude-kind.platform"),
 };
 const pathNames = {
-  ORIGINAL: "순수 창작",
-  PARODY: "패러디",
-  PLAGIARISM: "표절",
+  ORIGINAL: text("label.creation-path.original"),
+  PARODY: text("label.creation-path.parody"),
+  PLAGIARISM: text("label.creation-path.plagiarism"),
 };
-const ageLabels = ["10대", "20대", "30대", "40대", "50대 이상"];
+const ageLabels = [
+  text("label.readers-age.teens"),
+  text("label.readers-age.twenties"),
+  text("label.readers-age.thirties"),
+  text("label.readers-age.forties"),
+  text("label.readers-age.fifty-plus"),
+];
 
 function distribute(values: number[]) {
   const counts = values.map(Math.floor);
@@ -77,20 +89,22 @@ export function authorView(state: LifeState, content: Content) {
     seed: state.seed,
     day: state.day,
     phase: state.phase,
-    penName: author.penName,
+    penName: displayName("entity.pen", author.penName),
     age:
       author.startAge + Math.floor(state.day / content.balance.life.yearDays),
-    motive: author.motive,
+    motive: displayName("entity.motive", author.motive),
     path: author.startPath ? pathNames[author.startPath] : null,
-    job:
+    job: displayName(
+      "entity.job",
       content.world.jobs.find((job) => job.id === author.jobId)?.name ??
-      author.jobId,
-    home: author.home.name,
+        author.jobId,
+    ),
+    home: displayName("entity.home", author.home.name),
     abilities: { ...author.abilities },
     condition: { ...author.condition },
     social: { ...author.social },
     states: author.specialStates.map((status) => ({
-      name: status.key,
+      name: displayName("entity.special", status.key),
       until: status.until,
     })),
     cash: author.cash,
@@ -109,13 +123,20 @@ export function workView(work: Work, content: Content) {
   const byAge = distribute(work.stats.newByAge);
   return {
     id: work.id,
-    title: work.title,
-    genre: work.genre,
-    material: work.material,
-    tags: [...work.tags],
+    title: displayWorkTitle(work.title),
+    genre: displayName("entity.genre", work.genre),
+    material: displayName("entity.material", work.material),
+    tags: work.tags.map((tag) => displayName("entity.tag", tag)),
     path: pathNames[work.startPath],
-    platform: platform.name,
-    model: platform.model === "EPISODE" ? "편결" : "구독",
+    platform: matchingText(
+      "entity.platform." + platform.id + ".name",
+      platform.name,
+    ),
+    model: text(
+      platform.model === "EPISODE"
+        ? "label.platform.episode"
+        : "label.platform.subscription",
+    ),
     status: work.status,
     statusLabel: statusNames[work.status],
     startDay: work.startDay,
@@ -164,19 +185,31 @@ export function pendingView(state: LifeState, content: Content) {
   return {
     id: pending.id,
     day: pending.day,
-    title: def.title,
-    text: def.text,
-    target: work?.title ?? null,
+    title: matchingText("event." + def.id + ".title", def.title),
+    text: matchingText("event." + def.id + ".body", def.text),
+    target: work ? displayWorkTitle(work.title) : null,
     choices: (def.choices ?? [])
       .filter((choice) => pending.choiceIds.includes(choice.id))
-      .map((choice) => ({ id: choice.id, label: choice.label })),
+      .map((choice) => ({
+        id: choice.id,
+        label: matchingText(
+          "event." + def.id + ".choice." + choice.id,
+          choice.label,
+        ),
+      })),
     offer: company
       ? {
-          name: company.name,
+          name: matchingText(
+            "entity.company." + company.id + ".name",
+            company.name,
+          ),
           share: company.share,
           advance: company.advance,
           duration: company.duration,
-          promise: company.promise,
+          promise: matchingText(
+            "entity.company." + company.id + ".promise",
+            company.promise,
+          ),
         }
       : null,
   };
@@ -188,17 +221,24 @@ export function aptitudeView(state: LifeState, content: Content) {
       kind: aptitudeNames[kind],
       key:
         kind === "PLATFORM"
-          ? (content.platforms.find((platform) => platform.id === key)?.name ??
-            key)
+          ? displayName(
+              "entity.platform",
+              content.platforms.find((platform) => platform.id === key)?.name ??
+                key,
+            )
           : kind === "SCHEDULE"
-            ? "주 " +
-              [...Array(7).keys()].filter((n) => (Number(key) & (1 << n)) !== 0)
-                .length +
-              "회"
-            : key,
+            ? text("ui.aptitude.schedule", {
+                times: [...Array(7).keys()].filter(
+                  (n) => (Number(key) & (1 << n)) !== 0,
+                ).length,
+              })
+            : displayName("entity." + kind.toLowerCase(), key),
       evidence,
       stage,
-      estimate,
+      estimate:
+        estimate === null
+          ? null
+          : displayName("label.aptitude-grade", estimate),
     }),
   );
 }
@@ -207,17 +247,20 @@ export function contractViews(state: LifeState, content: Content) {
   return state.contracts.map((entry) => ({
     id: entry.id,
     workId: entry.workId,
-    title:
+    title: displayWorkTitle(
       state.works.find((work) => work.id === entry.workId)?.title ??
-      entry.workId,
-    company:
+        entry.workId,
+    ),
+    company: displayName(
+      "entity.company",
       content.world.companies.find((company) => company.id === entry.companyId)
         ?.name ?? entry.companyId,
+    ),
     signedDay: entry.signedDay,
     expiresDay: entry.expiresDay,
     share: entry.share,
     advance: entry.advance,
-    promise: entry.promise,
+    promise: displayName("entity.company", entry.promise),
     status: entry.status,
   }));
 }

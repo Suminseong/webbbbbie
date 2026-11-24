@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "dependencies": {
+    "@webbbbbie/content": "0.1.0",
     "@webbbbbie/engine": "0.1.0"
   }
 }

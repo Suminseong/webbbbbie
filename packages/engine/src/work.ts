@@ -1,4 +1,5 @@
 import type { Content, WorkStatus } from "@webbbbbie/content";
+import { displayWorkTitle, text } from "@webbbbbie/content";
 import {
   activeWork,
   changeCondition,
@@ -65,21 +66,18 @@ export function transitionWork(
       rewarded: false,
     };
   }
-  const titles: Record<WorkStatus, string> = {
-    PLANNING: "기획",
-    SERIAL_FREE: "무료 연재",
-    SERIAL_PAID: "유료 연재",
-    HIATUS: "휴재",
-    COMPLETED: "완결",
-    RUSHED_END: "급완결",
-    DROPPED: "연중",
-    TAKEN_DOWN: "비공개",
-  };
+  const label =
+    to === "COMPLETED"
+      ? "label.work-log.completed"
+      : "label.work-status." + to.toLowerCase().replaceAll("_", "-");
   record(
     events,
     "WORK_STATUS_CHANGED",
     day,
-    work.title + " · " + titles[to],
+    text("engine.log.status", {
+      work_title: displayWorkTitle(work.title),
+      status: text(label),
+    }),
     work.id,
   );
 }
@@ -217,7 +215,9 @@ export function writeAndPublish(
         events,
         "CHAPTER_MISSED",
         day,
-        work.title + " · 휴재로 미게시",
+        text("engine.log.missed-hiatus", {
+          work_title: displayWorkTitle(work.title),
+        }),
         work.id,
       );
     }
@@ -264,7 +264,10 @@ export function writeAndPublish(
         events,
         "CHAPTER_POSTED",
         day,
-        work.title + " · " + work.published + "화 등록",
+        text("engine.log.posted", {
+          work_title: displayWorkTitle(work.title),
+          chapter: work.published,
+        }),
         work.id,
       );
     } else if (planned) {
@@ -274,7 +277,9 @@ export function writeAndPublish(
         events,
         "CHAPTER_MISSED",
         day,
-        work.title + " · 비축 원고 부족",
+        text("engine.log.missed-stock", {
+          work_title: displayWorkTitle(work.title),
+        }),
         work.id,
       );
     } else if (work.stats.streakMissed > 0) {
@@ -347,7 +352,7 @@ export function finishWorks(
       events,
       "STATE_CHANGED",
       day,
-      work.title + " · 종료 경험 반영",
+      text("engine.log.growth", { work_title: displayWorkTitle(work.title) }),
       work.id,
     );
   }

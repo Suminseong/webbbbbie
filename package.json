@@ -20,6 +20,8 @@
     "validate": "tsx packages/cli/src/main.ts validate",
     "sim": "tsx packages/cli/src/main.ts run",
     "golden": "tsx packages/cli/src/main.ts golden",
+    "bench": "tsx packages/cli/src/main.ts bench",
+    "profile": "tsx packages/cli/src/main.ts profile",
     "test:browser": "playwright test",
     "format": "prettier --write ."
   },

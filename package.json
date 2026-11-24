@@ -1,0 +1,38 @@
+{
+  "name": "webbbbbie",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20.12.2"
+  },
+  "scripts": {
+    "dev": "vite apps/web --host 127.0.0.1",
+    "build": "npm run typecheck && vite build apps/web",
+    "preview": "vite preview apps/web --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "validate": "tsx packages/cli/src/main.ts validate",
+    "sim": "tsx packages/cli/src/main.ts run",
+    "golden": "tsx packages/cli/src/main.ts golden",
+    "test:browser": "playwright test",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "^20.19.0",
+    "eslint": "^9.38.0",
+    "fast-check": "^4.3.0",
+    "prettier": "^3.6.0",
+    "tsx": "^4.20.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.2",
+    "vite": "6.4.6",
+    "vitest": "3.2.7"
+  }
+}

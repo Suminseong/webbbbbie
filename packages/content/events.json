@@ -1,0 +1,935 @@
+[
+  {
+    "id": "origin",
+    "title": "왜 하필 웹소설인가",
+    "text": "0일차. 아무도 기다리지 않는 첫 원고의 방향부터 정할 차례다.",
+    "tier": "ORIGIN",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 0,
+    "choices": [
+      {
+        "id": "original",
+        "label": "순수 창작으로 시작",
+        "effects": [
+          {
+            "kind": "origin",
+            "path": "ORIGINAL"
+          }
+        ]
+      },
+      {
+        "id": "parody",
+        "label": "패러디로 시작",
+        "effects": [
+          {
+            "kind": "origin",
+            "path": "PARODY"
+          }
+        ]
+      },
+      {
+        "id": "plagiarism",
+        "label": "표절로 시작",
+        "effects": [
+          {
+            "kind": "origin",
+            "path": "PLAGIARISM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quiet-desk",
+    "title": "아무도 안 찾는 오후",
+    "text": "통계창을 안 켜고 썼더니 오늘은 문장이 덜 밉다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 16,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "commute",
+    "title": "출근길에 떠오른 소재",
+    "text": "지하철 손잡이를 잡고 메모했다. 퇴근하면 더 잘 쓸 수 있을까.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 11,
+    "cooldown": 0,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "chapter-buffer",
+    "title": "한 화 더 써 둠",
+    "text": "마감 전 저장 버튼을 누르니 비축분이 생겼다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 10,
+    "cooldown": 3,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "reader-fan",
+    "title": "첫 정주행 댓글",
+    "text": "닉네임이 낯익다. 1화부터 같은 사람이 따라왔다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 13,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "ego-bad",
+    "title": "검색하면 나오는 것들",
+    "text": "에고서칭 결과, 작품 제목보다 상처가 오래 남는다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 12,
+    "cooldown": 4,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 13
+      },
+      {
+        "kind": "special",
+        "key": "내글구려병",
+        "days": 4
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "critique",
+    "title": "감평글 알림",
+    "text": "고닉이 1화의 장단점을 짚었다. 세 번째 문장이 자꾸 눈에 걸린다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 1.6800000000000002,
+    "cooldown": 5,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "take",
+        "label": "감평을 참고한다",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "evidence",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "오늘은 닫아 둔다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "network",
+    "title": "흑망생이들의 단톡",
+    "text": "뻘글 두 개, 꿀팁 하나, 그리고 아직 닉네임으로만 아는 작가 한 명.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 7,
+    "cooldown": 5,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      },
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      }
+    ]
+  },
+  {
+    "id": "ai-bait",
+    "title": "AI 집필 유혹",
+    "text": "‘딸깍하면 연참’이라는 글이 올라왔다. 댓글은 이미 전쟁터다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.12,
+    "cooldown": 18,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "close",
+        "label": "글을 닫는다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "argue",
+        "label": "댓글에 한마디 남긴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cyber-closing",
+    "title": "싸이부기 하나만",
+    "text": "보상심리가 메뉴판을 넘긴다. 간식 먹고 원고 켜기로 했다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 10,
+    "cooldown": 3,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 10000
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 25
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -6800
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "payout-toast",
+    "title": "첫 인세 캡처",
+    "text": "입금 내역을 닫았다 열었다 한다. 실감은 아직 안 난다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 16,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 8
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "special",
+        "key": "보상심리",
+        "days": 7
+      }
+    ]
+  },
+  {
+    "id": "care",
+    "title": "손목이 먼저 기권함",
+    "text": "키보드를 두드릴수록 손목이 시큰하다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2.24,
+    "cooldown": 8,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 85
+      }
+    ],
+    "choices": [
+      {
+        "id": "care",
+        "label": "진료를 받고 쉰다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -22000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 9
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -12
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "밀린 원고부터 쓴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "side-gig",
+    "title": "알바 공고가 떴다",
+    "text": "작업 시간을 조금 내주면 생활비 걱정을 덜 수 있다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2.24,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "unemployed"
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "알바를 시작한다",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "part_time"
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "이번 달은 원고에 집중한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gear",
+    "title": "장비병 도짐",
+    "text": "새 키보드 축을 검색하다 보니 창작 의욕보다 결제 의욕이 높다.",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.6800000000000002,
+    "cooldown": 12,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 85000
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "장비를 산다",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -79000
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 6
+          },
+          {
+            "kind": "special",
+            "key": "장비병",
+            "days": 7
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "장바구니만 남긴다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forced-hiatus",
+    "title": "강제 휴재",
+    "text": "몸이 먼저 멈췄다. 공지창에 휴재 사유가 올라갔다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 16,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "any": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 57
+      },
+      {
+        "key": "fatigue",
+        "op": "gte",
+        "value": 81
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "HIATUS",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "ntr-drift",
+    "title": "NTR 드리프트",
+    "text": "복선보다 기분을 믿은 대가. 최신화 댓글이 한 방향으로 흐르기 시작했다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 8,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 63
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -15
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.27
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "rush-ending",
+    "title": "급완결 버튼",
+    "text": "아직 회수할 떡밥이 남았지만, 작가는 마지막 문장을 찍었다.",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 77
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 13
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "RUSHED_END"
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -8
+      }
+    ]
+  },
+  {
+    "id": "new-title-illness",
+    "title": "신작병",
+    "text": "완결 안 난 원고 탭 옆에 신작 폴더가 생겼다.",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 12,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 57
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "special",
+        "key": "신작병",
+        "days": 8
+      }
+    ]
+  },
+  {
+    "id": "forced-multi",
+    "title": "동시연재 선언",
+    "text": "‘하루가 48시간이면 된다’는 공지를 올려 버렸다.",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 10,
+    "cooldown": 0,
+    "minDay": 7,
+    "conditions": [
+      {
+        "key": "maxPublished",
+        "op": "gte",
+        "value": 5
+      },
+      {
+        "key": "activeWorks",
+        "op": "eq",
+        "value": 1
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "any": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 53
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 35
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "drop",
+    "title": "연중 고민",
+    "text": "비어 가는 비축과 쌓여 가는 댓글 사이에서 공지 문구를 고른다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2.24,
+    "cooldown": 12,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 7
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 40
+      }
+    ],
+    "choices": [
+      {
+        "id": "continue",
+        "label": "계속 시도한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "drop",
+        "label": "작품을 연중한다",
+        "effects": [
+          {
+            "kind": "transition",
+            "to": "DROPPED"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contract-offer",
+    "title": "매니지먼트 제안",
+    "text": "정산과 프로모션 조건이 담긴 제안서가 도착했다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2.8000000000000003,
+    "cooldown": 6,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "demand",
+        "op": "gte",
+        "value": 16
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      },
+      {
+        "key": "canContract",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "offer": true,
+    "choices": [
+      {
+        "id": "accept",
+        "label": "제안을 수락한다",
+        "effects": [
+          {
+            "kind": "contract"
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "제안을 거절한다",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "copy-comment",
+    "title": "기시감 있다는 댓글",
+    "text": "초반 전개를 어디선가 본 것 같다는 댓글이 달렸다.",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 12,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "path",
+        "op": "eq",
+        "value": "PLAGIARISM"
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "copied_exposed:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "copied_exposed"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 8
+      },
+      {
+        "kind": "schedule",
+        "id": "copy-discussion",
+        "delay": 2,
+        "window": 12
+      }
+    ]
+  },
+  {
+    "id": "copy-discussion",
+    "title": "표절 의혹 공론화",
+    "text": "비교글 캡처가 커뮤니티를 돌고 있다.",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 8,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "admit",
+        "label": "인정하고 작품을 내린다",
+        "effects": [
+          {
+            "kind": "transition",
+            "to": "TAKEN_DOWN"
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -14
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "침묵을 유지한다",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 12
+          },
+          {
+            "kind": "schedule",
+            "id": "takedown",
+            "delay": 3,
+            "window": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "takedown",
+    "title": "표절 적발로 비공개",
+    "text": "플랫폼에서 작품의 공개가 중단됐다.",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 10,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID",
+      "HIATUS",
+      "COMPLETED",
+      "RUSHED_END",
+      "DROPPED"
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "TAKEN_DOWN"
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -6
+      }
+    ]
+  },
+  {
+    "id": "fallback",
+    "title": "평범한 하루",
+    "text": "오늘은 원고 창을 열고, 저녁에 닫았다.",
+    "tier": "FALLBACK",
+    "scope": "NONE",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": []
+  }
+]

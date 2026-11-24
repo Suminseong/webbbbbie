@@ -1,0 +1,9 @@
+{
+  "name": "@webbbbbie/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "@webbbbbie/engine": "0.1.0"
+  }
+}

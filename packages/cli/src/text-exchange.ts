@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { extname } from "node:path";
-import ExcelJS from "exceljs";
 import { parse } from "csv-parse/sync";
+import readWorkbook from "read-excel-file/node";
 import { textIdPattern, textIssue } from "@webbbbbie/content";
 import { columns, statuses } from "./text-catalog";
 import type { Row } from "./text-catalog";
@@ -38,14 +38,6 @@ function rowsFromGrid(grid: unknown[][]): InputRow[] {
         typeof value === "number"
       ) {
         values[key] = value == null ? "" : String(value);
-      } else if (
-        typeof value === "object" &&
-        "richText" in value &&
-        Array.isArray(value.richText)
-      ) {
-        values[key] = value.richText
-          .map((part: { text: string }) => part.text)
-          .join("");
       } else {
         values[key] = "";
         issue ??= "NON_PLAIN_CELL:" + key;
@@ -68,16 +60,10 @@ export async function readExchange(path: string): Promise<InputRow[]> {
   }
   if (extension !== ".xlsx")
     throw new Error("Use an XLSX file or the UTF-8 CSV exported from TEXTS.");
-  const file = new ExcelJS.Workbook();
-  await file.xlsx.readFile(path);
-  const sheet = file.getWorksheet("TEXTS");
+  const workbook = await readWorkbook(path, { trim: false });
+  const sheet = workbook.find((item) => item.sheet === "TEXTS");
   if (!sheet) throw new Error("Missing TEXTS sheet.");
-  const width = sheet.getRow(1).cellCount;
-  const grid = Array.from({ length: sheet.rowCount }, (_, i) => {
-    const row = sheet.getRow(i + 1);
-    return Array.from({ length: width }, (_, j) => row.getCell(j + 1).value);
-  });
-  return rowsFromGrid(grid);
+  return rowsFromGrid(sheet.data);
 }
 
 const sameSource = (a: Row, b: Row) =>

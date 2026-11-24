@@ -1,0 +1,12 @@
+[
+  {
+    "seed": 42,
+    "days": 180,
+    "sha256": "11415b49602dc0ff9ece05be693d686e9c31aa02f237a133fa5d55c06c5004f8"
+  },
+  {
+    "seed": 712,
+    "days": 120,
+    "sha256": "6c902a841c8679edc31c0ddbedc1de14df0e0d60d2e1b341e958a60b9c392387"
+  }
+]

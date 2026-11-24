@@ -1,0 +1,10 @@
+{
+  "name": "@webbbbbie/cli",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "@webbbbbie/engine": "0.1.0",
+    "@webbbbbie/content": "0.1.0"
+  }
+}

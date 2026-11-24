@@ -1,0 +1,11 @@
+{
+  "name": "@webbbbbie/engine",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": "./src/api.ts",
+  "dependencies": {
+    "@webbbbbie/content": "0.1.0",
+    "zod": "^3.25.0"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "life": {
+    "ageMin": 20,
+    "ageMax": 34,
+    "yearDays": 365,
+    "startCash": 450000,
+    "abilityMin": 24,
+    "abilityMax": 86,
+    "maxActiveWorks": 4
+  },
+  "time": {
+    "day": 48,
+    "sleep": 14,
+    "minSleep": 8,
+    "living": 6,
+    "workUnit": 2,
+    "deadlinePressure": 4,
+    "communityMax": 4,
+    "egoMax": 3
+  },
+  "writing": {
+    "base": 0.04,
+    "speedFactor": 0.0008,
+    "conditionMin": 0.1,
+    "fatiguePenalty": 0.5,
+    "stressPenalty": 0.3,
+    "aptitudeMin": 0.8,
+    "aptitudeMax": 1.2,
+    "targetStock": 5,
+    "paidChapters": 25,
+    "paidFavorites": 1000,
+    "resumeHealth": 40,
+    "defaultHiatus": 7,
+    "secondWorkChapters": 5
+  },
+  "condition": {
+    "initialHealth": 88,
+    "initialFatigue": 14,
+    "initialStress": 18,
+    "initialDrive": 64,
+    "healthySleep": 12,
+    "healthLoss": 0.4,
+    "healthRecovery": 0.5,
+    "fatigueThreshold": 30,
+    "fatigueGain": 1.5,
+    "fatigueRecovery": 2,
+    "fatigueSleepBase": 10,
+    "missedThreshold": 7,
+    "missedStress": 1,
+    "restStress": 0.25,
+    "successStress": 0.45
+  },
+  "market": {
+    "reach": 0.02,
+    "groupSize": 5,
+    "ageSpeed": [2, 3, 4, 5, 6],
+    "ageAttrition": [0.03, 0.024, 0.018, 0.012, 0.005],
+    "newDays": 8,
+    "returnDays": 3,
+    "hotFavorites": 600,
+    "bestFavorites": 1400
+  },
+  "economy": {
+    "settlementDays": 30,
+    "chapterPrice": 100,
+    "purchaseRate": 0.6,
+    "authorShare": 0.6,
+    "subscriptionWon": 3,
+    "livingExpense": 540000
+  },
+  "events": {
+    "forcedGlobalCooldown": 3,
+    "forcedSameCooldown": 14,
+    "maxPriorityStreak": 3,
+    "choiceIntervalMin": 7,
+    "choiceIntervalMax": 14,
+    "logKeep": 160,
+    "summaryKeep": 45,
+    "eventHistoryKeep": 90
+  },
+  "aptitude": {
+    "guessEvidence": 3,
+    "confirmEvidence": 8,
+    "evidenceDays": 3,
+    "unknownMin": 12,
+    "unknownMax": 94,
+    "guessError": 1
+  },
+  "growth": {
+    "completionSkill": 2,
+    "rushedSkill": 0.5,
+    "droppedSkill": 0.2,
+    "recognitionCap": 8,
+    "completionTrust": 7
+  },
+  "limits": {
+    "dailyMeanMs": 1,
+    "saveMaxBytes": 1048576,
+    "sampleWorks": 10,
+    "sampleDays": 7300
+  }
+}

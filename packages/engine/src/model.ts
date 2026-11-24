@@ -1,0 +1,259 @@
+import { z } from "zod";
+import {
+  abilityKeys,
+  aptitudeKinds,
+  channels,
+  conditionKeys,
+  paths,
+  socialKeys,
+  statuses,
+} from "@webbbbbie/content";
+
+const finite = z.number().finite();
+const natural = finite.int().nonnegative();
+const score = finite.min(0).max(100);
+const volume = finite.nonnegative();
+const word = z.string().min(1);
+const amount = finite.int();
+const ageBands = z.array(volume).length(5);
+function keyed<K extends string>(keys: readonly K[], value: typeof score) {
+  return z.object(
+    Object.fromEntries(keys.map((key) => [key, value])) as Record<
+      K,
+      typeof score
+    >,
+  );
+}
+const labor = z.object({
+  work: natural,
+  living: natural,
+  sleep: natural,
+  community: natural,
+  ego: natural,
+  writing: z.record(natural),
+  unused: natural,
+});
+const ability = keyed(abilityKeys, score);
+const condition = keyed(conditionKeys, score);
+const social = keyed(socialKeys, score);
+const path = z.enum(paths);
+const status = z.enum(statuses);
+const activeStatus = z.enum(["SERIAL_FREE", "SERIAL_PAID"]);
+const endStatus = z.enum(["COMPLETED", "RUSHED_END", "DROPPED", "TAKEN_DOWN"]);
+const phase = z.enum(["READY", "AWAITING_CHOICE", "ENDED"]);
+const target = z.object({
+  scope: z.enum(["AUTHOR", "WORK", "CONTRACT", "NONE"]),
+  id: word.nullable(),
+});
+
+const aptitude = z.object({
+  kind: z.enum(aptitudeKinds),
+  key: word,
+  trueValue: score,
+  evidence: natural,
+  lastEvidence: amount,
+  estimate: z.string().nullable(),
+  stage: z.enum(["UNKNOWN", "GUESS", "CERTAIN"]),
+});
+const author = z.object({
+  penName: word,
+  startAge: natural,
+  motive: word,
+  paths: z.array(path),
+  startPath: path.nullable(),
+  jobId: word,
+  home: z.object({ name: word, comfort: score, expense: volume }),
+  abilities: ability,
+  condition,
+  social,
+  traits: keyed(
+    ["consumption", "community", "multitask", "deadlineTolerance"] as const,
+    score,
+  ),
+  specialStates: z.array(z.object({ key: word, until: natural })),
+  aptitudes: z.array(aptitude),
+  cash: amount,
+  lastRoutine: labor.nullable(),
+});
+const workStats = z.object({
+  newReaders: volume,
+  newByAge: ageBands,
+  newBySource: keyed(channels, volume),
+  totalNew: volume,
+  views: volume,
+  totalViews: volume,
+  latestViews: volume,
+  lost: volume,
+  favorites: volume,
+  publishedToday: natural,
+  streakMissed: natural,
+  lastPosted: natural.nullable(),
+  promotionUntil: amount,
+  missedReason: z.enum(["HIATUS", "NO_STOCK"]).nullable(),
+});
+const work = z.object({
+  id: word,
+  title: word,
+  genre: word,
+  material: word,
+  tags: z.array(word),
+  startPath: path,
+  platformId: word,
+  contractId: word.nullable(),
+  status,
+  startDay: natural,
+  targetChapters: natural.positive(),
+  published: natural,
+  stock: volume,
+  mask: natural.max(127),
+  quality: score,
+  consistency: score,
+  attachment: score,
+  hiatusUntil: natural.nullable(),
+  resumeTo: activeStatus.nullable(),
+  paidFrom: natural.nullable(),
+  paidEligibleDay: natural.nullable(),
+  lastResume: natural.nullable(),
+  readers: z.array(z.array(volume)).length(5),
+  caughtUp: ageBands,
+  flags: z.array(word),
+  stats: workStats,
+  revenue: z.object({ accrued: natural, paid: natural }),
+  end: z
+    .object({
+      day: natural,
+      reason: endStatus,
+      favorites: volume,
+      views: volume,
+      chapters: natural,
+      rewarded: z.boolean(),
+    })
+    .nullable(),
+});
+const contract = z.object({
+  id: word,
+  workId: word,
+  companyId: word,
+  signedDay: natural,
+  expiresDay: natural,
+  share: finite.min(0).max(1),
+  advance: natural,
+  promise: word,
+  promotionStart: natural,
+  promotionEnd: natural,
+  status: z.enum(["ACTIVE", "EXPIRED", "TERMINATED"]),
+});
+const selectedEvent = z.object({
+  id: word,
+  defId: word,
+  day: natural,
+  tier: z.enum(["ORIGIN", "FOLLOW_UP", "FORCED", "REGULAR", "FALLBACK"]),
+  target,
+  choiceIds: z.array(word),
+  resolvedChoice: word.nullable(),
+  offerCompanyId: word.nullable(),
+  followUpId: word.nullable(),
+  status: z.enum(["PENDING", "RESOLVED"]),
+});
+const scheduled = z.object({
+  id: word,
+  defId: word,
+  from: word,
+  target,
+  dueDay: natural,
+  expiresDay: natural,
+});
+const ledger = z.object({
+  id: word,
+  day: natural,
+  kind: z.enum(["SALARY", "PAYOUT", "LIVING", "EVENT", "ADVANCE"]),
+  amount,
+  workId: word.nullable(),
+  ref: word,
+});
+const engineEvent = z.object({
+  type: z.enum([
+    "DAY_STARTED",
+    "EVENT_SELECTED",
+    "CHOICE_REQUIRED",
+    "CHOICE_RESOLVED",
+    "EFFECT_APPLIED",
+    "CHAPTER_POSTED",
+    "CHAPTER_MISSED",
+    "WORK_STATUS_CHANGED",
+    "STATE_CHANGED",
+    "PAYOUT",
+    "DAY_CLOSED",
+  ]),
+  day: natural,
+  message: z.string(),
+  workId: word.nullable(),
+});
+const summary = z.object({
+  day: natural,
+  eventId: word,
+  eventTitle: word,
+  time: labor,
+  newReaders: volume,
+  views: volume,
+  posted: natural,
+  gained: natural,
+  cash: amount,
+  condition,
+});
+export const stateSchema = z.object({
+  schemaVersion: natural,
+  rulesVersion: word,
+  contentHash: word,
+  seed: natural.max(4294967295),
+  day: natural,
+  phase,
+  author,
+  works: z.array(work),
+  contracts: z.array(contract),
+  ledger: z.array(ledger),
+  flags: z.array(word),
+  eventLast: z.record(natural),
+  eventCount: z.record(natural),
+  lastForced: amount,
+  priorityStreak: natural,
+  followUps: z.array(scheduled),
+  eventHistory: z.array(selectedEvent),
+  archive: z.array(z.tuple([word, word.nullable(), word.nullable()])),
+  pending: selectedEvent.nullable(),
+  log: z.array(engineEvent),
+  summaries: z.array(summary),
+});
+export const envelopeSchema = z.object({
+  format: z.literal("webnovel-life-save"),
+  schemaVersion: natural,
+  rulesVersion: word,
+  contentHash: word,
+  savedAtDay: natural,
+  phase,
+  state: stateSchema,
+});
+export type LifeState = z.infer<typeof stateSchema>;
+export type Author = z.infer<typeof author>;
+export type Work = z.infer<typeof work>;
+export type Contract = z.infer<typeof contract>;
+export type EventInstance = z.infer<typeof selectedEvent>;
+export type Target = z.infer<typeof target>;
+export type EngineEvent = z.infer<typeof engineEvent>;
+export type DailySummary = z.infer<typeof summary>;
+export type Routine = z.infer<typeof labor>;
+export type LedgerEntry = z.infer<typeof ledger>;
+export type Aptitude = z.infer<typeof aptitude>;
+export type ConditionStat = (typeof conditionKeys)[number];
+export type SocialStat = (typeof socialKeys)[number];
+export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
+export const neverEnd: LifeEndPolicy = () => false;
+export const SCHEMA_VERSION = 1;
+export const RULES_VERSION = "0.1.0";
+export type AdvanceResult = {
+  state: LifeState;
+  events: EngineEvent[];
+  stoppedReason: "DAYS_DONE" | "AWAITING_CHOICE" | "ENDED";
+};
+export type CommandError =
+  "E_NO_PENDING" | "E_INVALID_CHOICE" | "E_SAVE_CORRUPT" | "E_SAVE_VERSION";

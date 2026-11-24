@@ -1,0 +1,11 @@
+{
+  "lifeEnd": "none",
+  "allowFalseConviction": false,
+  "minimumReleaseEvents": 300,
+  "completionReach": {
+    "COMPLETED": 1,
+    "RUSHED_END": 0.6,
+    "DROPPED": 0.3,
+    "TAKEN_DOWN": 0
+  }
+}

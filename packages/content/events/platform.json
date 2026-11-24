@@ -1,0 +1,444 @@
+[
+  {
+    "id": "takedown",
+    "category": "platform",
+    "title": "event.takedown.title",
+    "text": "event.takedown.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 10,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID",
+      "HIATUS",
+      "COMPLETED",
+      "RUSHED_END",
+      "DROPPED"
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "TAKEN_DOWN"
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -6
+      }
+    ]
+  },
+  {
+    "id": "today-best",
+    "category": "platform",
+    "title": "event.today-best.title",
+    "text": "event.today-best.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 400
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "rank-drop",
+    "category": "platform",
+    "title": "event.rank-drop.title",
+    "text": "event.rank-drop.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 200
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "special",
+        "key": "통계창 중독",
+        "days": 4
+      }
+    ]
+  },
+  {
+    "id": "new-feature-pick",
+    "category": "platform",
+    "title": "event.new-feature-pick.title",
+    "text": "event.new-feature-pick.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "lte",
+        "value": 20
+      },
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 55
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "contest-notice",
+    "category": "platform",
+    "title": "event.contest-notice.title",
+    "text": "event.contest-notice.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "choices": [
+      {
+        "id": "enter",
+        "label": "event.contest-notice.choice.enter",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "schedule",
+            "id": "contest-result",
+            "delay": 20,
+            "window": 10
+          }
+        ]
+      },
+      {
+        "id": "skip",
+        "label": "event.contest-notice.choice.skip",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contest-result",
+    "category": "platform",
+    "title": "event.contest-result.title",
+    "text": "event.contest-result.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 5
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "maintenance",
+    "category": "platform",
+    "title": "event.maintenance.title",
+    "text": "event.maintenance.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "policy-change",
+    "category": "platform",
+    "title": "event.policy-change.title",
+    "text": "event.policy-change.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 180,
+    "minDay": 60,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "slot-missing",
+    "category": "platform",
+    "title": "event.slot-missing.title",
+    "text": "event.slot-missing.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "inquiry",
+        "label": "event.slot-missing.choice.inquiry",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "event.slot-missing.choice.wait",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "banner",
+    "category": "platform",
+    "title": "event.banner.title",
+    "text": "event.banner.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 600
+      },
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 55
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "frequency-warning",
+    "category": "platform",
+    "title": "event.frequency-warning.title",
+    "text": "event.frequency-warning.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 0.5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "cover-upload",
+    "category": "platform",
+    "title": "event.cover-upload.title",
+    "text": "event.cover-upload.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 150000
+      }
+    ],
+    "choices": [
+      {
+        "id": "commission",
+        "label": "event.cover-upload.choice.commission",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -150000
+          },
+          {
+            "kind": "promotion",
+            "days": 3
+          },
+          {
+            "kind": "attachment",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "diy",
+        "label": "event.cover-upload.choice.diy",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          },
+          {
+            "kind": "attachment",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "platform-event",
+    "category": "platform",
+    "title": "event.platform-event.title",
+    "text": "event.platform-event.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "join",
+        "label": "event.platform-event.choice.join",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "event.platform-event.choice.pass",
+        "effects": []
+      }
+    ]
+  }
+]

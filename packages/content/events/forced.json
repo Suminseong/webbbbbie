@@ -1,0 +1,463 @@
+[
+  {
+    "id": "forced-hiatus",
+    "category": "forced",
+    "title": "event.forced-hiatus.title",
+    "text": "event.forced-hiatus.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 16,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "any": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 57
+      },
+      {
+        "key": "fatigue",
+        "op": "gte",
+        "value": 81
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "HIATUS",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "ntr-drift",
+    "category": "forced",
+    "title": "event.ntr-drift.title",
+    "text": "event.ntr-drift.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 8,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 63
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -15
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.27
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "rush-ending",
+    "category": "forced",
+    "title": "event.rush-ending.title",
+    "text": "event.rush-ending.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 77
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 13
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "RUSHED_END"
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -8
+      }
+    ]
+  },
+  {
+    "id": "new-title-illness",
+    "category": "forced",
+    "title": "event.new-title-illness.title",
+    "text": "event.new-title-illness.body",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 12,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 57
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "special",
+        "key": "신작병",
+        "days": 8
+      }
+    ]
+  },
+  {
+    "id": "forced-multi",
+    "category": "forced",
+    "title": "event.forced-multi.title",
+    "text": "event.forced-multi.body",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 10,
+    "cooldown": 0,
+    "minDay": 7,
+    "conditions": [
+      {
+        "key": "maxPublished",
+        "op": "gte",
+        "value": 5
+      },
+      {
+        "key": "activeWorks",
+        "op": "eq",
+        "value": 1
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "any": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 53
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 35
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "forced-comment-fight",
+    "category": "forced",
+    "title": "event.forced-comment-fight.title",
+    "text": "event.forced-comment-fight.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 64
+      },
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.05
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "forced-plot-reset",
+    "category": "forced",
+    "title": "event.forced-plot-reset.title",
+    "text": "event.forced-plot-reset.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 5,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 66
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -6
+      },
+      {
+        "kind": "consistency",
+        "amount": -10
+      },
+      {
+        "kind": "stock",
+        "amount": -3
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.08
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "forced-binge-writing",
+    "category": "forced",
+    "title": "event.forced-binge-writing.title",
+    "text": "event.forced-binge-writing.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 5,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 82
+      },
+      {
+        "key": "health",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 12
+      }
+    ]
+  },
+  {
+    "id": "forced-notice-rant",
+    "category": "forced",
+    "title": "event.forced-notice-rant.title",
+    "text": "event.forced-notice-rant.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 72
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -5
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -6
+      }
+    ]
+  },
+  {
+    "id": "forced-vanish",
+    "category": "forced",
+    "title": "event.forced-vanish.title",
+    "text": "event.forced-vanish.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 80
+      },
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 72
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "HIATUS",
+        "days": 10
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -12
+      },
+      {
+        "kind": "social",
+        "stat": "completionTrust",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "forced-delete-stock",
+    "category": "forced",
+    "title": "event.forced-delete-stock.title",
+    "text": "event.forced-delete-stock.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 5,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "내글구려병:true"
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 58
+      },
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": -99
+      },
+      {
+        "kind": "quality",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -6
+      }
+    ]
+  }
+]

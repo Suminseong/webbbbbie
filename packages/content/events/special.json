@@ -1,0 +1,369 @@
+[
+  {
+    "id": "stats-refresh",
+    "category": "special",
+    "title": "event.stats-refresh.title",
+    "text": "event.stats-refresh.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      },
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "통계창 중독:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "통계창 중독",
+        "days": 10
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "ego-addiction",
+    "category": "special",
+    "title": "event.ego-addiction.title",
+    "text": "event.ego-addiction.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 45
+      },
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "에고서칭 중독:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "에고서칭 중독",
+        "days": 14
+      }
+    ]
+  },
+  {
+    "id": "art-disease",
+    "category": "special",
+    "title": "event.art-disease.title",
+    "text": "event.art-disease.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "insight",
+        "op": "gte",
+        "value": 55
+      },
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 58
+      }
+    ],
+    "choices": [
+      {
+        "id": "embrace",
+        "label": "event.art-disease.choice.embrace",
+        "effects": [
+          {
+            "kind": "special",
+            "key": "예술병",
+            "days": 14
+          },
+          {
+            "kind": "quality",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "resist",
+        "label": "event.art-disease.choice.resist",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "commercial",
+            "amount": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "big-author-disease",
+    "category": "special",
+    "title": "event.big-author-disease.title",
+    "text": "event.big-author-disease.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 25
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "대작가병",
+        "days": 14
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "ending-itch",
+    "category": "special",
+    "title": "event.ending-itch.title",
+    "text": "event.ending-itch.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 80
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "완결병",
+        "days": 12
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "awakening",
+    "category": "special",
+    "title": "event.awakening.title",
+    "text": "event.awakening.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 30,
+    "conditions": [
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 72
+      },
+      {
+        "key": "stress",
+        "op": "lte",
+        "value": 40
+      }
+    ],
+    "effects": [
+      {
+        "kind": "special",
+        "key": "각성",
+        "days": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "naegeul-cure",
+    "category": "special",
+    "title": "event.naegeul-cure.title",
+    "text": "event.naegeul-cure.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 5,
+    "cooldown": 10,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "내글구려병:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "clearSpecial",
+        "key": "내글구려병"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "ego-detox",
+    "category": "special",
+    "title": "event.ego-detox.title",
+    "text": "event.ego-detox.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "에고서칭 중독:true"
+      }
+    ],
+    "choices": [
+      {
+        "id": "delete",
+        "label": "event.ego-detox.choice.delete",
+        "effects": [
+          {
+            "kind": "clearSpecial",
+            "key": "에고서칭 중독"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -4
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.ego-detox.choice.keep",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "art-cured",
+    "category": "special",
+    "title": "event.art-cured.title",
+    "text": "event.art-cured.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "예술병:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "clearSpecial",
+        "key": "예술병"
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      }
+    ]
+  },
+  {
+    "id": "reward-shopping",
+    "category": "special",
+    "title": "event.reward-shopping.title",
+    "text": "event.reward-shopping.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 10,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "보상심리:true"
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 50000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -45000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  }
+]

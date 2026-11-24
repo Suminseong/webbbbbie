@@ -106,7 +106,7 @@
       "genre": "entity.genre.01",
       "material": "entity.material.01",
       "tags": ["entity.tag.01", "entity.tag.02", "entity.tag.03"],
-      "target": 58,
+      "target": 160,
       "mask": 31
     },
     {
@@ -114,7 +114,7 @@
       "genre": "entity.genre.02",
       "material": "entity.material.02",
       "tags": ["entity.tag.04", "entity.tag.05", "entity.tag.06"],
-      "target": 53,
+      "target": 140,
       "mask": 63
     },
     {
@@ -122,7 +122,7 @@
       "genre": "entity.genre.03",
       "material": "entity.material.03",
       "tags": ["entity.tag.07", "entity.tag.08", "entity.tag.06"],
-      "target": 45,
+      "target": 120,
       "mask": 63
     },
     {
@@ -130,7 +130,7 @@
       "genre": "entity.genre.04",
       "material": "entity.material.04",
       "tags": ["entity.tag.09", "entity.tag.08", "entity.tag.03"],
-      "target": 48,
+      "target": 130,
       "mask": 31
     },
     {
@@ -138,7 +138,7 @@
       "genre": "entity.genre.05",
       "material": "entity.material.05",
       "tags": ["entity.tag.10", "entity.tag.11", "entity.tag.04"],
-      "target": 67,
+      "target": 200,
       "mask": 31
     },
     {
@@ -146,7 +146,7 @@
       "genre": "entity.genre.03",
       "material": "entity.material.02",
       "tags": ["entity.tag.05", "entity.tag.11", "entity.tag.10"],
-      "target": 52,
+      "target": 150,
       "mask": 27
     },
     {
@@ -154,7 +154,7 @@
       "genre": "entity.genre.04",
       "material": "entity.material.03",
       "tags": ["entity.tag.07", "entity.tag.09", "entity.tag.08"],
-      "target": 38,
+      "target": 110,
       "mask": 31
     }
   ],

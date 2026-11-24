@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
-import { defaultContent, parseContent, text } from "@webbbbbie/content";
+import {
+  defaultContent,
+  eventCategories,
+  parseContent,
+  text,
+} from "@webbbbbie/content";
 import { createEngine } from "@webbbbbie/engine";
 import type { LifeState } from "@webbbbbie/engine";
 import { withEvents } from "../packages/content/test-fixtures/content";
@@ -112,11 +117,22 @@ describe("deterministic life and daily commits", () => {
       ok: false,
       error: "E_SAVE_CORRUPT",
     });
+    const current = '"schemaVersion":' + state.schemaVersion;
     expect(
       product.deserialize(
-        saved.replace('"schemaVersion":1', '"schemaVersion":2'),
+        saved.replace(current, '"schemaVersion":' + (state.schemaVersion + 1)),
       ),
     ).toEqual({ ok: false, error: "E_SAVE_VERSION" });
+    // A prototype (schema 1, rules 0.1.0) save is refused, not misread.
+    const prototype = JSON.parse(saved);
+    prototype.schemaVersion = 1;
+    prototype.rulesVersion = "0.1.0";
+    delete prototype.state.ledgerCarry;
+    delete prototype.state.ledgerSeq;
+    expect(product.deserialize(JSON.stringify(prototype))).toEqual({
+      ok: false,
+      error: "E_SAVE_VERSION",
+    });
     const broken = JSON.parse(saved);
     broken.state.works[0].platformId = "missing";
     expect(product.deserialize(JSON.stringify(broken))).toEqual({
@@ -372,10 +388,20 @@ describe("production systems", () => {
 
 describe("content and long-run stability", () => {
   it("[NFR-004][NFR-009] rejects invalid references and keeps valid authored data", () => {
-    expect(
-      defaultContent.events.filter((entry) => entry.tier !== "ORIGIN"),
-    ).toHaveLength(24);
+    const daily = defaultContent.events.filter(
+      (entry) => entry.tier !== "ORIGIN",
+    );
+    expect(daily.length).toBeGreaterThanOrEqual(144);
+    for (const category of eventCategories)
+      expect(
+        defaultContent.events.some((entry) => entry.category === category),
+      ).toBe(true);
     expect(defaultContent.platforms).toHaveLength(6);
+    const unknownSpecial = structuredClone(defaultContent);
+    unknownSpecial.events
+      .find((event) => event.id === "quiet-desk")!
+      .effects!.push({ kind: "special", key: "없는병", days: 3 });
+    expect(() => parseContent(unknownSpecial)).toThrow(/Unknown special/);
     const broken = structuredClone(defaultContent);
     broken.events
       .find((event) => event.id === "copy-comment")!
@@ -490,4 +516,168 @@ describe("content and long-run stability", () => {
       "C-13 load: " + bytes + " bytes, " + average.toFixed(3) + " ms/day",
     );
   });
+});
+
+describe("content expansion and balance safeguards", () => {
+  it("[FR-STATE-002] applies special-state modifiers to writing and stress until expiry", () => {
+    const base = published();
+    base.works[0].stock = 0;
+    const ill = structuredClone(base);
+    ill.author.specialStates.push({ key: "내글구려병", until: 3 });
+    const plain = quiet.advance(base, 1).state;
+    const sick = quiet.advance(ill, 1).state;
+    expect(sick.works[0].stock).toBeLessThan(plain.works[0].stock);
+    expect(sick.author.condition.stress).toBeGreaterThan(
+      plain.author.condition.stress,
+    );
+    expect(sick.author.lastRoutine!.ego).toBeGreaterThanOrEqual(
+      plain.author.lastRoutine!.ego,
+    );
+    const later = quiet.advance(sick, 3).state;
+    expect(later.author.specialStates).toHaveLength(0);
+    expect(quiet.getAuthorView(sick).states[0].name).toBe("내글구려병");
+  });
+
+  it("[FR-READER-003][NFR-003] fades backlist discovery after an ending", () => {
+    const state = published();
+    const work = state.works[0];
+    work.status = "COMPLETED";
+    work.stats.favorites = 2000;
+    work.end = {
+      day: 0,
+      reason: "COMPLETED",
+      favorites: 2000,
+      views: 0,
+      chapters: 12,
+      rewarded: true,
+    };
+    const fresh = quiet.advance(state, 1).state.works[0].stats.newReaders;
+    const old = quiet.advance(state, 400).state.works[0].stats.newReaders;
+    expect(fresh).toBeGreaterThan(0);
+    expect(old).toBeLessThan(fresh * 0.3);
+    const obscure = structuredClone(state);
+    obscure.works[0].stats.favorites = 20;
+    expect(
+      quiet.advance(obscure, 1).state.works[0].stats.newReaders,
+    ).toBeLessThan(fresh);
+  });
+
+  it("[FR-ECONOMY-001][FR-ECONOMY-004] compacts old ledger entries without losing cash or IDs", () => {
+    const initial = product.createLife(42);
+    const start = initial.author.cash;
+    const state = play(product, initial, 900);
+    const keep = defaultContent.balance.economy.ledgerKeepDays;
+    expect(
+      state.ledger.every((entry) => entry.day >= state.day - keep - 30),
+    ).toBe(true);
+    const carried = Object.values(state.ledgerCarry).reduce((a, b) => a + b, 0);
+    const retained = state.ledger.reduce((a, entry) => a + entry.amount, 0);
+    expect(start + carried + retained).toBe(state.author.cash);
+    expect(new Set(state.ledger.map((entry) => entry.id)).size).toBe(
+      state.ledger.length,
+    );
+    expect(state.ledgerSeq).toBeGreaterThan(state.ledger.length);
+    const view = product.getLedgerView(state);
+    expect(view.carried).toEqual(state.ledgerCarry);
+    const load = product.deserialize(product.serialize(state));
+    expect(load.ok).toBe(true);
+  });
+
+  it("[FR-WORK-001][C-15] rests between works before planning the next one", () => {
+    const state = published();
+    const work = state.works[0];
+    work.status = "COMPLETED";
+    work.end = {
+      day: 0,
+      reason: "COMPLETED",
+      favorites: 0,
+      views: 0,
+      chapters: 12,
+      rewarded: true,
+    };
+    const { restMin, restMax } = defaultContent.balance.life;
+    expect(quiet.advance(state, restMin - 1).state.works).toHaveLength(1);
+    expect(quiet.advance(state, restMax + 1).state.works).toHaveLength(2);
+  });
+
+  it("[FR-EVENT-004][T-08] never targets backlist works with serial-only events", () => {
+    const engine = createEngine(withEvents("writers-block"));
+    const state = published(engine);
+    const ended = structuredClone(state.works[0]);
+    ended.id = "W-9";
+    ended.status = "COMPLETED";
+    state.works.push(ended);
+    let life = state;
+    for (let day = 0; day < 20; day += 1) {
+      life = engine.advance(life, 1).state;
+      const last = life.archive[life.archive.length - 1];
+      if (last[0] === "writers-block") expect(last[1]).toBe(state.works[0].id);
+    }
+    expect(life.archive.some((entry) => entry[0] === "writers-block")).toBe(
+      true,
+    );
+  });
+
+  it("[FR-CONTRACT-003] applies contract events and promotions only to the contracted work", () => {
+    const engine = createEngine(withEvents("promotion-confirmed"));
+    const state = published(engine);
+    const other = structuredClone(state.works[0]);
+    other.id = "W-2";
+    other.contractId = null;
+    state.works.push(other);
+    state.contracts.push({
+      id: "C-1",
+      workId: "W-1",
+      companyId: defaultContent.world.companies[0].id,
+      signedDay: 0,
+      expiresDay: 200,
+      share: 0.6,
+      advance: 0,
+      promise: "test",
+      promotionStart: 500,
+      promotionEnd: 501,
+      status: "ACTIVE",
+    });
+    state.works[0].contractId = "C-1";
+    const next = engine.advance(state, 1).state;
+    expect(next.archive[1][0]).toBe("promotion-confirmed");
+    expect(next.works[0].stats.promotionUntil).toBeGreaterThan(1);
+    expect(next.works[1].stats.promotionUntil).toBe(-1);
+    expect(next.works[0].stats.newBySource.PROMOTION).toBeGreaterThan(0);
+    expect(next.works[1].stats.newBySource.PROMOTION).toBe(0);
+  });
+
+  it("[FR-EVENT-002][C-08] paces regular choices without blocking the daily slot", () => {
+    const engine = createEngine(withEvents("critique"));
+    const state = published(engine);
+    state.eventLast["choice:global"] = 0;
+    const result = engine.advance(state, 1).state;
+    expect(result.pending).toBeNull();
+    expect(result.archive[1][0]).toBe("fallback");
+    const gaps: number[] = [];
+    for (let seed = 0; seed < 12; seed += 1) {
+      const life = play(product, product.createLife(seed), 240);
+      let last = 0;
+      for (const [day, entry] of life.archive.entries()) {
+        if (day === 0 || entry[2] === null) continue;
+        if (last) gaps.push(day - last);
+        last = day;
+      }
+    }
+    gaps.sort((a, b) => a - b);
+    const median = gaps[Math.floor(gaps.length / 2)];
+    expect(median).toBeGreaterThanOrEqual(5);
+    expect(median).toBeLessThanOrEqual(14);
+  });
+
+  it("[NFR-005][C-13] keeps the real 20-year product life within the save budget", () => {
+    const state = play(product, product.createLife(42), 7300);
+    const bytes = Buffer.byteLength(product.serialize(state));
+    expect(bytes).toBeLessThanOrEqual(
+      defaultContent.balance.limits.saveMaxBytes,
+    );
+    expect(state.works.length).toBeLessThan(150);
+    const cash = state.author.cash;
+    expect(Number.isSafeInteger(cash)).toBe(true);
+  }, 60_000);
 });

@@ -1,0 +1,602 @@
+[
+  {
+    "id": "commute",
+    "category": "job",
+    "title": "event.commute.title",
+    "text": "event.commute.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 5,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "side-gig",
+    "category": "job",
+    "title": "event.side-gig.title",
+    "text": "event.side-gig.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2.24,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "unemployed"
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.side-gig.choice.accept",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "part_time"
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "event.side-gig.choice.decline",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "overtime",
+    "category": "job",
+    "title": "event.overtime.title",
+    "text": "event.overtime.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 10,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 7
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "company-dinner",
+    "category": "job",
+    "title": "event.company-dinner.title",
+    "text": "event.company-dinner.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -2
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "annual-leave",
+    "category": "job",
+    "title": "event.annual-leave.title",
+    "text": "event.annual-leave.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -10
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "secret-writing",
+    "category": "job",
+    "title": "event.secret-writing.title",
+    "text": "event.secret-writing.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "job-offer",
+    "category": "job",
+    "title": "event.job-offer.title",
+    "text": "event.job-offer.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 240,
+    "minDay": 90,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      }
+    ],
+    "choices": [
+      {
+        "id": "move",
+        "label": "event.job-offer.choice.move",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "employee"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "schedule",
+            "id": "new-job-adapt",
+            "delay": 7,
+            "window": 14
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "event.job-offer.choice.stay",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new-job-adapt",
+    "category": "job",
+    "title": "event.new-job-adapt.title",
+    "text": "event.new-job-adapt.body",
+    "tier": "FOLLOW_UP",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 8
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "layoff",
+    "category": "job",
+    "title": "event.layoff.title",
+    "text": "event.layoff.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 120,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "job",
+        "id": "unemployed"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 10
+      },
+      {
+        "kind": "cash",
+        "amount": 1200000
+      }
+    ]
+  },
+  {
+    "id": "big-outsourcing",
+    "category": "job",
+    "title": "event.big-outsourcing.title",
+    "text": "event.big-outsourcing.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "freelance"
+      }
+    ],
+    "choices": [
+      {
+        "id": "take",
+        "label": "event.big-outsourcing.choice.take",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 800000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 12
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "event.big-outsourcing.choice.decline",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "exam-week",
+    "category": "job",
+    "title": "event.exam-week.title",
+    "text": "event.exam-week.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "student"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 8
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "store-owner",
+    "category": "job",
+    "title": "event.store-owner.title",
+    "text": "event.store-owner.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      }
+    ],
+    "choices": [
+      {
+        "id": "help",
+        "label": "event.store-owner.choice.help",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 60000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "event.store-owner.choice.refuse",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "remote-work",
+    "category": "job",
+    "title": "event.remote-work.title",
+    "text": "event.remote-work.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "leave-request",
+    "category": "job",
+    "title": "event.leave-request.title",
+    "text": "event.leave-request.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 180,
+    "minDay": 60,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      },
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1000000
+      }
+    ],
+    "choices": [
+      {
+        "id": "leave",
+        "label": "event.leave-request.choice.leave",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "leave"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -6
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "event.leave-request.choice.stay",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "go-full-time",
+    "category": "job",
+    "title": "event.go-full-time.title",
+    "text": "event.go-full-time.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 240,
+    "minDay": 90,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 6000000
+      }
+    ],
+    "any": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      },
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      },
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "leave"
+      }
+    ],
+    "choices": [
+      {
+        "id": "quit",
+        "label": "event.go-full-time.choice.quit",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "full_time_author"
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.go-full-time.choice.keep",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      }
+    ]
+  }
+]

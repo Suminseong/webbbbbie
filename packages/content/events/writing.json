@@ -1,0 +1,596 @@
+[
+  {
+    "id": "chapter-buffer",
+    "category": "writing",
+    "title": "event.chapter-buffer.title",
+    "text": "event.chapter-buffer.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 3,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "drop",
+    "category": "writing",
+    "title": "event.drop.title",
+    "text": "event.drop.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2.24,
+    "cooldown": 12,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 7
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 40
+      }
+    ],
+    "choices": [
+      {
+        "id": "continue",
+        "label": "event.drop.choice.continue",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "drop",
+        "label": "event.drop.choice.drop",
+        "effects": [
+          {
+            "kind": "transition",
+            "to": "DROPPED"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prologue-rewrite",
+    "category": "writing",
+    "title": "event.prologue-rewrite.title",
+    "text": "event.prologue-rewrite.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "choices": [
+      {
+        "id": "rewrite",
+        "label": "event.prologue-rewrite.choice.rewrite",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.prologue-rewrite.choice.keep",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "typo-storm",
+    "category": "writing",
+    "title": "event.typo-storm.title",
+    "text": "event.typo-storm.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "plot-memo-lost",
+    "category": "writing",
+    "title": "event.plot-memo-lost.title",
+    "text": "event.plot-memo-lost.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 50,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "setting-book",
+    "category": "writing",
+    "title": "event.setting-book.title",
+    "text": "event.setting-book.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 8
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "transcribe",
+    "category": "writing",
+    "title": "event.transcribe.title",
+    "text": "event.transcribe.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "style",
+        "amount": 0.6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "writers-block",
+    "category": "writing",
+    "title": "event.writers-block.title",
+    "text": "event.writers-block.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "targetBias": "stock",
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "chain-posting",
+    "category": "writing",
+    "title": "event.chain-posting.title",
+    "text": "event.chain-posting.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 4
+      }
+    ],
+    "choices": [
+      {
+        "id": "post",
+        "label": "event.chain-posting.choice.post",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -2
+          },
+          {
+            "kind": "promotion",
+            "days": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "save",
+        "label": "event.chain-posting.choice.save",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "character-alive",
+    "category": "writing",
+    "title": "event.character-alive.title",
+    "text": "event.character-alive.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 2
+      },
+      {
+        "kind": "attachment",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "rhythm",
+    "category": "writing",
+    "title": "event.rhythm.title",
+    "text": "event.rhythm.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "vocabulary",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "title-change",
+    "category": "writing",
+    "title": "event.title-change.title",
+    "text": "event.title-change.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "change",
+        "label": "event.title-change.choice.change",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 3
+          },
+          {
+            "kind": "consistency",
+            "amount": -2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.title-change.choice.keep",
+        "effects": [
+          {
+            "kind": "attachment",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chapter-length",
+    "category": "writing",
+    "title": "event.chapter-length.title",
+    "text": "event.chapter-length.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "split",
+        "label": "event.chapter-length.choice.split",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": 1
+          },
+          {
+            "kind": "quality",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "whole",
+        "label": "event.chapter-length.choice.whole",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "side-story",
+    "category": "writing",
+    "title": "event.side-story.title",
+    "text": "event.side-story.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "attachment",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "stock",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "last-minute",
+    "category": "writing",
+    "title": "event.last-minute.title",
+    "text": "event.last-minute.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 14,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      },
+      {
+        "kind": "quality",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "revision-hell",
+    "category": "writing",
+    "title": "event.revision-hell.title",
+    "text": "event.revision-hell.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 1
+      },
+      {
+        "kind": "stock",
+        "amount": -0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "cliche-twist",
+    "category": "writing",
+    "title": "event.cliche-twist.title",
+    "text": "event.cliche-twist.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 2
+      },
+      {
+        "kind": "evidence",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "outline-day",
+    "category": "writing",
+    "title": "event.outline-day.title",
+    "text": "event.outline-day.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  }
+]

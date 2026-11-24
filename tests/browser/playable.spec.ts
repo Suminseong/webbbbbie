@@ -46,31 +46,25 @@ test("[FR-UI-001/003/005] starts at day 0 and accepts choice, day and speed cont
       level: 1,
     }),
   ).toBeVisible();
-  await page
-    .getByRole("combobox", { name: text("ui.clock.speed-label") })
-    .selectOption("2");
+  await page.getByRole("combobox", { name: text("ui.clock.speed-label") }).selectOption("10");
   await page.getByRole("button", { name: text("ui.clock.play") }).click();
-  await expect(page.getByTestId("phase")).toHaveText(text("ui.clock.waiting"));
-  await expect(
-    page.getByRole("heading", {
-      name: 1 + text("ui.clock.day-unit"),
-      level: 1,
-    }),
-  ).toBeVisible();
+  // Auto play runs through ordinary days and stops at the next major choice
+  // (seed 42 with first options: day 9). The confirmed day stays frozen.
+  await expect(page.getByTestId("phase")).toHaveText(text("ui.clock.waiting"), {
+    timeout: 15_000,
+  });
+  const dayHeading = page.getByRole("heading", { level: 1 });
+  const waitingDay = (await dayHeading.textContent()) ?? "";
+  expect(waitingDay).not.toBe(1 + text("ui.clock.day-unit"));
+  await page.waitForTimeout(500);
+  await expect(dayHeading).toHaveText(waitingDay);
   await page.locator(".event-options button").first().click();
-  await expect(
-    page.getByRole("heading", {
-      name: 2 + text("ui.clock.day-unit"),
-      level: 1,
-    }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: text("ui.clock.paused"), exact: true })
-    .click();
+  await expect(dayHeading).not.toHaveText(waitingDay);
+  await page.getByRole("button", { name: text("ui.clock.paused"), exact: true }).click();
   await expect(page.getByTestId("phase")).toHaveText(text("ui.clock.paused"));
-  await expect(
-    page.getByRole("combobox", { name: text("ui.clock.speed-label") }),
-  ).toHaveValue("2");
+  await expect(page.getByRole("combobox", { name: text("ui.clock.speed-label") })).toHaveValue(
+    "10",
+  );
   expect(errors).toEqual([]);
 });
 

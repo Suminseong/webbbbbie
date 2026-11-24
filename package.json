@@ -22,6 +22,8 @@
     "golden": "tsx packages/cli/src/main.ts golden",
     "text:export": "tsx packages/cli/src/text-resources.ts export",
     "text:import": "tsx packages/cli/src/text-resources.ts import",
+    "bench": "tsx packages/cli/src/main.ts bench",
+    "profile": "tsx packages/cli/src/main.ts profile",
     "test:browser": "playwright test",
     "format": "prettier --write ."
   },

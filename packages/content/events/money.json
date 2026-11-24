@@ -1,0 +1,517 @@
+[
+  {
+    "id": "cyber-closing",
+    "category": "money",
+    "title": "event.cyber-closing.title",
+    "text": "event.cyber-closing.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 3,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 10000
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 25
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -6800
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "payout-toast",
+    "category": "money",
+    "title": "event.payout-toast.title",
+    "text": "event.payout-toast.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 16,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 8
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "special",
+        "key": "보상심리",
+        "days": 7
+      }
+    ]
+  },
+  {
+    "id": "gear",
+    "category": "money",
+    "title": "event.gear.title",
+    "text": "event.gear.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.68,
+    "cooldown": 12,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 85000
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "event.gear.choice.buy",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -79000
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 6
+          },
+          {
+            "kind": "special",
+            "key": "장비병",
+            "days": 7
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "event.gear.choice.wait",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "delivery-night",
+    "category": "money",
+    "title": "event.delivery-night.title",
+    "text": "event.delivery-night.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 6,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 30
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 20000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -18000
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "chair-upgrade",
+    "category": "money",
+    "title": "event.chair-upgrade.title",
+    "text": "event.chair-upgrade.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 180,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 260000
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "event.chair-upgrade.choice.buy",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -239000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -8
+          },
+          {
+            "kind": "special",
+            "key": "장비병",
+            "days": 5
+          }
+        ]
+      },
+      {
+        "id": "cushion",
+        "label": "event.chair-upgrade.choice.cushion",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -15000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rent-hike",
+    "category": "money",
+    "title": "event.rent-hike.title",
+    "text": "event.rent-hike.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 90,
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -120000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "tax-season",
+    "category": "money",
+    "title": "event.tax-season.title",
+    "text": "event.tax-season.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 300,
+    "minDay": 120,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "accountant",
+        "label": "event.tax-season.choice.accountant",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -80000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "self",
+        "label": "event.tax-season.choice.self",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "savings",
+    "category": "money",
+    "title": "event.savings.title",
+    "text": "event.savings.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 1000000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "broke",
+    "category": "money",
+    "title": "event.broke.title",
+    "text": "event.broke.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 50000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "parents-allowance",
+    "category": "money",
+    "title": "event.parents-allowance.title",
+    "text": "event.parents-allowance.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 150000
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.parents-allowance.choice.accept",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 300000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "label": "event.parents-allowance.choice.return",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "luxury",
+    "category": "money",
+    "title": "event.luxury.title",
+    "text": "event.luxury.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 3000000
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 1500000
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "event.luxury.choice.buy",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -1200000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "walk",
+        "label": "event.luxury.choice.walk",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cafe-office",
+    "category": "money",
+    "title": "event.cafe-office.title",
+    "text": "event.cafe-office.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 5,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 10000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -6500
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "first-million",
+    "category": "money",
+    "title": "event.first-million.title",
+    "text": "event.first-million.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1000000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 6
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 1
+      },
+      {
+        "kind": "special",
+        "key": "보상심리",
+        "days": 5
+      }
+    ]
+  }
+]

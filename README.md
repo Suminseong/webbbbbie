@@ -22,19 +22,23 @@ npm test
 npm run validate
 npm run golden
 npm run sim -- 42 60
+npm run profile -- 100 730
+npm run bench
 npx playwright install chromium
 npm run test:browser
 ```
+
+`profile [시드 수] [일수] [mixed|first]`는 시드 표본의 선택 간격·사건 분포·정산 경계를 집계합니다. `bench`는 20년 진행의 일일 처리 시간·저장 크기·공개 조회 비용을 측정합니다. 규칙이나 콘텐츠를 의도적으로 바꿨다면 `npx tsx packages/cli/src/main.ts golden update "<이유>"`로 골든 해시를 갱신하고 이유를 남깁니다.
 
 Playwright는 빌드된 브라우저 앱을 실행합니다. 기존 Chromium 계열 브라우저 실행 파일을 사용하려면 WEBBBBBIE_BROWSER_EXECUTABLE에 절대 경로를 지정합니다. Firefox 테스트는 Playwright Firefox 설치 후 WEBBBBBIE_BROWSER_KIND를 firefox로 지정합니다.
 
 ## 구조
 
 - packages/engine — 입출력과 화면이 없는 결정적 TypeScript 엔진.
-- packages/content — 직업, 작가 설정, 플랫폼 6곳, 일일 사건 24건과 시작 사건 1건, 계수와 데이터 검증.
+- packages/content — 직업, 작가 설정, 플랫폼 6곳, 특수 상태 10종, 분야별 사건 파일(events/*.json, 고유 사건 145건), 계수와 데이터 검증.
 - packages/cli — 데이터 검증, 시드 재생 및 골든 상태 검증.
 - apps/web — 기능 검증용 브라우저 UI와 IndexedDB 어댑터.
-- docs — [기술 설계](docs/design.md) 및 [화면 연동 계약](docs/view-model.md).
+- docs — [기술 설계](docs/design.md), [화면 연동 계약](docs/view-model.md), [사건 콘텐츠 작성 안내](docs/content-authoring.md), [검증 기록](docs/verification/2026-11-25-rules-0.2.md).
 
 요구사항은 Notion의 v0.2 기준을 따릅니다. 편결·구독, 작품별 연재·통계, 다작, 강제 사건, 적성, 계약 및 경제의 초도 구현을 포함합니다. 콘텐츠 확장과 제품 밸런스, 시각 디자인 고도화는 후속 범위입니다. 인생 종료 정책은 현재 계속 진행입니다.
 

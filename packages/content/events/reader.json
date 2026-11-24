@@ -1,0 +1,641 @@
+[
+  {
+    "id": "reader-fan",
+    "category": "reader",
+    "title": "event.reader-fan.title",
+    "text": "event.reader-fan.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 8,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "copy-comment",
+    "category": "reader",
+    "title": "event.copy-comment.title",
+    "text": "event.copy-comment.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 12,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "path",
+        "op": "eq",
+        "value": "PLAGIARISM"
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "copied_exposed:false"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "copied_exposed"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 8
+      },
+      {
+        "kind": "schedule",
+        "id": "copy-discussion",
+        "delay": 2,
+        "window": 12
+      }
+    ]
+  },
+  {
+    "id": "fav-hundred",
+    "category": "reader",
+    "title": "event.fav-hundred.title",
+    "text": "event.fav-hundred.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 100
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "fav-thousand",
+    "category": "reader",
+    "title": "event.fav-thousand.title",
+    "text": "event.fav-thousand.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 1000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "drop-comment",
+    "category": "reader",
+    "title": "event.drop-comment.title",
+    "text": "event.drop-comment.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 4,
+    "cooldown": 14,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "readerShock",
+        "amount": 0.01
+      }
+    ]
+  },
+  {
+    "id": "typo-reader",
+    "category": "reader",
+    "title": "event.typo-reader.title",
+    "text": "event.typo-reader.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "long-review",
+    "category": "reader",
+    "title": "event.long-review.title",
+    "text": "event.long-review.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 15
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      },
+      {
+        "kind": "evidence",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "fan-art",
+    "category": "reader",
+    "title": "event.fan-art.title",
+    "text": "event.fan-art.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 300
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 6
+      },
+      {
+        "kind": "attachment",
+        "amount": 4
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "prediction-hit",
+    "category": "reader",
+    "title": "event.prediction-hit.title",
+    "text": "event.prediction-hit.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "choices": [
+      {
+        "id": "twist",
+        "label": "event.prediction-hit.choice.twist",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 2
+          },
+          {
+            "kind": "consistency",
+            "amount": -4
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.prediction-hit.choice.keep",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "goguma-protest",
+    "category": "reader",
+    "title": "event.goguma-protest.title",
+    "text": "event.goguma-protest.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 21,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "choices": [
+      {
+        "id": "cider",
+        "label": "event.goguma-protest.choice.cider",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": -3
+          },
+          {
+            "kind": "quality",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "hold",
+        "label": "event.goguma-protest.choice.hold",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "readerShock",
+            "amount": 0.02
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cider-reaction",
+    "category": "reader",
+    "title": "event.cider-reaction.title",
+    "text": "event.cider-reaction.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 60
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      },
+      {
+        "kind": "promotion",
+        "days": 1
+      }
+    ]
+  },
+  {
+    "id": "rating-terror",
+    "category": "reader",
+    "title": "event.rating-terror.title",
+    "text": "event.rating-terror.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 200
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 7
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      },
+      {
+        "kind": "schedule",
+        "id": "terror-explain",
+        "delay": 1,
+        "window": 6
+      }
+    ]
+  },
+  {
+    "id": "terror-explain",
+    "category": "reader",
+    "title": "event.terror-explain.title",
+    "text": "event.terror-explain.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "ignore",
+        "label": "event.terror-explain.choice.ignore",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "notice",
+        "label": "event.terror-explain.choice.notice",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 1
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binge-proof",
+    "category": "reader",
+    "title": "event.binge-proof.title",
+    "text": "event.binge-proof.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "schedule-question",
+    "category": "reader",
+    "title": "event.schedule-question.title",
+    "text": "event.schedule-question.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      },
+      {
+        "kind": "evidence",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "support-comment",
+    "category": "reader",
+    "title": "event.support-comment.title",
+    "text": "event.support-comment.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "fandom",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 5000
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "naming-reader",
+    "category": "reader",
+    "title": "event.naming-reader.title",
+    "text": "event.naming-reader.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 500
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 4
+      },
+      {
+        "kind": "attachment",
+        "amount": 3
+      }
+    ]
+  }
+]

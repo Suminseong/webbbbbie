@@ -1,0 +1,586 @@
+[
+  {
+    "id": "quiet-desk",
+    "category": "life",
+    "title": "event.quiet-desk.title",
+    "text": "event.quiet-desk.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 5,
+    "cooldown": 6,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "care",
+    "category": "life",
+    "title": "event.care.title",
+    "text": "event.care.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2.24,
+    "cooldown": 8,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 85
+      }
+    ],
+    "choices": [
+      {
+        "id": "care",
+        "label": "event.care.choice.care",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -22000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 9
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -12
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "event.care.choice.ignore",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fallback",
+    "category": "life",
+    "title": "event.fallback.title",
+    "text": "event.fallback.body",
+    "tier": "FALLBACK",
+    "scope": "NONE",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": []
+  },
+  {
+    "id": "rainy-window",
+    "category": "life",
+    "title": "event.rainy-window.title",
+    "text": "event.rainy-window.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 12,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "family-dinner",
+    "category": "life",
+    "title": "event.family-dinner.title",
+    "text": "event.family-dinner.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 20,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "friend-wedding",
+    "category": "life",
+    "title": "event.friend-wedding.title",
+    "text": "event.friend-wedding.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 15,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 60000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -50000
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "cold",
+    "category": "life",
+    "title": "event.cold.title",
+    "text": "event.cold.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "walk",
+    "category": "life",
+    "title": "event.walk.title",
+    "text": "event.walk.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 10,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "sleep-in",
+    "category": "life",
+    "title": "event.sleep-in.title",
+    "text": "event.sleep-in.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 14,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -8
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "checkup",
+    "category": "life",
+    "title": "event.checkup.title",
+    "text": "event.checkup.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 180,
+    "minDay": 30,
+    "choices": [
+      {
+        "id": "stretch",
+        "label": "event.checkup.choice.stretch",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -3
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "label": "event.checkup.choice.later",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cat-keyboard",
+    "category": "life",
+    "title": "event.cat-keyboard.title",
+    "text": "event.cat-keyboard.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "moving",
+    "category": "life",
+    "title": "event.moving.title",
+    "text": "event.moving.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 60,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 400000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -350000
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 10
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "birthday",
+    "category": "life",
+    "title": "event.birthday.title",
+    "text": "event.birthday.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 365,
+    "minDay": 30,
+    "conditions": [
+      {
+        "key": "fandom",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "still-writing",
+    "category": "life",
+    "title": "event.still-writing.title",
+    "text": "event.still-writing.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 40,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "flu",
+    "category": "life",
+    "title": "event.flu.title",
+    "text": "event.flu.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 30,
+    "choices": [
+      {
+        "id": "rest",
+        "label": "event.flu.choice.rest",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -10
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "push",
+        "label": "event.flu.choice.push",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gym",
+    "category": "life",
+    "title": "event.gym.title",
+    "text": "event.gym.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 90000
+      }
+    ],
+    "choices": [
+      {
+        "id": "join",
+        "label": "event.gym.choice.join",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -90000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 6
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -4
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "label": "event.gym.choice.home",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cafe-noise",
+    "category": "life",
+    "title": "event.cafe-noise.title",
+    "text": "event.cafe-noise.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "insomnia",
+    "category": "life",
+    "title": "event.insomnia.title",
+    "text": "event.insomnia.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 15,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 45
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "day-off",
+    "category": "life",
+    "title": "event.day-off.title",
+    "text": "event.day-off.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 21,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -7
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  }
+]

@@ -1,0 +1,327 @@
+[
+  {
+    "id": "contract-offer",
+    "category": "contract",
+    "title": "event.contract-offer.title",
+    "text": "event.contract-offer.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2.8,
+    "cooldown": 6,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "demand",
+        "op": "gte",
+        "value": 24
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      },
+      {
+        "key": "canContract",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "offer": true,
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.contract-offer.choice.accept",
+        "effects": [
+          {
+            "kind": "contract"
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "event.contract-offer.choice.decline",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "editor-meeting",
+    "category": "contract",
+    "title": "event.editor-meeting.title",
+    "text": "event.editor-meeting.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 4,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "quality",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "manuscript-push",
+    "category": "contract",
+    "title": "event.manuscript-push.title",
+    "text": "event.manuscript-push.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 3,
+    "cooldown": 21,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "statement-error",
+    "category": "contract",
+    "title": "event.statement-error.title",
+    "text": "event.statement-error.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 100000
+      }
+    ],
+    "choices": [
+      {
+        "id": "ask",
+        "label": "event.statement-error.choice.ask",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 30000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "let",
+        "label": "event.statement-error.choice.let",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "promotion-confirmed",
+    "category": "contract",
+    "title": "event.promotion-confirmed.title",
+    "text": "event.promotion-confirmed.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "pd-change",
+    "category": "contract",
+    "title": "event.pd-change.title",
+    "text": "event.pd-change.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      },
+      {
+        "kind": "quality",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "cover-draft",
+    "category": "contract",
+    "title": "event.cover-draft.title",
+    "text": "event.cover-draft.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "effects": [
+      {
+        "kind": "attachment",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "side-story-request",
+    "category": "contract",
+    "title": "event.side-story-request.title",
+    "text": "event.side-story-request.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 40
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.side-story-request.choice.accept",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 200000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          },
+          {
+            "kind": "attachment",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "event.side-story-request.choice.decline",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "publisher-contact",
+    "category": "contract",
+    "title": "event.publisher-contact.title",
+    "text": "event.publisher-contact.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 1.5,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 800
+      },
+      {
+        "key": "canContract",
+        "op": "eq",
+        "value": 1
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 15
+      }
+    ],
+    "offer": true,
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.publisher-contact.choice.accept",
+        "effects": [
+          {
+            "kind": "contract"
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "event.publisher-contact.choice.decline",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  }
+]

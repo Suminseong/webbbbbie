@@ -12,8 +12,9 @@ export function transaction(
   workId: string | null = null,
 ) {
   if (!amount) return;
+  state.ledgerSeq += 1;
   state.ledger.push({
-    id: "TX-" + day + "-" + (state.ledger.length + 1),
+    id: "TX-" + day + "-" + state.ledgerSeq,
     day,
     kind,
     amount,
@@ -21,6 +22,22 @@ export function transaction(
     ref,
   });
   state.author.cash += amount;
+}
+
+/**
+ * Rolls ledger entries older than the retention window into per-kind totals.
+ * Cash stays equal to the starting cash plus carry plus retained entries, and
+ * per-work settlement totals remain in each work's revenue record.
+ */
+export function compactLedger(state: LifeState, content: Content, day: number) {
+  const horizon = day - content.balance.economy.ledgerKeepDays;
+  if (!state.ledger.length || state.ledger[0].day >= horizon) return;
+  const keep = state.ledger.findIndex((entry) => entry.day >= horizon);
+  const old = keep < 0 ? state.ledger : state.ledger.slice(0, keep);
+  for (const entry of old)
+    state.ledgerCarry[entry.kind] =
+      (state.ledgerCarry[entry.kind] ?? 0) + entry.amount;
+  state.ledger = keep < 0 ? [] : state.ledger.slice(keep);
 }
 
 export function activeContract(state: LifeState, work: Work, day: number) {

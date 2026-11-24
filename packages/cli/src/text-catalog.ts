@@ -8,10 +8,15 @@ import {
   textTemplate,
   variablesIn,
 } from "@webbbbbie/content";
-import type { Condition, Effect, EventDef } from "@webbbbbie/content";
-import definitions from "../../content/events.json";
+import type {
+  Condition,
+  Effect,
+  EventDef,
+  SpecialDef,
+} from "@webbbbbie/content";
 import world from "../../content/world.json";
 import platforms from "../../content/platforms.json";
+import specials from "../../content/specials.json";
 import staticContext from "../../content/text-context.ko.json";
 
 export const columns = [
@@ -38,7 +43,7 @@ type Context = Pick<Row, "category" | "group_id" | "context" | "constraints">;
 const scopes = {
   AUTHOR: "작가 전체",
   WORK: "조건에 맞아 선정된 한 작품",
-  CONTRACT: "선정된 유효 계약",
+  CONTRACT: "선정된 유효 계약과 그 계약의 작품",
   NONE: "별도 대상 없음",
 };
 const tiers = {
@@ -60,13 +65,27 @@ const conditionNames: Record<Condition["key"], string> = {
   published: "대상 작품의 등록 회차",
   maxPublished: "활성작 중 최다 등록 회차",
   activeWorks: "활성 작품 수",
-  canAddWork: "추가 작품 생성 가능",
-  canContract: "대상 작품의 계약 가능",
+  canAddWork: "추가 작품 생성 가능 여부(1은 가능)",
+  canContract: "대상 작품에 활성 계약 없이 계약 가능 여부(1은 가능)",
   demand: "작가 수요",
   egoUse: "전날 에고서칭 슬롯",
   communityUse: "전날 커뮤니티 활동 슬롯",
   path: "창작 경로",
   targetFlag: "사건 이력 표식",
+  special: "특수 상태",
+  recognition: "인지도",
+  reputation: "평판",
+  fandom: "팬덤",
+  expectation: "차기작 기대감",
+  favorites: "대상 작품 선호작 수",
+  quality: "대상 작품 품질",
+  stock: "대상 작품 비축분",
+  contracted: "대상 작품의 계약 여부(1은 계약 있음)",
+  completedWorks: "완결 작품 수",
+  totalWorks: "전체 작품 수",
+  multitask: "작가의 멀티태스킹 성향",
+  insight: "작가 능지",
+  workAge: "대상 작품이 시작된 뒤 지난 일수",
 };
 const workStatus = (key: string) =>
   sourceText("label.work-status." + key.toLowerCase().replaceAll("_", "-"));
@@ -74,6 +93,10 @@ const pathLabel = (key: string) =>
   sourceText("label.creation-path." + key.toLowerCase());
 const sided = (amount: number) => (amount < 0 ? String(amount) : "+" + amount);
 function conditionText(rule: Condition) {
+  if (rule.key === "special") {
+    const [name, active] = String(rule.value).split(":");
+    return "특수 상태 ‘" + name + "’ " + (active === "true" ? "있음" : "없음");
+  }
   if (rule.key === "targetFlag") {
     const [flag, present] = String(rule.value).split(":");
     const label =
@@ -126,11 +149,20 @@ function effectText(effect: Effect): { description: string; tone: -1 | 0 | 1 } {
         tone: amountTone(effect.amount),
       };
     }
-    case "special":
+    case "special": {
+      const state = defaultContent.specials.find(
+        (item) => item.key === effect.key,
+      );
       return {
-        description: effect.key + " 상태 " + effect.days + "일 부여 또는 갱신",
-        tone: effect.key === "보상심리" ? 0 : -1,
+        description:
+          effect.key +
+          " 상태 " +
+          effect.days +
+          "일 부여 또는 갱신" +
+          (state ? "(" + specialModifiers(state) + ")" : ""),
+        tone: specialTone(state),
       };
+    }
     case "origin":
       return {
         description:
@@ -218,7 +250,66 @@ function effectText(effect: Effect): { description: string; tone: -1 | 0 | 1 } {
           "일 동안 유효",
         tone: 0,
       };
+    case "ability":
+      return {
+        description:
+          sourceText("label.ability." + effect.stat) +
+          " " +
+          sided(effect.amount),
+        tone: amountTone(effect.amount),
+      };
+    case "attachment":
+      return {
+        description: "대상 작품 애착 " + sided(effect.amount),
+        tone: amountTone(effect.amount),
+      };
+    case "consistency":
+      return {
+        description: "대상 작품의 작품 일관성 " + sided(effect.amount),
+        tone: amountTone(effect.amount),
+      };
+    case "promotion":
+      return {
+        description:
+          "대상 작품의 프로모션 노출을 현재부터 " +
+          effect.days +
+          "일까지 보장. 이미 더 오래 예정되어 있으면 유지",
+        tone: 1,
+      };
+    case "clearSpecial": {
+      const tone = specialTone(
+        defaultContent.specials.find((item) => item.key === effect.key),
+      );
+      return {
+        description: effect.key + " 특수 상태 해제",
+        tone: tone === 1 ? -1 : tone === -1 ? 1 : 0,
+      };
+    }
   }
+}
+
+function specialModifiers(state: SpecialDef): string {
+  return (
+    "매일 집필량 ×" +
+    state.writing +
+    ", 멘헤라 " +
+    sided(state.stressDaily) +
+    ", 창작 의욕 " +
+    sided(state.driveDaily) +
+    ", 에고서칭 슬롯 " +
+    sided(state.egoBonus) +
+    ", 커뮤니티 활동 슬롯 " +
+    sided(state.communityBonus)
+  );
+}
+
+function specialTone(state: SpecialDef | undefined): -1 | 0 | 1 {
+  if (!state) return 0;
+  const gains =
+    state.writing > 1 || state.stressDaily < 0 || state.driveDaily > 0;
+  const costs =
+    state.writing < 1 || state.stressDaily > 0 || state.driveDaily < 0;
+  return gains === costs ? 0 : gains ? 1 : -1;
 }
 
 function effectSummary(effects: readonly Effect[]) {
@@ -263,8 +354,7 @@ function eventFrame(event: EventDef) {
 
 function eventContexts(out: Map<string, Context>) {
   const tone = "웹소설 작가 커뮤니티 문체. 엔진에서 정한 조건과 효과를 유지.";
-  for (const raw of definitions) {
-    const event = defaultContent.events.find((item) => item.id === raw.id)!;
+  for (const event of defaultContent.events) {
     const group = "event." + event.id;
     const frame = eventFrame(event);
     const branches = event.choices
@@ -274,22 +364,21 @@ function eventContexts(out: Map<string, Context>) {
       frame +
       " " +
       (branches ? "선택 결과 " + branches : effectSummary(event.effects ?? []));
-    out.set(raw.title, {
+    out.set(group + ".title", {
       category: "EVENTS",
       group_id: group,
       context: "사건 제목. " + overview,
       constraints: "짧은 제목. " + tone,
     });
-    out.set(raw.text, {
+    out.set(group + ".body", {
       category: "EVENTS",
       group_id: group,
       context: "사건 본문. " + overview,
       constraints:
         "보이지 않는 결과와 비공개 특성을 미리 단정하지 않음. " + tone,
     });
-    for (const option of raw.choices ?? []) {
-      const choice = event.choices!.find((item) => item.id === option.id)!;
-      out.set(option.label, {
+    for (const choice of event.choices ?? []) {
+      out.set(group + ".choice." + choice.id, {
         category: "CHOICES",
         group_id: group,
         context:
@@ -409,27 +498,15 @@ function entityContexts(out: Map<string, Context>) {
       "해당 회사의 제안 카드에 보이는 프로모션·편집 지원 약속. 계약 체결 후 실제 이행과 구별.",
     );
   }
-  for (const raw of definitions) {
-    const effects = [
-      ...(raw.effects ?? []),
-      ...(raw.choices ?? []).flatMap((choice) => choice.effects),
-    ];
-    for (const effect of effects) {
-      if (
-        effect.kind === "special" &&
-        "key" in effect &&
-        typeof effect.key === "string" &&
-        "days" in effect
-      ) {
-        add(
-          effect.key,
-          "조건을 충족한 사건에서 부여·갱신되어 작가 패널에 표시되는 특수 상태 이름. 이 정의의 지속 기간 " +
-            effect.days +
-            "일.",
-          "entity.special",
-        );
-      }
-    }
+  for (const state of specials) {
+    add(
+      state.name,
+      "사건으로 부여·갱신되면 작가 패널에 남은 기한과 같이 표시되는 상태 이름. " +
+        specialModifiers(state) +
+        ".",
+      "entity.special",
+      "명칭만 교정. 상태의 효과와 지속 일수는 사건 규칙에서 결정.",
+    );
   }
 }
 

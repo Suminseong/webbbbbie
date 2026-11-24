@@ -1,0 +1,45 @@
+[
+  {
+    "id": "origin",
+    "category": "origin",
+    "title": "event.origin.title",
+    "text": "event.origin.body",
+    "tier": "ORIGIN",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 0,
+    "choices": [
+      {
+        "id": "original",
+        "label": "event.origin.choice.original",
+        "effects": [
+          {
+            "kind": "origin",
+            "path": "ORIGINAL"
+          }
+        ]
+      },
+      {
+        "id": "parody",
+        "label": "event.origin.choice.parody",
+        "effects": [
+          {
+            "kind": "origin",
+            "path": "PARODY"
+          }
+        ]
+      },
+      {
+        "id": "plagiarism",
+        "label": "event.origin.choice.plagiarism",
+        "effects": [
+          {
+            "kind": "origin",
+            "path": "PLAGIARISM"
+          }
+        ]
+      }
+    ]
+  }
+]

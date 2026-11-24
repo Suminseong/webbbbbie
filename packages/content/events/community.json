@@ -1,0 +1,757 @@
+[
+  {
+    "id": "ego-bad",
+    "category": "community",
+    "title": "event.ego-bad.title",
+    "text": "event.ego-bad.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 4,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 7
+      },
+      {
+        "kind": "special",
+        "key": "내글구려병",
+        "days": 4
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -1
+      }
+    ],
+    "targetBias": "views"
+  },
+  {
+    "id": "critique",
+    "category": "community",
+    "title": "event.critique.title",
+    "text": "event.critique.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 1.68,
+    "cooldown": 5,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "take",
+        "label": "event.critique.choice.take",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "evidence",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "event.critique.choice.leave",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "network",
+    "category": "community",
+    "title": "event.network.title",
+    "text": "event.network.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 7,
+    "cooldown": 5,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      },
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      }
+    ]
+  },
+  {
+    "id": "ai-bait",
+    "category": "community",
+    "title": "event.ai-bait.title",
+    "text": "event.ai-bait.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.12,
+    "cooldown": 18,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "close",
+        "label": "event.ai-bait.choice.close",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "argue",
+        "label": "event.ai-bait.choice.argue",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "copy-discussion",
+    "category": "community",
+    "title": "event.copy-discussion.title",
+    "text": "event.copy-discussion.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 8,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "admit",
+        "label": "event.copy-discussion.choice.admit",
+        "effects": [
+          {
+            "kind": "transition",
+            "to": "TAKEN_DOWN"
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -14
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "event.copy-discussion.choice.ignore",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 12
+          },
+          {
+            "kind": "schedule",
+            "id": "takedown",
+            "delay": 3,
+            "window": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tip-post",
+    "category": "community",
+    "title": "event.tip-post.title",
+    "text": "event.tip-post.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      },
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "critique-swap",
+    "category": "community",
+    "title": "event.critique-swap.title",
+    "text": "event.critique-swap.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "swap",
+        "label": "event.critique-swap.choice.swap",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 2
+          },
+          {
+            "kind": "evidence",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "event.critique-swap.choice.pass",
+        "effects": []
+      }
+    ]
+  },
+  {
+    "id": "black-envy",
+    "category": "community",
+    "title": "event.black-envy.title",
+    "text": "event.black-envy.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 300
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 5
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "pen-name-found",
+    "category": "community",
+    "title": "event.pen-name-found.title",
+    "text": "event.pen-name-found.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 0,
+    "minDay": 1,
+    "once": true,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "admit",
+        "label": "event.pen-name-found.choice.admit",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "delete",
+        "label": "event.pen-name-found.choice.delete",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "flag",
+            "key": "nick_changed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "offline-meet",
+    "category": "community",
+    "title": "event.offline-meet.title",
+    "text": "event.offline-meet.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 30,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 40000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -35000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -6
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "flame-war",
+    "category": "community",
+    "title": "event.flame-war.title",
+    "text": "event.flame-war.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "watch",
+        "label": "event.flame-war.choice.watch",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "join",
+        "label": "event.flame-war.choice.join",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 6
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "block-list",
+    "category": "community",
+    "title": "event.block-list.title",
+    "text": "event.block-list.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -5
+      }
+    ]
+  },
+  {
+    "id": "shitpost-spree",
+    "category": "community",
+    "title": "event.shitpost-spree.title",
+    "text": "event.shitpost-spree.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 14,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "debut-congrats",
+    "category": "community",
+    "title": "event.debut-congrats.title",
+    "text": "event.debut-congrats.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 30,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "contest-info",
+    "category": "community",
+    "title": "event.contest-info.title",
+    "text": "event.contest-info.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "community_tip"
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "ai-debate",
+    "category": "community",
+    "title": "event.ai-debate.title",
+    "text": "event.ai-debate.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "own",
+        "label": "event.ai-debate.choice.own",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 3
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "close",
+        "label": "event.ai-debate.choice.close",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "snipe-post",
+    "category": "community",
+    "title": "event.snipe-post.title",
+    "text": "event.snipe-post.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 500
+      }
+    ],
+    "choices": [
+      {
+        "id": "ignore",
+        "label": "event.snipe-post.choice.ignore",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "read",
+        "label": "event.snipe-post.choice.read",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 8
+          },
+          {
+            "kind": "evidence",
+            "amount": 1
+          },
+          {
+            "kind": "special",
+            "key": "내글구려병",
+            "days": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quit-community",
+    "category": "community",
+    "title": "event.quit-community.title",
+    "text": "event.quit-community.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "quit",
+        "label": "event.quit-community.choice.quit",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -6
+          },
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "event.quit-community.choice.stay",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mentor",
+    "category": "community",
+    "title": "event.mentor.title",
+    "text": "event.mentor.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1,
+    "cooldown": 120,
+    "minDay": 20,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.6
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  }
+]

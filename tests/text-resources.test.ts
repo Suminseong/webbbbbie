@@ -168,3 +168,50 @@ describe("Gemini exchange", () => {
     ).toBe("ALREADY_APPLIED");
   });
 });
+
+describe("Applied Gemini copy", () => {
+  it("keeps every applied edit valid against its original and leaves simulation keys on the original", () => {
+    for (const [id, revised] of Object.entries(appliedTexts)) {
+      expect(textIssue(sourceText(id), revised)).toBeNull();
+    }
+    // Simulation data resolves to originals; edits only change display.
+    const grades = Object.keys(appliedTexts).filter((id) =>
+      id.startsWith("label.aptitude-grade."),
+    );
+    for (const id of grades) expect(appliedTexts[id]).not.toBe(sourceText(id));
+    expect(
+      defaultContent.world.motives.every(
+        (motive) => !Object.values(appliedTexts).includes(motive.text),
+      ),
+    ).toBe(true);
+  });
+
+  it("groups payout amounts in the event log like the screen", async () => {
+    const { groupDigits } = await import("../packages/engine/src/economy");
+    expect([0, 999, 1000, 13048, 1234567, -1200000].map(groupDigits)).toEqual([
+      "0",
+      "999",
+      "1,000",
+      "13,048",
+      "1,234,567",
+      "-1,200,000",
+    ]);
+    const { createLife, advance, choose, getPending, getEventLog } =
+      await import("@webbbbbie/engine");
+    let state = createLife(42);
+    while (state.day < 120) {
+      const pending = getPending(state);
+      if (pending) {
+        const result = choose(state, pending.id, pending.choices[0].id);
+        if (!result.ok) throw new Error(result.error);
+        state = result.state;
+      } else state = advance(state, 120 - state.day).state;
+    }
+    const payouts = getEventLog(state).filter(
+      (entry) => entry.type === "PAYOUT",
+    );
+    expect(payouts.length).toBeGreaterThan(0);
+    for (const entry of payouts)
+      expect(entry.message).toMatch(/ \d{1,3}(,\d{3})*원$/);
+  });
+});

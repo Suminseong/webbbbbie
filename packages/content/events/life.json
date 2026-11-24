@@ -2,8 +2,8 @@
   {
     "id": "quiet-desk",
     "category": "life",
-    "title": "아무도 안 찾는 오후",
-    "text": "통계창을 안 켜고 썼더니 오늘은 문장이 덜 밉다.",
+    "title": "event.quiet-desk.title",
+    "text": "event.quiet-desk.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 5,
@@ -25,8 +25,8 @@
   {
     "id": "care",
     "category": "life",
-    "title": "손목이 먼저 기권함",
-    "text": "키보드를 두드릴수록 손목이 시큰하다.",
+    "title": "event.care.title",
+    "text": "event.care.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2.24,
@@ -42,7 +42,7 @@
     "choices": [
       {
         "id": "care",
-        "label": "진료를 받고 쉰다",
+        "label": "event.care.choice.care",
         "effects": [
           {
             "kind": "cash",
@@ -62,7 +62,7 @@
       },
       {
         "id": "ignore",
-        "label": "밀린 원고부터 쓴다",
+        "label": "event.care.choice.ignore",
         "effects": [
           {
             "kind": "condition",
@@ -81,8 +81,8 @@
   {
     "id": "fallback",
     "category": "life",
-    "title": "평범한 하루",
-    "text": "오늘은 원고 창을 열고, 저녁에 닫았다.",
+    "title": "event.fallback.title",
+    "text": "event.fallback.body",
     "tier": "FALLBACK",
     "scope": "NONE",
     "weight": 1,
@@ -93,8 +93,8 @@
   {
     "id": "rainy-window",
     "category": "life",
-    "title": "빗소리 작업",
-    "text": "창밖에 비가 오니 이상하게 문장이 잘 붙는다.",
+    "title": "event.rainy-window.title",
+    "text": "event.rainy-window.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -116,8 +116,8 @@
   {
     "id": "family-dinner",
     "category": "life",
-    "title": "명절 잔소리",
-    "text": "‘그래서 그 소설은 돈이 되니?’ 숟가락이 무거워진다.",
+    "title": "event.family-dinner.title",
+    "text": "event.family-dinner.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -139,8 +139,8 @@
   {
     "id": "friend-wedding",
     "category": "life",
-    "title": "친구 결혼식",
-    "text": "축의금 봉투를 쓰다가 내 작가 소개란을 떠올렸다.",
+    "title": "event.friend-wedding.title",
+    "text": "event.friend-wedding.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -173,8 +173,8 @@
   {
     "id": "cold",
     "category": "life",
-    "title": "목감기",
-    "text": "목소리는 안 나오는데 손가락은 멀쩡하다. 문제는 머리다.",
+    "title": "event.cold.title",
+    "text": "event.cold.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -196,8 +196,8 @@
   {
     "id": "walk",
     "category": "life",
-    "title": "산책 플롯",
-    "text": "동네 한 바퀴 돌다가 막힌 회차의 해법이 떠올랐다.",
+    "title": "event.walk.title",
+    "text": "event.walk.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -224,8 +224,8 @@
   {
     "id": "sleep-in",
     "category": "life",
-    "title": "알람 세 번 끔",
-    "text": "눈 떠 보니 점심이다. 몸은 개운한데 양심이 아프다.",
+    "title": "event.sleep-in.title",
+    "text": "event.sleep-in.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -247,8 +247,8 @@
   {
     "id": "checkup",
     "category": "life",
-    "title": "건강검진 결과지",
-    "text": "‘거북목 의심’ 한 줄이 유난히 크게 보인다.",
+    "title": "event.checkup.title",
+    "text": "event.checkup.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -257,7 +257,7 @@
     "choices": [
       {
         "id": "stretch",
-        "label": "스트레칭 루틴을 만든다",
+        "label": "event.checkup.choice.stretch",
         "effects": [
           {
             "kind": "condition",
@@ -273,7 +273,7 @@
       },
       {
         "id": "later",
-        "label": "다음 검진 때 생각한다",
+        "label": "event.checkup.choice.later",
         "effects": [
           {
             "kind": "condition",
@@ -287,8 +287,8 @@
   {
     "id": "cat-keyboard",
     "category": "life",
-    "title": "고양이가 키보드를 밟음",
-    "text": "‘ㅁㅁㅁㅁㅁㅁ’ 한 줄이 저장돼 있었다. 오늘은 그냥 웃는다.",
+    "title": "event.cat-keyboard.title",
+    "text": "event.cat-keyboard.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -305,8 +305,8 @@
   {
     "id": "moving",
     "category": "life",
-    "title": "이사 준비",
-    "text": "박스 위에 노트북을 올려놓고 쓰는 하루.",
+    "title": "event.moving.title",
+    "text": "event.moving.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -339,8 +339,8 @@
   {
     "id": "birthday",
     "category": "life",
-    "title": "생일 알림",
-    "text": "축하 메시지 사이에 ‘작가님 생일 축하해요’가 하나 섞여 있었다.",
+    "title": "event.birthday.title",
+    "text": "event.birthday.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -369,8 +369,8 @@
   {
     "id": "still-writing",
     "category": "life",
-    "title": "‘아직도 소설 써?’",
-    "text": "오랜만에 만난 동창이 묻는다. 대답 대신 웃었다.",
+    "title": "event.still-writing.title",
+    "text": "event.still-writing.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -392,8 +392,8 @@
   {
     "id": "flu",
     "category": "life",
-    "title": "독감",
-    "text": "열이 오르니 원고 창이 두 개로 보인다.",
+    "title": "event.flu.title",
+    "text": "event.flu.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -402,7 +402,7 @@
     "choices": [
       {
         "id": "rest",
-        "label": "푹 쉰다",
+        "label": "event.flu.choice.rest",
         "effects": [
           {
             "kind": "condition",
@@ -423,7 +423,7 @@
       },
       {
         "id": "push",
-        "label": "약 먹고 쓴다",
+        "label": "event.flu.choice.push",
         "effects": [
           {
             "kind": "condition",
@@ -442,8 +442,8 @@
   {
     "id": "gym",
     "category": "life",
-    "title": "헬스장 등록",
-    "text": "체력이 필력이라는 말을 믿어 보기로 했다.",
+    "title": "event.gym.title",
+    "text": "event.gym.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -459,7 +459,7 @@
     "choices": [
       {
         "id": "join",
-        "label": "3개월 등록한다",
+        "label": "event.gym.choice.join",
         "effects": [
           {
             "kind": "cash",
@@ -479,7 +479,7 @@
       },
       {
         "id": "home",
-        "label": "홈트 영상으로 버틴다",
+        "label": "event.gym.choice.home",
         "effects": [
           {
             "kind": "condition",
@@ -493,8 +493,8 @@
   {
     "id": "cafe-noise",
     "category": "life",
-    "title": "옆자리 대화",
-    "text": "카페 옆자리 연애 상담이 너무 웹소설 같아서 메모했다.",
+    "title": "event.cafe-noise.title",
+    "text": "event.cafe-noise.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -516,8 +516,8 @@
   {
     "id": "insomnia",
     "category": "life",
-    "title": "잠 못 드는 밤",
-    "text": "누우면 다음 화 대사가 떠오른다. 일어나면 사라진다.",
+    "title": "event.insomnia.title",
+    "text": "event.insomnia.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -551,8 +551,8 @@
   {
     "id": "day-off",
     "category": "life",
-    "title": "아무것도 안 하는 날",
-    "text": "오늘만큼은 원고도 통계도 열지 않기로 했다.",
+    "title": "event.day-off.title",
+    "text": "event.day-off.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,

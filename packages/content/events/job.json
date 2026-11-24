@@ -2,8 +2,8 @@
   {
     "id": "commute",
     "category": "job",
-    "title": "출근길에 떠오른 소재",
-    "text": "지하철 손잡이를 잡고 메모했다. 퇴근하면 더 잘 쓸 수 있을까.",
+    "title": "event.commute.title",
+    "text": "event.commute.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -32,8 +32,8 @@
   {
     "id": "side-gig",
     "category": "job",
-    "title": "알바 공고가 떴다",
-    "text": "작업 시간을 조금 내주면 생활비 걱정을 덜 수 있다.",
+    "title": "event.side-gig.title",
+    "text": "event.side-gig.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2.24,
@@ -49,7 +49,7 @@
     "choices": [
       {
         "id": "accept",
-        "label": "알바를 시작한다",
+        "label": "event.side-gig.choice.accept",
         "effects": [
           {
             "kind": "job",
@@ -59,7 +59,7 @@
       },
       {
         "id": "decline",
-        "label": "이번 달은 원고에 집중한다",
+        "label": "event.side-gig.choice.decline",
         "effects": [
           {
             "kind": "condition",
@@ -73,8 +73,8 @@
   {
     "id": "overtime",
     "category": "job",
-    "title": "갑작스러운 야근",
-    "text": "퇴근 10분 전, 메일 한 통이 저녁을 가져갔다.",
+    "title": "event.overtime.title",
+    "text": "event.overtime.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -108,8 +108,8 @@
   {
     "id": "company-dinner",
     "category": "job",
-    "title": "회식",
-    "text": "‘2차는 자율’이라는 말은 늘 거짓말이다.",
+    "title": "event.company-dinner.title",
+    "text": "event.company-dinner.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -143,8 +143,8 @@
   {
     "id": "annual-leave",
     "category": "job",
-    "title": "연차 하루",
-    "text": "평일 낮의 카페는 원고 쓰기 좋은 곳이었다.",
+    "title": "event.annual-leave.title",
+    "text": "event.annual-leave.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -178,8 +178,8 @@
   {
     "id": "secret-writing",
     "category": "job",
-    "title": "몰래 집필",
-    "text": "모니터 한쪽에 엑셀, 한쪽에 원고. 심장이 두 배로 뛴다.",
+    "title": "event.secret-writing.title",
+    "text": "event.secret-writing.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -208,8 +208,8 @@
   {
     "id": "job-offer",
     "category": "job",
-    "title": "이직 제안",
-    "text": "연봉은 조금 오르고 야근은 많이 늘어난다는 회사.",
+    "title": "event.job-offer.title",
+    "text": "event.job-offer.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -225,7 +225,7 @@
     "choices": [
       {
         "id": "move",
-        "label": "정규직으로 옮긴다",
+        "label": "event.job-offer.choice.move",
         "effects": [
           {
             "kind": "job",
@@ -246,7 +246,7 @@
       },
       {
         "id": "stay",
-        "label": "지금 일을 지킨다",
+        "label": "event.job-offer.choice.stay",
         "effects": [
           {
             "kind": "condition",
@@ -260,8 +260,8 @@
   {
     "id": "new-job-adapt",
     "category": "job",
-    "title": "새 직장 적응기",
-    "text": "업무를 배우느라 원고 창을 연 기억이 없다.",
+    "title": "event.new-job-adapt.title",
+    "text": "event.new-job-adapt.body",
     "tier": "FOLLOW_UP",
     "scope": "AUTHOR",
     "weight": 6,
@@ -283,8 +283,8 @@
   {
     "id": "layoff",
     "category": "job",
-    "title": "권고사직",
-    "text": "회의실로 불려 갔다. 짐은 생각보다 적었다.",
+    "title": "event.layoff.title",
+    "text": "event.layoff.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -316,8 +316,8 @@
   {
     "id": "big-outsourcing",
     "category": "job",
-    "title": "대형 외주",
-    "text": "외주 단가가 좋다. 마감도 지독하다.",
+    "title": "event.big-outsourcing.title",
+    "text": "event.big-outsourcing.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -333,7 +333,7 @@
     "choices": [
       {
         "id": "take",
-        "label": "외주를 받는다",
+        "label": "event.big-outsourcing.choice.take",
         "effects": [
           {
             "kind": "cash",
@@ -353,7 +353,7 @@
       },
       {
         "id": "decline",
-        "label": "원고를 택한다",
+        "label": "event.big-outsourcing.choice.decline",
         "effects": [
           {
             "kind": "condition",
@@ -367,8 +367,8 @@
   {
     "id": "exam-week",
     "category": "job",
-    "title": "기말고사",
-    "text": "전공 책 사이에 플롯 노트가 끼어 있다.",
+    "title": "event.exam-week.title",
+    "text": "event.exam-week.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -402,8 +402,8 @@
   {
     "id": "store-owner",
     "category": "job",
-    "title": "알바 사장님의 부탁",
-    "text": "‘이번 주만 마감까지 좀 부탁해.’",
+    "title": "event.store-owner.title",
+    "text": "event.store-owner.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -419,7 +419,7 @@
     "choices": [
       {
         "id": "help",
-        "label": "도와드린다",
+        "label": "event.store-owner.choice.help",
         "effects": [
           {
             "kind": "cash",
@@ -434,7 +434,7 @@
       },
       {
         "id": "refuse",
-        "label": "원고 핑계를 댄다",
+        "label": "event.store-owner.choice.refuse",
         "effects": [
           {
             "kind": "condition",
@@ -448,8 +448,8 @@
   {
     "id": "remote-work",
     "category": "job",
-    "title": "재택근무 날",
-    "text": "출근길이 사라지니 원고 시간이 생겼다. 대신 침대가 가깝다.",
+    "title": "event.remote-work.title",
+    "text": "event.remote-work.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -478,8 +478,8 @@
   {
     "id": "leave-request",
     "category": "job",
-    "title": "휴직을 고민하다",
-    "text": "작품 반응이 좋다. 잠깐 쉬어 볼까.",
+    "title": "event.leave-request.title",
+    "text": "event.leave-request.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -500,7 +500,7 @@
     "choices": [
       {
         "id": "leave",
-        "label": "휴직계를 낸다",
+        "label": "event.leave-request.choice.leave",
         "effects": [
           {
             "kind": "job",
@@ -520,7 +520,7 @@
       },
       {
         "id": "stay",
-        "label": "아직은 버틴다",
+        "label": "event.leave-request.choice.stay",
         "effects": [
           {
             "kind": "condition",
@@ -534,8 +534,8 @@
   {
     "id": "go-full-time",
     "category": "job",
-    "title": "전업 선언",
-    "text": "정산서와 월급 명세서를 나란히 놓고 오래 봤다.",
+    "title": "event.go-full-time.title",
+    "text": "event.go-full-time.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -568,7 +568,7 @@
     "choices": [
       {
         "id": "quit",
-        "label": "전업 작가가 된다",
+        "label": "event.go-full-time.choice.quit",
         "effects": [
           {
             "kind": "job",
@@ -588,7 +588,7 @@
       },
       {
         "id": "keep",
-        "label": "겸업을 유지한다",
+        "label": "event.go-full-time.choice.keep",
         "effects": [
           {
             "kind": "condition",

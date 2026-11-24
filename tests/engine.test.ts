@@ -4,6 +4,7 @@ import {
   defaultContent,
   eventCategories,
   parseContent,
+  text,
 } from "@webbbbbie/content";
 import { createEngine } from "@webbbbbie/engine";
 import type { LifeState } from "@webbbbbie/engine";
@@ -181,7 +182,9 @@ describe("deterministic life and daily commits", () => {
     const loaded = engine.deserialize(engine.serialize(first));
     if (!loaded.ok) throw new Error(loaded.error);
     const pending = engine.advance(loaded.state, 4).state;
-    expect(engine.getPending(pending)?.title).toBe("표절 의혹 공론화");
+    expect(engine.getPending(pending)?.title).toBe(
+      text("event.copy-discussion.title"),
+    );
     const last = play(engine, select(engine, pending, "ignore"), 8);
     expect(last.works[0].status).toBe("TAKEN_DOWN");
     expect(last.works[0].stats.newReaders).toBe(0);
@@ -351,7 +354,7 @@ describe("production systems", () => {
     before.author.social.demand = 66;
     const offered = engine.advance(before).state;
     expect(engine.getPending(offered)?.offer).toMatchObject({
-      name: "늘봄 매니지먼트",
+      name: text("entity.company.neulpom.name"),
       share: 0.71,
     });
     const decline = select(engine, offered, "decline");

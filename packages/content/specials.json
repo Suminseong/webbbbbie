@@ -1,7 +1,7 @@
 [
   {
     "key": "내글구려병",
-    "name": "내글구려병",
+    "name": "entity.special.01",
     "writing": 0.75,
     "stressDaily": 0.4,
     "driveDaily": -0.6,
@@ -10,7 +10,7 @@
   },
   {
     "key": "신작병",
-    "name": "신작병",
+    "name": "entity.special.04",
     "writing": 0.9,
     "stressDaily": 0,
     "driveDaily": 0.4,
@@ -19,7 +19,7 @@
   },
   {
     "key": "완결병",
-    "name": "완결병",
+    "name": "entity.special.completion-fixation",
     "writing": 1.1,
     "stressDaily": 0.3,
     "driveDaily": -0.3,
@@ -28,7 +28,7 @@
   },
   {
     "key": "통계창 중독",
-    "name": "통계창 중독",
+    "name": "entity.special.stats-obsession",
     "writing": 0.9,
     "stressDaily": 0.3,
     "driveDaily": 0,
@@ -37,7 +37,7 @@
   },
   {
     "key": "에고서칭 중독",
-    "name": "에고서칭 중독",
+    "name": "entity.special.ego-search-obsession",
     "writing": 0.85,
     "stressDaily": 0.5,
     "driveDaily": -0.2,
@@ -46,7 +46,7 @@
   },
   {
     "key": "예술병",
-    "name": "예술병",
+    "name": "entity.special.artistic-fixation",
     "writing": 0.8,
     "stressDaily": 0.1,
     "driveDaily": 0.3,
@@ -55,7 +55,7 @@
   },
   {
     "key": "대작가병",
-    "name": "대작가병",
+    "name": "entity.special.writer-grandiosity",
     "writing": 0.95,
     "stressDaily": -0.3,
     "driveDaily": 0.3,
@@ -64,7 +64,7 @@
   },
   {
     "key": "장비병",
-    "name": "장비병",
+    "name": "entity.special.03",
     "writing": 1.05,
     "stressDaily": 0,
     "driveDaily": 0.2,
@@ -73,7 +73,7 @@
   },
   {
     "key": "보상심리",
-    "name": "보상심리",
+    "name": "entity.special.02",
     "writing": 0.95,
     "stressDaily": -0.2,
     "driveDaily": 0.1,
@@ -82,7 +82,7 @@
   },
   {
     "key": "각성",
-    "name": "각성",
+    "name": "entity.special.awakening",
     "writing": 1.3,
     "stressDaily": -0.2,
     "driveDaily": 0.6,

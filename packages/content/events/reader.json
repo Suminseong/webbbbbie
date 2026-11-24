@@ -2,8 +2,8 @@
   {
     "id": "reader-fan",
     "category": "reader",
-    "title": "첫 정주행 댓글",
-    "text": "닉네임이 낯익다. 1화부터 같은 사람이 따라왔다.",
+    "title": "event.reader-fan.title",
+    "text": "event.reader-fan.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 4,
@@ -33,8 +33,8 @@
   {
     "id": "copy-comment",
     "category": "reader",
-    "title": "기시감 있다는 댓글",
-    "text": "초반 전개를 어디선가 본 것 같다는 댓글이 달렸다.",
+    "title": "event.copy-comment.title",
+    "text": "event.copy-comment.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 12,
@@ -79,8 +79,8 @@
   {
     "id": "fav-hundred",
     "category": "reader",
-    "title": "선작 100 돌파",
-    "text": "선호작 숫자가 세 자리가 됐다. 캡처는 이미 했다.",
+    "title": "event.fav-hundred.title",
+    "text": "event.fav-hundred.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 6,
@@ -111,8 +111,8 @@
   {
     "id": "fav-thousand",
     "category": "reader",
-    "title": "선작 천",
-    "text": "알림이 무섭게 울린다. 이제는 무섭다.",
+    "title": "event.fav-thousand.title",
+    "text": "event.fav-thousand.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 6,
@@ -148,8 +148,8 @@
   {
     "id": "drop-comment",
     "category": "reader",
-    "title": "하차합니다",
-    "text": "‘여기까지 봤습니다. 하차합니다.’ 정중해서 더 아프다.",
+    "title": "event.drop-comment.title",
+    "text": "event.drop-comment.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 4,
@@ -178,8 +178,8 @@
   {
     "id": "typo-reader",
     "category": "reader",
-    "title": "오탈자 제보",
-    "text": "독자가 오탈자 목록을 정리해 왔다. 고맙고 부끄럽다.",
+    "title": "event.typo-reader.title",
+    "text": "event.typo-reader.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -213,8 +213,8 @@
   {
     "id": "long-review",
     "category": "reader",
-    "title": "장문 감상평",
-    "text": "내가 깔아 둔 복선을 독자가 하나하나 짚었다.",
+    "title": "event.long-review.title",
+    "text": "event.long-review.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -248,8 +248,8 @@
   {
     "id": "fan-art",
     "category": "reader",
-    "title": "팬아트 도착",
-    "text": "주인공이 이렇게 생겼을 줄은 나도 몰랐다.",
+    "title": "event.fan-art.title",
+    "text": "event.fan-art.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -283,8 +283,8 @@
   {
     "id": "prediction-hit",
     "category": "reader",
-    "title": "결말 예측 적중",
-    "text": "댓글이 다음 화 반전을 정확히 맞혔다. 고쳐야 하나.",
+    "title": "event.prediction-hit.title",
+    "text": "event.prediction-hit.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -301,7 +301,7 @@
     "choices": [
       {
         "id": "twist",
-        "label": "반전을 다시 짠다",
+        "label": "event.prediction-hit.choice.twist",
         "effects": [
           {
             "kind": "quality",
@@ -319,7 +319,7 @@
       },
       {
         "id": "keep",
-        "label": "예정대로 간다",
+        "label": "event.prediction-hit.choice.keep",
         "effects": [
           {
             "kind": "condition",
@@ -333,8 +333,8 @@
   {
     "id": "goguma-protest",
     "category": "reader",
-    "title": "고구마 항의",
-    "text": "‘사이다 언제 나와요?’ 댓글이 줄줄이 달렸다.",
+    "title": "event.goguma-protest.title",
+    "text": "event.goguma-protest.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -351,7 +351,7 @@
     "choices": [
       {
         "id": "cider",
-        "label": "다음 화에 사이다를 당긴다",
+        "label": "event.goguma-protest.choice.cider",
         "effects": [
           {
             "kind": "consistency",
@@ -370,7 +370,7 @@
       },
       {
         "id": "hold",
-        "label": "빌드업을 지킨다",
+        "label": "event.goguma-protest.choice.hold",
         "effects": [
           {
             "kind": "consistency",
@@ -392,8 +392,8 @@
   {
     "id": "cider-reaction",
     "category": "reader",
-    "title": "사이다 반응 폭발",
-    "text": "최신화 댓글창이 느낌표로 가득 찼다.",
+    "title": "event.cider-reaction.title",
+    "text": "event.cider-reaction.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -432,8 +432,8 @@
   {
     "id": "rating-terror",
     "category": "reader",
-    "title": "별점 테러",
-    "text": "하룻밤 사이에 별점 1점이 수십 개 붙었다.",
+    "title": "event.rating-terror.title",
+    "text": "event.rating-terror.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -469,8 +469,8 @@
   {
     "id": "terror-explain",
     "category": "reader",
-    "title": "해명 요구 댓글",
-    "text": "‘작가님 입장 밝혀 주세요’ 테러의 이유는 아무도 모른다.",
+    "title": "event.terror-explain.title",
+    "text": "event.terror-explain.body",
     "tier": "FOLLOW_UP",
     "scope": "WORK",
     "weight": 6,
@@ -480,7 +480,7 @@
     "choices": [
       {
         "id": "ignore",
-        "label": "무대응한다",
+        "label": "event.terror-explain.choice.ignore",
         "effects": [
           {
             "kind": "condition",
@@ -491,7 +491,7 @@
       },
       {
         "id": "notice",
-        "label": "짧은 공지를 올린다",
+        "label": "event.terror-explain.choice.notice",
         "effects": [
           {
             "kind": "condition",
@@ -515,8 +515,8 @@
   {
     "id": "binge-proof",
     "category": "reader",
-    "title": "정주행 인증",
-    "text": "‘하루 만에 정주행했어요’ 인증글이 올라왔다.",
+    "title": "event.binge-proof.title",
+    "text": "event.binge-proof.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -545,8 +545,8 @@
   {
     "id": "schedule-question",
     "category": "reader",
-    "title": "연재 주기 문의",
-    "text": "‘연재 요일이 언제예요?’ 같은 질문이 세 번째다.",
+    "title": "event.schedule-question.title",
+    "text": "event.schedule-question.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -575,8 +575,8 @@
   {
     "id": "support-comment",
     "category": "reader",
-    "title": "응원 후원 댓글",
-    "text": "작은 금액과 긴 응원이 함께 왔다.",
+    "title": "event.support-comment.title",
+    "text": "event.support-comment.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -610,8 +610,8 @@
   {
     "id": "naming-reader",
     "category": "reader",
-    "title": "독자 애칭 탄생",
-    "text": "독자들이 스스로 이름을 붙였다. 이제 ‘우리’가 생겼다.",
+    "title": "event.naming-reader.title",
+    "text": "event.naming-reader.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 1,

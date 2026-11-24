@@ -2,8 +2,8 @@
   {
     "id": "takedown",
     "category": "platform",
-    "title": "표절 적발로 비공개",
-    "text": "플랫폼에서 작품의 공개가 중단됐다.",
+    "title": "event.takedown.title",
+    "text": "event.takedown.body",
     "tier": "FOLLOW_UP",
     "scope": "WORK",
     "weight": 10,
@@ -32,8 +32,8 @@
   {
     "id": "today-best",
     "category": "platform",
-    "title": "투베 진입",
-    "text": "투데이 베스트 하단에 내 제목이 걸렸다.",
+    "title": "event.today-best.title",
+    "text": "event.today-best.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 4,
@@ -67,8 +67,8 @@
   {
     "id": "rank-drop",
     "category": "platform",
-    "title": "랭킹 하락",
-    "text": "어제보다 열두 칸 내려갔다. 새로고침해도 같다.",
+    "title": "event.rank-drop.title",
+    "text": "event.rank-drop.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -98,8 +98,8 @@
   {
     "id": "new-feature-pick",
     "category": "platform",
-    "title": "신작 기획전 선정",
-    "text": "플랫폼 신작 기획전 명단에 들어갔다.",
+    "title": "event.new-feature-pick.title",
+    "text": "event.new-feature-pick.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -134,8 +134,8 @@
   {
     "id": "contest-notice",
     "category": "platform",
-    "title": "공모전 공지",
-    "text": "상금보다 ‘수상작 정식 연재’ 문구가 눈에 띈다.",
+    "title": "event.contest-notice.title",
+    "text": "event.contest-notice.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -152,7 +152,7 @@
     "choices": [
       {
         "id": "enter",
-        "label": "공모전에 출품한다",
+        "label": "event.contest-notice.choice.enter",
         "effects": [
           {
             "kind": "condition",
@@ -169,7 +169,7 @@
       },
       {
         "id": "skip",
-        "label": "이번엔 넘긴다",
+        "label": "event.contest-notice.choice.skip",
         "effects": [
           {
             "kind": "condition",
@@ -183,8 +183,8 @@
   {
     "id": "contest-result",
     "category": "platform",
-    "title": "공모전 결과 발표",
-    "text": "결과 페이지를 세 번 새로고침했다.",
+    "title": "event.contest-result.title",
+    "text": "event.contest-result.body",
     "tier": "FOLLOW_UP",
     "scope": "WORK",
     "weight": 6,
@@ -211,8 +211,8 @@
   {
     "id": "maintenance",
     "category": "platform",
-    "title": "플랫폼 서버 점검",
-    "text": "예약 연재가 점검 시간에 걸렸다.",
+    "title": "event.maintenance.title",
+    "text": "event.maintenance.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -230,8 +230,8 @@
   {
     "id": "policy-change",
     "category": "platform",
-    "title": "정산 정책 변경 공지",
-    "text": "공지 맨 아래, 작은 글씨가 마음에 걸린다.",
+    "title": "event.policy-change.title",
+    "text": "event.policy-change.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -248,8 +248,8 @@
   {
     "id": "slot-missing",
     "category": "platform",
-    "title": "노출 누락",
-    "text": "분명 업데이트했는데 최신 목록에 안 보인다.",
+    "title": "event.slot-missing.title",
+    "text": "event.slot-missing.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -259,7 +259,7 @@
     "choices": [
       {
         "id": "inquiry",
-        "label": "고객센터에 문의한다",
+        "label": "event.slot-missing.choice.inquiry",
         "effects": [
           {
             "kind": "promotion",
@@ -274,7 +274,7 @@
       },
       {
         "id": "wait",
-        "label": "그냥 기다린다",
+        "label": "event.slot-missing.choice.wait",
         "effects": [
           {
             "kind": "condition",
@@ -288,8 +288,8 @@
   {
     "id": "banner",
     "category": "platform",
-    "title": "추천 배너 노출",
-    "text": "메인 배너 한 칸에 표지가 걸렸다.",
+    "title": "event.banner.title",
+    "text": "event.banner.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -323,8 +323,8 @@
   {
     "id": "frequency-warning",
     "category": "platform",
-    "title": "연재 주기 안내 메일",
-    "text": "‘연재 주기가 불규칙하면 노출에 불리할 수 있습니다.’",
+    "title": "event.frequency-warning.title",
+    "text": "event.frequency-warning.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -349,8 +349,8 @@
   {
     "id": "cover-upload",
     "category": "platform",
-    "title": "표지 교체",
-    "text": "새 표지를 올리고 썸네일을 몇 번이고 확인했다.",
+    "title": "event.cover-upload.title",
+    "text": "event.cover-upload.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -367,7 +367,7 @@
     "choices": [
       {
         "id": "commission",
-        "label": "외주 표지를 맡긴다",
+        "label": "event.cover-upload.choice.commission",
         "effects": [
           {
             "kind": "cash",
@@ -385,7 +385,7 @@
       },
       {
         "id": "diy",
-        "label": "직접 만든다",
+        "label": "event.cover-upload.choice.diy",
         "effects": [
           {
             "kind": "condition",
@@ -403,8 +403,8 @@
   {
     "id": "platform-event",
     "category": "platform",
-    "title": "독자 참여 이벤트",
-    "text": "플랫폼이 댓글 이벤트를 연다. 참여하면 노출이 조금 늘어난다.",
+    "title": "event.platform-event.title",
+    "text": "event.platform-event.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -421,7 +421,7 @@
     "choices": [
       {
         "id": "join",
-        "label": "참여한다",
+        "label": "event.platform-event.choice.join",
         "effects": [
           {
             "kind": "promotion",
@@ -436,7 +436,7 @@
       },
       {
         "id": "pass",
-        "label": "넘긴다",
+        "label": "event.platform-event.choice.pass",
         "effects": []
       }
     ]

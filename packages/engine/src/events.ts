@@ -1,4 +1,5 @@
 import type { Condition, Content, Effect, EventDef } from "@webbbbbie/content";
+import { matchingText, originalTexts, text } from "@webbbbbie/content";
 import {
   activeWork,
   changeCondition,
@@ -525,19 +526,32 @@ export function applyEvent(
       events,
       "CHOICE_RESOLVED",
       instance.day,
-      selected.label,
+      matchingText(
+        "event." + definition.id + ".choice." + selected.id,
+        selected.label,
+      ),
       instance.target.id,
     );
   for (const effect of effects)
     applyEffect(state, content, instance, effect, events);
-  if (effects.length)
+  if (effects.length) {
+    const resultId = "event." + definition.id + ".result";
     record(
       events,
       "EFFECT_APPLIED",
       instance.day,
-      definition.title + " · 결과 반영",
+      text(
+        Object.hasOwn(originalTexts, resultId) ? resultId : "engine.log.effect",
+        {
+          event_title: matchingText(
+            "event." + definition.id + ".title",
+            definition.title,
+          ),
+        },
+      ),
       instance.target.id,
     );
+  }
   const resolved: EventInstance = {
     ...instance,
     status: "RESOLVED",

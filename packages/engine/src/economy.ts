@@ -1,4 +1,5 @@
 import type { Content } from "@webbbbbie/content";
+import { displayWorkTitle, text } from "@webbbbbie/content";
 import { clamp, record, sum } from "./author";
 import type { EngineEvent, LedgerEntry, LifeState, Work } from "./model";
 
@@ -65,9 +66,14 @@ export function updateContracts(
         events,
         "STATE_CHANGED",
         day,
-        work.title +
-          " · 계약 " +
-          (contract.status === "EXPIRED" ? "만료" : "종료"),
+        text(
+          contract.status === "EXPIRED"
+            ? "engine.log.contract-expired"
+            : "engine.log.contract-ended",
+          {
+            work_title: displayWorkTitle(work.title),
+          },
+        ),
         work.id,
       );
       continue;
@@ -81,8 +87,14 @@ export function updateContracts(
         events,
         "STATE_CHANGED",
         day,
-        work.title +
-          (honored ? " · 계약 프로모션 시작" : " · 약속된 프로모션 지연"),
+        text(
+          honored
+            ? "engine.log.promotion-started"
+            : "engine.log.promotion-delayed",
+          {
+            work_title: displayWorkTitle(work.title),
+          },
+        ),
         work.id,
       );
     }
@@ -95,7 +107,9 @@ export function updateContracts(
           events,
           "STATE_CHANGED",
           day,
-          work.title + " · 담당자의 원고 독촉",
+          text("engine.log.editor-pressure", {
+            work_title: displayWorkTitle(work.title),
+          }),
           work.id,
         );
       } else if (company.skill >= 60) {
@@ -104,7 +118,9 @@ export function updateContracts(
           events,
           "STATE_CHANGED",
           day,
-          work.title + " · 편집 피드백 반영",
+          text("engine.log.editor-feedback", {
+            work_title: displayWorkTitle(work.title),
+          }),
           work.id,
         );
       }
@@ -169,7 +185,10 @@ export function settle(
       events,
       "PAYOUT",
       day,
-      work.title + " · 정산 입금 " + payout + "원",
+      text("engine.log.payout", {
+        work_title: displayWorkTitle(work.title),
+        amount: payout,
+      }),
       work.id,
     );
   }

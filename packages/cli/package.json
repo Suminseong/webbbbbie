@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "dependencies": {
+    "@webbbbbie/content": "0.1.0",
     "@webbbbbie/engine": "0.1.0",
-    "@webbbbbie/content": "0.1.0"
+    "csv-parse": "6.1.0",
+    "read-excel-file": "9.3.20"
   }
 }

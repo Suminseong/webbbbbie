@@ -2,8 +2,8 @@
   {
     "id": "chapter-buffer",
     "category": "writing",
-    "title": "한 화 더 써 둠",
-    "text": "마감 전 저장 버튼을 누르니 비축분이 생겼다.",
+    "title": "event.chapter-buffer.title",
+    "text": "event.chapter-buffer.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 4,
@@ -25,8 +25,8 @@
   {
     "id": "drop",
     "category": "writing",
-    "title": "연중 고민",
-    "text": "비어 가는 비축과 쌓여 가는 댓글 사이에서 공지 문구를 고른다.",
+    "title": "event.drop.title",
+    "text": "event.drop.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2.24,
@@ -48,7 +48,7 @@
     "choices": [
       {
         "id": "continue",
-        "label": "계속 시도한다",
+        "label": "event.drop.choice.continue",
         "effects": [
           {
             "kind": "condition",
@@ -59,7 +59,7 @@
       },
       {
         "id": "drop",
-        "label": "작품을 연중한다",
+        "label": "event.drop.choice.drop",
         "effects": [
           {
             "kind": "transition",
@@ -72,8 +72,8 @@
   {
     "id": "prologue-rewrite",
     "category": "writing",
-    "title": "프롤로그 갈아엎기",
-    "text": "1화가 계속 거슬린다. 다시 쓰면 나아질까.",
+    "title": "event.prologue-rewrite.title",
+    "text": "event.prologue-rewrite.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -90,7 +90,7 @@
     "choices": [
       {
         "id": "rewrite",
-        "label": "프롤로그를 새로 쓴다",
+        "label": "event.prologue-rewrite.choice.rewrite",
         "effects": [
           {
             "kind": "quality",
@@ -109,7 +109,7 @@
       },
       {
         "id": "keep",
-        "label": "지금은 앞으로 간다",
+        "label": "event.prologue-rewrite.choice.keep",
         "effects": [
           {
             "kind": "condition",
@@ -123,8 +123,8 @@
   {
     "id": "typo-storm",
     "category": "writing",
-    "title": "오탈자 대잔치",
-    "text": "다시 읽어 보니 ‘했다’가 세 번 연속이다.",
+    "title": "event.typo-storm.title",
+    "text": "event.typo-storm.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -153,8 +153,8 @@
   {
     "id": "plot-memo-lost",
     "category": "writing",
-    "title": "떡밥 메모 분실",
-    "text": "어느 회차에 깔았던 복선이었는지 기억이 안 난다.",
+    "title": "event.plot-memo-lost.title",
+    "text": "event.plot-memo-lost.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -183,8 +183,8 @@
   {
     "id": "setting-book",
     "category": "writing",
-    "title": "설정집 정리",
-    "text": "흩어진 설정을 문서 하나로 모았다. 생각보다 구멍이 많다.",
+    "title": "event.setting-book.title",
+    "text": "event.setting-book.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -206,8 +206,8 @@
   {
     "id": "transcribe",
     "category": "writing",
-    "title": "필사 한 시간",
-    "text": "좋아하는 작가의 문장을 따라 써 본다. 손이 기억하기를 바라며.",
+    "title": "event.transcribe.title",
+    "text": "event.transcribe.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -229,8 +229,8 @@
   {
     "id": "writers-block",
     "category": "writing",
-    "title": "플롯 막힘",
-    "text": "다음 화로 넘어가는 다리가 무너졌다.",
+    "title": "event.writers-block.title",
+    "text": "event.writers-block.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -254,8 +254,8 @@
   {
     "id": "chain-posting",
     "category": "writing",
-    "title": "연참 결심",
-    "text": "비축이 넉넉하다. 오늘 두 편을 올릴까?",
+    "title": "event.chain-posting.title",
+    "text": "event.chain-posting.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -272,7 +272,7 @@
     "choices": [
       {
         "id": "post",
-        "label": "연참한다",
+        "label": "event.chain-posting.choice.post",
         "effects": [
           {
             "kind": "stock",
@@ -291,7 +291,7 @@
       },
       {
         "id": "save",
-        "label": "비축을 지킨다",
+        "label": "event.chain-posting.choice.save",
         "effects": [
           {
             "kind": "condition",
@@ -305,8 +305,8 @@
   {
     "id": "character-alive",
     "category": "writing",
-    "title": "캐릭터가 혼자 움직임",
-    "text": "조연이 대사를 멋대로 고쳐 쓰기 시작했다. 나쁘지 않다.",
+    "title": "event.character-alive.title",
+    "text": "event.character-alive.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -332,8 +332,8 @@
   {
     "id": "rhythm",
     "category": "writing",
-    "title": "문장 리듬을 찾음",
-    "text": "소리 내 읽어 보니 문장이 숨을 쉰다.",
+    "title": "event.rhythm.title",
+    "text": "event.rhythm.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -355,8 +355,8 @@
   {
     "id": "title-change",
     "category": "writing",
-    "title": "제목 변경 고민",
-    "text": "긴 제목이 유행이라는데, 내 제목은 너무 담백하다.",
+    "title": "event.title-change.title",
+    "text": "event.title-change.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -373,7 +373,7 @@
     "choices": [
       {
         "id": "change",
-        "label": "제목을 바꾼다",
+        "label": "event.title-change.choice.change",
         "effects": [
           {
             "kind": "promotion",
@@ -392,7 +392,7 @@
       },
       {
         "id": "keep",
-        "label": "그대로 간다",
+        "label": "event.title-change.choice.keep",
         "effects": [
           {
             "kind": "attachment",
@@ -405,8 +405,8 @@
   {
     "id": "chapter-length",
     "category": "writing",
-    "title": "분량 조절",
-    "text": "5천 자를 넘겼다. 쪼갤까, 그냥 올릴까.",
+    "title": "event.chapter-length.title",
+    "text": "event.chapter-length.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -416,7 +416,7 @@
     "choices": [
       {
         "id": "split",
-        "label": "두 화로 나눈다",
+        "label": "event.chapter-length.choice.split",
         "effects": [
           {
             "kind": "stock",
@@ -430,7 +430,7 @@
       },
       {
         "id": "whole",
-        "label": "한 번에 올린다",
+        "label": "event.chapter-length.choice.whole",
         "effects": [
           {
             "kind": "quality",
@@ -443,8 +443,8 @@
   {
     "id": "side-story",
     "category": "writing",
-    "title": "외전 아이디어",
-    "text": "본편보다 외전이 더 재밌을 것 같은 위험한 예감.",
+    "title": "event.side-story.title",
+    "text": "event.side-story.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -477,8 +477,8 @@
   {
     "id": "last-minute",
     "category": "writing",
-    "title": "마감 5분 전 업로드",
-    "text": "예약 버튼을 누르는 손이 떨렸다. 시계는 23시 55분.",
+    "title": "event.last-minute.title",
+    "text": "event.last-minute.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -512,8 +512,8 @@
   {
     "id": "revision-hell",
     "category": "writing",
-    "title": "퇴고 지옥",
-    "text": "고칠수록 처음 문장이 나았던 것 같다.",
+    "title": "event.revision-hell.title",
+    "text": "event.revision-hell.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -539,8 +539,8 @@
   {
     "id": "cliche-twist",
     "category": "writing",
-    "title": "클리셰 비틀기",
-    "text": "다들 아는 회귀물 공식을 반 바퀴 틀어 봤다.",
+    "title": "event.cliche-twist.title",
+    "text": "event.cliche-twist.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -566,8 +566,8 @@
   {
     "id": "outline-day",
     "category": "writing",
-    "title": "목차 다시 짜기",
-    "text": "결말까지 목차를 세우니 갈 길이 보인다.",
+    "title": "event.outline-day.title",
+    "text": "event.outline-day.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,

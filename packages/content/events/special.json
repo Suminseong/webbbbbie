@@ -2,8 +2,8 @@
   {
     "id": "stats-refresh",
     "category": "special",
-    "title": "통계창 새로고침",
-    "text": "5분마다 조회수를 확인하는 손가락.",
+    "title": "event.stats-refresh.title",
+    "text": "event.stats-refresh.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -38,8 +38,8 @@
   {
     "id": "ego-addiction",
     "category": "special",
-    "title": "검색창의 필명",
-    "text": "필명을 검색하는 것이 하루 일과가 됐다.",
+    "title": "event.ego-addiction.title",
+    "text": "event.ego-addiction.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -73,8 +73,8 @@
   {
     "id": "art-disease",
     "category": "special",
-    "title": "예술병의 속삭임",
-    "text": "‘조회수보다 중요한 게 있지 않나.’",
+    "title": "event.art-disease.title",
+    "text": "event.art-disease.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -96,7 +96,7 @@
     "choices": [
       {
         "id": "embrace",
-        "label": "문장에 공을 들인다",
+        "label": "event.art-disease.choice.embrace",
         "effects": [
           {
             "kind": "special",
@@ -111,7 +111,7 @@
       },
       {
         "id": "resist",
-        "label": "독자가 원하는 걸 쓴다",
+        "label": "event.art-disease.choice.resist",
         "effects": [
           {
             "kind": "ability",
@@ -125,8 +125,8 @@
   {
     "id": "big-author-disease",
     "category": "special",
-    "title": "대작가병",
-    "text": "인터뷰 질문을 미리 상상하기 시작했다.",
+    "title": "event.big-author-disease.title",
+    "text": "event.big-author-disease.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -155,8 +155,8 @@
   {
     "id": "ending-itch",
     "category": "special",
-    "title": "완결병",
-    "text": "결말이 눈앞에 아른거린다. 빨리 끝내고 싶다.",
+    "title": "event.ending-itch.title",
+    "text": "event.ending-itch.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 3,
@@ -186,8 +186,8 @@
   {
     "id": "awakening",
     "category": "special",
-    "title": "각성",
-    "text": "오늘은 손이 머리보다 빠르다. 이런 날이 있다.",
+    "title": "event.awakening.title",
+    "text": "event.awakening.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -221,8 +221,8 @@
   {
     "id": "naegeul-cure",
     "category": "special",
-    "title": "칭찬 한 줄의 약효",
-    "text": "‘이 문장 진짜 좋아요.’ 그 한 줄로 내 글이 다시 읽힌다.",
+    "title": "event.naegeul-cure.title",
+    "text": "event.naegeul-cure.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 5,
@@ -255,8 +255,8 @@
   {
     "id": "ego-detox",
     "category": "special",
-    "title": "검색 금지령",
-    "text": "에고서칭 앱을 지울지 고민한다.",
+    "title": "event.ego-detox.title",
+    "text": "event.ego-detox.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -272,7 +272,7 @@
     "choices": [
       {
         "id": "delete",
-        "label": "앱을 지운다",
+        "label": "event.ego-detox.choice.delete",
         "effects": [
           {
             "kind": "clearSpecial",
@@ -287,7 +287,7 @@
       },
       {
         "id": "keep",
-        "label": "하루만 더",
+        "label": "event.ego-detox.choice.keep",
         "effects": [
           {
             "kind": "condition",
@@ -301,8 +301,8 @@
   {
     "id": "art-cured",
     "category": "special",
-    "title": "예술병 완치",
-    "text": "공들인 회차의 조회수가 가장 낮았다. 정신이 번쩍 든다.",
+    "title": "event.art-cured.title",
+    "text": "event.art-cured.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -335,8 +335,8 @@
   {
     "id": "reward-shopping",
     "category": "special",
-    "title": "보상심리 쇼핑",
-    "text": "‘이번 주 고생했으니까.’ 결제 버튼은 가볍다.",
+    "title": "event.reward-shopping.title",
+    "text": "event.reward-shopping.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,

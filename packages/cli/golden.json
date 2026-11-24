@@ -2,15 +2,15 @@
   {
     "seed": 42,
     "days": 180,
-    "sha256": "f6531d7e4e009e75c6da63e0f05ee197296c946de440287ce5211fe3c63a4d72",
+    "sha256": "21739a7593a56fab5d5c2f545d4a8923a08478cff9f2cb7c076198a70fcd862f",
     "rulesVersion": "0.2.0",
-    "reason": "rules 0.2.0: content v2 (145 events, categories, specials), backlist fade, traffic share, stress homeostasis, choice pacing, rest gap, ledger compaction"
+    "reason": "규칙 0.2.0과 사건 145건 기준. 텍스트 교정과 시뮬레이션 검증을 독립적으로 운영하기 위해 일지의 문구 문자열을 제외함."
   },
   {
     "seed": 712,
     "days": 120,
-    "sha256": "bb96455eafbfe839c9a82878e9f0c2b84476ca2d120f99ba245e896c5ef2b597",
+    "sha256": "16a58c5dee3e60e8904fb9e1a3095c272e83349cd44f3cc4382e9369b7538cf1",
     "rulesVersion": "0.2.0",
-    "reason": "rules 0.2.0: content v2 (145 events, categories, specials), backlist fade, traffic share, stress homeostasis, choice pacing, rest gap, ledger compaction"
+    "reason": "규칙 0.2.0과 사건 145건 기준. 텍스트 교정과 시뮬레이션 검증을 독립적으로 운영하기 위해 일지의 문구 문자열을 제외함."
   }
 ]

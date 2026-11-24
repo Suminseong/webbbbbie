@@ -21,6 +21,7 @@ import {
   serialize,
 } from "@webbbbbie/engine";
 import type { LifeState } from "@webbbbbie/engine";
+import { catalogRows } from "./text-catalog";
 
 function run(seed: number, days: number, decisions?: string[]): LifeState {
   return drive(createLife(seed), days, decisions);
@@ -81,7 +82,9 @@ function validate() {
       data.world.jobs.length +
       " jobs, " +
       data.specials.length +
-      " special states.",
+      " special states, " +
+      catalogRows().length +
+      " text resources.",
   );
   console.log(
     JSON.stringify({
@@ -93,6 +96,15 @@ function validate() {
       followUps: data.events.filter((item) => item.tier === "FOLLOW_UP").length,
     }),
   );
+}
+
+function replayDigest(state: LifeState) {
+  // Preserve event ordering, targets and timestamps in the golden. UX wording
+  // can change independently of the simulation that emitted these events.
+  const log = state.log.map((entry) => ({ ...entry, message: "" }));
+  return createHash("sha256")
+    .update(serialize({ ...state, log }))
+    .digest("hex");
 }
 
 const quantile = (sorted: readonly number[], q: number) =>
@@ -326,7 +338,7 @@ function golden(update?: string) {
       return {
         seed,
         days,
-        sha256: createHash("sha256").update(serialize(state)).digest("hex"),
+        sha256: replayDigest(state),
         rulesVersion: state.rulesVersion,
         reason: update,
       };
@@ -336,9 +348,7 @@ function golden(update?: string) {
     return;
   }
   for (const { seed, days, sha256 } of fixtures) {
-    const actual = createHash("sha256")
-      .update(serialize(run(seed, days)))
-      .digest("hex");
+    const actual = replayDigest(run(seed, days));
     if (sha256 !== actual)
       throw new Error(
         "Golden mismatch: seed " + seed + ", day " + days + ", got " + actual,
@@ -475,7 +485,7 @@ if (command === "bench") {
         author: getAuthorView(state),
         works: getWorkViews(state),
         events: state.eventCount,
-        sha256: createHash("sha256").update(serialize(state)).digest("hex"),
+        sha256: replayDigest(state),
       },
       null,
       2,

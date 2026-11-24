@@ -2,8 +2,8 @@
   {
     "id": "cyber-closing",
     "category": "money",
-    "title": "싸이부기 하나만",
-    "text": "보상심리가 메뉴판을 넘긴다. 간식 먹고 원고 켜기로 했다.",
+    "title": "event.cyber-closing.title",
+    "text": "event.cyber-closing.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -36,8 +36,8 @@
   {
     "id": "payout-toast",
     "category": "money",
-    "title": "첫 인세 캡처",
-    "text": "입금 내역을 닫았다 열었다 한다. 실감은 아직 안 난다.",
+    "title": "event.payout-toast.title",
+    "text": "event.payout-toast.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 16,
@@ -72,8 +72,8 @@
   {
     "id": "gear",
     "category": "money",
-    "title": "장비병 도짐",
-    "text": "새 키보드 축을 검색하다 보니 창작 의욕보다 결제 의욕이 높다.",
+    "title": "event.gear.title",
+    "text": "event.gear.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1.68,
@@ -89,7 +89,7 @@
     "choices": [
       {
         "id": "buy",
-        "label": "장비를 산다",
+        "label": "event.gear.choice.buy",
         "effects": [
           {
             "kind": "cash",
@@ -109,7 +109,7 @@
       },
       {
         "id": "wait",
-        "label": "장바구니만 남긴다",
+        "label": "event.gear.choice.wait",
         "effects": [
           {
             "kind": "condition",
@@ -123,8 +123,8 @@
   {
     "id": "delivery-night",
     "category": "money",
-    "title": "배달 야식",
-    "text": "마감 끝나고 시킨 치킨이 오늘 하루의 보상이다.",
+    "title": "event.delivery-night.title",
+    "text": "event.delivery-night.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -162,8 +162,8 @@
   {
     "id": "chair-upgrade",
     "category": "money",
-    "title": "의자 바꿀까",
-    "text": "허리가 먼저 비명을 지른다. 의자 가격은 비명 이상이다.",
+    "title": "event.chair-upgrade.title",
+    "text": "event.chair-upgrade.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -179,7 +179,7 @@
     "choices": [
       {
         "id": "buy",
-        "label": "좋은 의자를 산다",
+        "label": "event.chair-upgrade.choice.buy",
         "effects": [
           {
             "kind": "cash",
@@ -199,7 +199,7 @@
       },
       {
         "id": "cushion",
-        "label": "방석으로 버틴다",
+        "label": "event.chair-upgrade.choice.cushion",
         "effects": [
           {
             "kind": "cash",
@@ -212,8 +212,8 @@
   {
     "id": "rent-hike",
     "category": "money",
-    "title": "월세 인상 통보",
-    "text": "집주인 문자는 늘 짧고 정중하다.",
+    "title": "event.rent-hike.title",
+    "text": "event.rent-hike.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -234,8 +234,8 @@
   {
     "id": "tax-season",
     "category": "money",
-    "title": "종합소득세 신고",
-    "text": "작가도 사업자라는 사실을 매년 오월에 깨닫는다.",
+    "title": "event.tax-season.title",
+    "text": "event.tax-season.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -251,7 +251,7 @@
     "choices": [
       {
         "id": "accountant",
-        "label": "세무사에게 맡긴다",
+        "label": "event.tax-season.choice.accountant",
         "effects": [
           {
             "kind": "cash",
@@ -266,7 +266,7 @@
       },
       {
         "id": "self",
-        "label": "직접 신고한다",
+        "label": "event.tax-season.choice.self",
         "effects": [
           {
             "kind": "condition",
@@ -285,8 +285,8 @@
   {
     "id": "savings",
     "category": "money",
-    "title": "통장 쪼개기",
-    "text": "생활비, 비상금, 장비 통장. 이름을 붙이니 든든하다.",
+    "title": "event.savings.title",
+    "text": "event.savings.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -310,8 +310,8 @@
   {
     "id": "broke",
     "category": "money",
-    "title": "잔고 바닥",
-    "text": "통장 잔고가 원고 글자 수보다 적다.",
+    "title": "event.broke.title",
+    "text": "event.broke.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -340,8 +340,8 @@
   {
     "id": "parents-allowance",
     "category": "money",
-    "title": "부모님 용돈",
-    "text": "‘밥은 먹고 다니니’라는 문자와 함께 입금 알림이 왔다.",
+    "title": "event.parents-allowance.title",
+    "text": "event.parents-allowance.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -357,7 +357,7 @@
     "choices": [
       {
         "id": "accept",
-        "label": "감사히 받는다",
+        "label": "event.parents-allowance.choice.accept",
         "effects": [
           {
             "kind": "cash",
@@ -372,7 +372,7 @@
       },
       {
         "id": "return",
-        "label": "돌려보낸다",
+        "label": "event.parents-allowance.choice.return",
         "effects": [
           {
             "kind": "condition",
@@ -391,8 +391,8 @@
   {
     "id": "luxury",
     "category": "money",
-    "title": "사치의 유혹",
-    "text": "정산 알림을 보고 명품 매장 앞에서 걸음을 멈췄다.",
+    "title": "event.luxury.title",
+    "text": "event.luxury.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -413,7 +413,7 @@
     "choices": [
       {
         "id": "buy",
-        "label": "산다",
+        "label": "event.luxury.choice.buy",
         "effects": [
           {
             "kind": "cash",
@@ -433,7 +433,7 @@
       },
       {
         "id": "walk",
-        "label": "지나친다",
+        "label": "event.luxury.choice.walk",
         "effects": [
           {
             "kind": "condition",
@@ -447,8 +447,8 @@
   {
     "id": "cafe-office",
     "category": "money",
-    "title": "카페 출근",
-    "text": "아메리카노 한 잔 값으로 네 시간의 집중을 샀다.",
+    "title": "event.cafe-office.title",
+    "text": "event.cafe-office.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 4,
@@ -481,8 +481,8 @@
   {
     "id": "first-million",
     "category": "money",
-    "title": "첫 백만 원 정산",
-    "text": "누적 정산이 일곱 자리가 됐다. 이 숫자는 진짜다.",
+    "title": "event.first-million.title",
+    "text": "event.first-million.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 6,

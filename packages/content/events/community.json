@@ -2,8 +2,8 @@
   {
     "id": "ego-bad",
     "category": "community",
-    "title": "검색하면 나오는 것들",
-    "text": "에고서칭 결과, 작품 제목보다 상처가 오래 남는다.",
+    "title": "event.ego-bad.title",
+    "text": "event.ego-bad.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 6,
@@ -39,8 +39,8 @@
   {
     "id": "critique",
     "category": "community",
-    "title": "감평글 알림",
-    "text": "고닉이 1화의 장단점을 짚었다. 세 번째 문장이 자꾸 눈에 걸린다.",
+    "title": "event.critique.title",
+    "text": "event.critique.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 1.68,
@@ -50,7 +50,7 @@
     "choices": [
       {
         "id": "take",
-        "label": "감평을 참고한다",
+        "label": "event.critique.choice.take",
         "effects": [
           {
             "kind": "quality",
@@ -69,7 +69,7 @@
       },
       {
         "id": "leave",
-        "label": "오늘은 닫아 둔다",
+        "label": "event.critique.choice.leave",
         "effects": [
           {
             "kind": "condition",
@@ -83,8 +83,8 @@
   {
     "id": "network",
     "category": "community",
-    "title": "흑망생이들의 단톡",
-    "text": "뻘글 두 개, 꿀팁 하나, 그리고 아직 닉네임으로만 아는 작가 한 명.",
+    "title": "event.network.title",
+    "text": "event.network.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 7,
@@ -117,8 +117,8 @@
   {
     "id": "ai-bait",
     "category": "community",
-    "title": "AI 집필 유혹",
-    "text": "‘딸깍하면 연참’이라는 글이 올라왔다. 댓글은 이미 전쟁터다.",
+    "title": "event.ai-bait.title",
+    "text": "event.ai-bait.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1.12,
@@ -127,7 +127,7 @@
     "choices": [
       {
         "id": "close",
-        "label": "글을 닫는다",
+        "label": "event.ai-bait.choice.close",
         "effects": [
           {
             "kind": "condition",
@@ -138,7 +138,7 @@
       },
       {
         "id": "argue",
-        "label": "댓글에 한마디 남긴다",
+        "label": "event.ai-bait.choice.argue",
         "effects": [
           {
             "kind": "condition",
@@ -157,8 +157,8 @@
   {
     "id": "copy-discussion",
     "category": "community",
-    "title": "표절 의혹 공론화",
-    "text": "비교글 캡처가 커뮤니티를 돌고 있다.",
+    "title": "event.copy-discussion.title",
+    "text": "event.copy-discussion.body",
     "tier": "FOLLOW_UP",
     "scope": "WORK",
     "weight": 8,
@@ -168,7 +168,7 @@
     "choices": [
       {
         "id": "admit",
-        "label": "인정하고 작품을 내린다",
+        "label": "event.copy-discussion.choice.admit",
         "effects": [
           {
             "kind": "transition",
@@ -183,7 +183,7 @@
       },
       {
         "id": "ignore",
-        "label": "침묵을 유지한다",
+        "label": "event.copy-discussion.choice.ignore",
         "effects": [
           {
             "kind": "social",
@@ -208,8 +208,8 @@
   {
     "id": "tip-post",
     "category": "community",
-    "title": "꿀팁글 저장",
-    "text": "‘연재 초반 30화 구성법’ 글을 북마크했다.",
+    "title": "event.tip-post.title",
+    "text": "event.tip-post.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -242,8 +242,8 @@
   {
     "id": "critique-swap",
     "category": "community",
-    "title": "감평 품앗이",
-    "text": "서로의 1화를 바꿔 읽기로 했다.",
+    "title": "event.critique-swap.title",
+    "text": "event.critique-swap.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -260,7 +260,7 @@
     "choices": [
       {
         "id": "swap",
-        "label": "감평을 주고받는다",
+        "label": "event.critique-swap.choice.swap",
         "effects": [
           {
             "kind": "quality",
@@ -279,7 +279,7 @@
       },
       {
         "id": "pass",
-        "label": "부끄러워서 거절한다",
+        "label": "event.critique-swap.choice.pass",
         "effects": []
       }
     ]
@@ -287,8 +287,8 @@
   {
     "id": "black-envy",
     "category": "community",
-    "title": "흑망생이 질투글",
-    "text": "‘저런 글이 왜 뜨지’라는 글에 내 작품이 언급됐다.",
+    "title": "event.black-envy.title",
+    "text": "event.black-envy.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -318,8 +318,8 @@
   {
     "id": "pen-name-found",
     "category": "community",
-    "title": "필명 발각",
-    "text": "커뮤 닉네임과 필명이 같다는 걸 누군가 알아챘다.",
+    "title": "event.pen-name-found.title",
+    "text": "event.pen-name-found.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,
@@ -341,7 +341,7 @@
     "choices": [
       {
         "id": "admit",
-        "label": "쿨하게 인정한다",
+        "label": "event.pen-name-found.choice.admit",
         "effects": [
           {
             "kind": "social",
@@ -357,7 +357,7 @@
       },
       {
         "id": "delete",
-        "label": "닉네임을 바꾼다",
+        "label": "event.pen-name-found.choice.delete",
         "effects": [
           {
             "kind": "condition",
@@ -375,8 +375,8 @@
   {
     "id": "offline-meet",
     "category": "community",
-    "title": "작가 오프 모임",
-    "text": "다들 마감 얘기만 한다. 이상하게 위로가 된다.",
+    "title": "event.offline-meet.title",
+    "text": "event.offline-meet.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -414,8 +414,8 @@
   {
     "id": "flame-war",
     "category": "community",
-    "title": "커뮤 논란",
-    "text": "누가 먼저 시작했는지 아무도 모르는 싸움이 사흘째다.",
+    "title": "event.flame-war.title",
+    "text": "event.flame-war.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -431,7 +431,7 @@
     "choices": [
       {
         "id": "watch",
-        "label": "눈팅만 한다",
+        "label": "event.flame-war.choice.watch",
         "effects": [
           {
             "kind": "condition",
@@ -447,7 +447,7 @@
       },
       {
         "id": "join",
-        "label": "한마디 거든다",
+        "label": "event.flame-war.choice.join",
         "effects": [
           {
             "kind": "condition",
@@ -471,8 +471,8 @@
   {
     "id": "block-list",
     "category": "community",
-    "title": "차단 목록 정리",
-    "text": "차단 버튼을 몇 번 눌렀더니 피드가 조용해졌다.",
+    "title": "event.block-list.title",
+    "text": "event.block-list.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -496,8 +496,8 @@
   {
     "id": "shitpost-spree",
     "category": "community",
-    "title": "뻘글 폭주",
-    "text": "새벽 두 시, 뻘글 세 개를 연달아 올렸다.",
+    "title": "event.shitpost-spree.title",
+    "text": "event.shitpost-spree.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 3,
@@ -531,8 +531,8 @@
   {
     "id": "debut-congrats",
     "category": "community",
-    "title": "고닉의 데뷔 축하",
-    "text": "같이 습작하던 고닉이 계약 소식을 올렸다.",
+    "title": "event.debut-congrats.title",
+    "text": "event.debut-congrats.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -554,8 +554,8 @@
   {
     "id": "contest-info",
     "category": "community",
-    "title": "공모전 정보 공유",
-    "text": "누군가 공모전 일정표를 깔끔하게 정리해 올렸다.",
+    "title": "event.contest-info.title",
+    "text": "event.contest-info.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -583,8 +583,8 @@
   {
     "id": "ai-debate",
     "category": "community",
-    "title": "AI 글쓰기 논쟁 2라운드",
-    "text": "‘결국 다 쓰게 될 거다’ 대 ‘그건 글이 아니다’.",
+    "title": "event.ai-debate.title",
+    "text": "event.ai-debate.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -593,7 +593,7 @@
     "choices": [
       {
         "id": "own",
-        "label": "내 문장으로 쓰겠다고 적는다",
+        "label": "event.ai-debate.choice.own",
         "effects": [
           {
             "kind": "condition",
@@ -609,7 +609,7 @@
       },
       {
         "id": "close",
-        "label": "탭을 닫는다",
+        "label": "event.ai-debate.choice.close",
         "effects": [
           {
             "kind": "condition",
@@ -623,8 +623,8 @@
   {
     "id": "snipe-post",
     "category": "community",
-    "title": "저격글",
-    "text": "익명 게시판에 내 작품을 콕 집은 글이 올라왔다.",
+    "title": "event.snipe-post.title",
+    "text": "event.snipe-post.body",
     "tier": "REGULAR",
     "scope": "WORK",
     "weight": 2,
@@ -641,7 +641,7 @@
     "choices": [
       {
         "id": "ignore",
-        "label": "읽지 않는다",
+        "label": "event.snipe-post.choice.ignore",
         "effects": [
           {
             "kind": "condition",
@@ -652,7 +652,7 @@
       },
       {
         "id": "read",
-        "label": "끝까지 읽는다",
+        "label": "event.snipe-post.choice.read",
         "effects": [
           {
             "kind": "condition",
@@ -675,8 +675,8 @@
   {
     "id": "quit-community",
     "category": "community",
-    "title": "커뮤 접기",
-    "text": "알림을 끄고 앱을 지울까 고민한다.",
+    "title": "event.quit-community.title",
+    "text": "event.quit-community.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 2,
@@ -692,7 +692,7 @@
     "choices": [
       {
         "id": "quit",
-        "label": "한 달 동안 접는다",
+        "label": "event.quit-community.choice.quit",
         "effects": [
           {
             "kind": "condition",
@@ -708,7 +708,7 @@
       },
       {
         "id": "stay",
-        "label": "정보는 필요하다",
+        "label": "event.quit-community.choice.stay",
         "effects": [
           {
             "kind": "condition",
@@ -722,8 +722,8 @@
   {
     "id": "mentor",
     "category": "community",
-    "title": "선배 작가의 쪽지",
-    "text": "‘초반 3화에 다 거세요.’ 짧은데 오래 남는다.",
+    "title": "event.mentor.title",
+    "text": "event.mentor.body",
     "tier": "REGULAR",
     "scope": "AUTHOR",
     "weight": 1,

@@ -3,6 +3,7 @@ import balanceData from "../balance.v0.json";
 import playerActionData from "../player-actions.v0.json";
 import oneTimeExpenseData from "../one-time-expenses.v0.json";
 import tagUnlockData from "../tag-unlocks.v0.json";
+import companyTraitData from "../company-traits.v0.json";
 import platformData from "../platforms.json";
 import worldData from "../world.json";
 import policyData from "../policies.json";
@@ -181,6 +182,34 @@ export const tagUnlocks = z
     "Duplicate unlocked tag ID",
   )
   .parse(tagUnlockData);
+/**
+ * Per-company contract details (16번 §9, 계약사 특성). `settlementCycle` is
+ * a public term. Punctuality, promotion strength and the editors' skill,
+ * interference and warmth are hidden: the player only sees observed records.
+ */
+const editorTrait = z
+  .object({
+    id,
+    name: z.string().min(1),
+    pitch: z.string().min(1),
+    skill: natural.max(100),
+    interference: natural.max(100),
+    warmth: natural.max(100),
+  })
+  .strict();
+export const companyTraits = z
+  .record(
+    id,
+    z
+      .object({
+        settlementCycle: z.union([z.literal(30), z.literal(60), z.literal(90)]),
+        payPunctuality: probability,
+        promoPower: probability,
+        editors: z.array(editorTrait).min(1),
+      })
+      .strict(),
+  )
+  .parse(companyTraitData);
 const platform = z
   .object({
     id,
@@ -238,6 +267,7 @@ export const effectSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("consistency"), amount: finite }),
   z.object({ kind: z.literal("promotion"), days }),
   z.object({ kind: z.literal("clearSpecial"), key: label }),
+  z.object({ kind: z.literal("reassignEditor") }),
 ]);
 
 /** Condition keys whose value is a "key:true|false" string. */
@@ -278,6 +308,11 @@ const condition = z
       "multitask",
       "insight",
       "workAge",
+      "contractDelays",
+      "contractPromoMissed",
+      "contractSkill",
+      "contractInterference",
+      "contractWarmth",
     ]),
     op: z.enum(["eq", "gte", "lte"]),
     value: z.union([finite, label]),
@@ -662,6 +697,12 @@ const contentSchema = z
         )
           issue("Unknown special state condition in " + entry.id);
         if (
+          rule.key.startsWith("contract") &&
+          entry.scope !== "CONTRACT" &&
+          rule.key !== "contracted"
+        )
+          issue("Contract condition without contract scope in " + entry.id);
+        if (
           ["favorites", "quality", "stock", "contracted", "workAge"].includes(
             rule.key,
           ) &&
@@ -701,6 +742,8 @@ const contentSchema = z
           issue("Unknown special state " + effect.key + " in " + entry.id);
         if (effect.kind === "origin" && entry.tier !== "ORIGIN")
           issue("Origin effect outside day zero in " + entry.id);
+        if (effect.kind === "reassignEditor" && entry.scope !== "CONTRACT")
+          issue("Editor effect without contract scope in " + entry.id);
         if (effect.kind === "contract" && !entry.offer)
           issue("Contract effect outside offer in " + entry.id);
         if (

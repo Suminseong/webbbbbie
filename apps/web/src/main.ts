@@ -215,7 +215,20 @@ function renderCurrentEvent() {
       <div><dt>${ui("ui.offer.advance")}</dt><dd>${escape(won(pending.offer.advance))}</dd></div>
       <div><dt>${ui("ui.offer.duration")}</dt><dd>${ui("ui.offer.duration-value", { days: pending.offer.duration })}</dd></div>
       <div><dt>${ui("ui.offer.promise")}</dt><dd>${escape(pending.offer.promise)}</dd></div>
-    </dl>`
+      <div><dt>${ui("ui.offer.cycle")}</dt><dd>${ui("ui.offer.cycle-value", { days: pending.offer.settlementCycle })}</dd></div>
+      <div><dt>${ui("ui.offer.editor")}</dt><dd>${pending.offer.editor ? ui("ui.offer.editor-value", { name: pending.offer.editor.name, pitch: pending.offer.editor.pitch }) : ui("ui.offer.editor-none")}</dd></div>
+      <div><dt>${ui("ui.offer.history")}</dt><dd>${
+        pending.offer.history
+          ? ui("ui.offer.history-value", {
+              contracts: pending.offer.history.contracts,
+              settlements: pending.offer.history.settlements,
+              delays: pending.offer.history.delays,
+              promo: pending.offer.history.promo,
+            })
+          : ui("ui.offer.history-none")
+      }</dd></div>
+    </dl>
+    <p class="small-muted">${ui("ui.offer.hidden-note")}</p>`
         : ""
     }
     <div class="event-options">${pending.choices
@@ -266,9 +279,9 @@ function workPanel(
         <div><dt>${ui("ui.work.latest-views")}</dt><dd>${count(work.latestViews)}</dd></div>
         <div><dt>${ui("ui.work.lost")}</dt><dd>${ui("ui.format.reader", { count: count(work.lost) })}</dd></div>
         <div><dt>${ui("ui.work.paid")}</dt><dd>${escape(won(work.paid))}</dd></div>
-        <div><dt>${ui("ui.work.first-views")}</dt><dd>${count(work.firstViews)}</dd></div>
+        <div><dt>${ui("ui.work.first-views")}</dt><dd>${count(work.inflow)}</dd></div>
         <div><dt>${ui("ui.work.active-readers")}</dt><dd>${count(work.activeReaders)}</dd></div>
-        <div><dt>${ui("ui.work.retention")}</dt><dd>${count(work.retention * 100)}%</dd></div>
+        <div><dt>${ui("ui.work.retention")}</dt><dd>${count(work.latestPerInflow * 100)}%</dd></div>
         <div><dt>${ui("ui.work.trend-7")}</dt><dd>${ui("ui.work.trend-value", { views: count(work.trend.d7.views), readers: count(work.trend.d7.newReaders) })}</dd></div>
         <div><dt>${ui("ui.work.trend-30")}</dt><dd>${ui("ui.work.trend-value", { views: count(work.trend.d30.views), readers: count(work.trend.d30.newReaders) })}</dd></div>
         <div><dt>${ui("ui.work.prep")}</dt><dd>${work.prep}</dd></div>
@@ -277,6 +290,7 @@ function workPanel(
         <div><dt>${ui("ui.work.quality")}</dt><dd>${count(work.quality)}</dd></div>
       </dl>
       ${renderSpark(work.history)}
+      ${renderFunnel(work.funnel)}
       ${work.end ? "" : workCommands(work)}
       ${work.end ? `<p class="small-muted">${ui("ui.work.ending", { day: work.end.day, reason: work.end.reason, chapters: work.end.chapters, favorites: count(work.end.favorites) })}</p>` : ""}
       ${work.missedReason ? `<p class="small-muted">${ui("ui.work.missed", { reason: text(work.missedReason === "HIATUS" ? "ui.work.miss-hiatus" : "ui.work.miss-stock") })}</p>` : ""}
@@ -309,6 +323,37 @@ function renderSpark(history: { day: number; views: number }[]) {
         `<i style="height:${Math.max(2, (item.views / top) * 100)}%" title="${ui("ui.format.day", { day: item.day })} · ${count(item.views)}"></i>`,
     )
     .join("")}</div>`;
+}
+
+/** Reader counts are expected values; small ones keep one decimal. */
+const fraction = (amount: number) =>
+  new Intl.NumberFormat("ko-KR", {
+    maximumFractionDigits: amount < 10 ? 1 : 0,
+  }).format(amount);
+
+function renderFunnel(
+  funnel: ReturnType<typeof getWorkViews>[number]["funnel"],
+) {
+  const rows = funnel.rows
+    .map((row) => {
+      const rate =
+        row.chapter === 1
+          ? ui("ui.work.funnel-rate-none")
+          : row.rate === null
+            ? ui("ui.work.funnel-rate-unknown")
+            : ui("ui.work.funnel-rate", {
+                percent: count(row.rate * 100),
+                reads: fraction(row.reads),
+                previous: fraction(row.previous ?? 0),
+              });
+      return `<li>${ui("ui.work.funnel-row", { chapter: row.chapter, reads: fraction(row.reads), drops: fraction(row.drops), rate })}</li>`;
+    })
+    .join("");
+  return `<div class="funnel"><h4>${ui("ui.work.funnel-title")}</h4>
+    <p><strong>${ui("ui.work.funnel-first")}</strong> ${funnel.firstReads === null ? ui("ui.work.funnel-first-unknown") : fraction(funnel.firstReads)}</p>
+    ${funnel.partial && funnel.since !== null ? `<p class="small-muted">${ui("ui.work.funnel-partial", { day: funnel.since })}</p>` : ""}
+    ${funnel.known ? `<p class="small-muted">${ui("ui.work.funnel-note")}</p><ol class="funnel-rows">${rows}</ol>` : `<p class="small-muted">${ui("ui.work.funnel-empty")}</p>`}
+  </div>`;
 }
 
 const cadenceOptions = (selected: number) =>
@@ -631,7 +676,10 @@ function tabContent() {
       <strong>${escape(contract.company)} · ${escape(contract.title)}</strong>
       <span>${ui("ui.contract.terms", { share: count(contract.share * 100), advance: won(contract.advance), day: contract.expiresDay })}<br>
       ${ui("ui.contract.dates", { start: contract.signedDay, end: contract.expiresDay })}<br>
-      ${ui("ui.contract.promise", { promise: contract.promise })}</span></div>`,
+      ${ui("ui.contract.promise", { promise: contract.promise })}<br>
+      ${ui("ui.contract.cycle", { days: contract.settlementCycle })}<br>
+      ${contract.editor ? ui("ui.contract.editor", { name: contract.editor.name, pitch: contract.editor.pitch }) : ui("ui.contract.editor-unknown")}<br>
+      ${ui("ui.contract.observed", { settlements: contract.observed.settlements, delays: contract.observed.delays, promo: contract.observed.promo, feedback: contract.observed.feedback, pressure: contract.observed.pressure, changes: contract.observed.editorChanges })}</span></div>`,
           )
           .join("")}</div>`
       : empty(ui("ui.contract.empty"));

@@ -17,6 +17,7 @@ import type {
 import world from "../../content/world.json";
 import platforms from "../../content/platforms.json";
 import specials from "../../content/specials.json";
+import companyTraits from "../../content/company-traits.v0.json";
 import staticContext from "../../content/text-context.ko.json";
 
 export const columns = [
@@ -86,6 +87,11 @@ const conditionNames: Record<Condition["key"], string> = {
   multitask: "작가의 멀티태스킹 성향",
   insight: "작가 능지",
   workAge: "대상 작품이 시작된 뒤 지난 일수",
+  contractDelays: "대상 계약에서 관측된 정산 지연 횟수",
+  contractPromoMissed: "대상 계약의 프로모션이 미흡했는지 여부(1은 미흡)",
+  contractSkill: "대상 계약 담당자의 비공개 편집 역량",
+  contractInterference: "대상 계약 담당자의 비공개 간섭 성향",
+  contractWarmth: "대상 계약 담당자의 비공개 소통 성향",
 };
 const workStatus = (key: string) =>
   sourceText("label.work-status." + key.toLowerCase().replaceAll("_", "-"));
@@ -275,6 +281,12 @@ function effectText(effect: Effect): { description: string; tone: -1 | 0 | 1 } {
           effect.days +
           "일까지 보장. 이미 더 오래 예정되어 있으면 유지",
         tone: 1,
+      };
+    case "reassignEditor":
+      return {
+        description:
+          "대상 계약의 담당 편집자가 같은 회사의 다른 담당자로 바뀜. 새 담당자의 성향은 공개되지 않음",
+        tone: 0,
       };
     case "clearSpecial": {
       const tone = specialTone(
@@ -498,6 +510,17 @@ function entityContexts(out: Map<string, Context>) {
       "해당 회사의 제안 카드에 보이는 프로모션·편집 지원 약속. 계약 체결 후 실제 이행과 구별.",
     );
   }
+  for (const company of Object.values(companyTraits))
+    for (const editor of company.editors) {
+      add(
+        editor.name,
+        "계약 제안서와 계약 목록에 보이는 가상 담당 편집자 이름. 이름만으로 실제 역량이나 성향을 알 수 없음.",
+      );
+      add(
+        editor.pitch,
+        "담당 편집자가 스스로 밝힌 소개 한 줄. 홍보 문구이므로 실제 역량·간섭·소통 성향을 확정하거나 수치를 암시하지 않음.",
+      );
+    }
   for (const state of specials as unknown as SpecialDef[]) {
     add(
       state.name,

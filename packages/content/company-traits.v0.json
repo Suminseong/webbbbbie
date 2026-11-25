@@ -1,0 +1,29 @@
+{
+  "neulpom": {
+    "settlementCycle": 30,
+    "payPunctuality": 0.94,
+    "promoPower": 0.9,
+    "editors": [
+      { "id": "neulpom-han", "name": "entity.editor.neulpom-han.name", "pitch": "entity.editor.neulpom-han.pitch", "skill": 64, "interference": 16, "warmth": 82 },
+      { "id": "neulpom-yoon", "name": "entity.editor.neulpom-yoon.name", "pitch": "entity.editor.neulpom-yoon.pitch", "skill": 48, "interference": 30, "warmth": 60 }
+    ]
+  },
+  "letter": {
+    "settlementCycle": 30,
+    "payPunctuality": 0.8,
+    "promoPower": 0.7,
+    "editors": [
+      { "id": "letter-seo", "name": "entity.editor.letter-seo.name", "pitch": "entity.editor.letter-seo.pitch", "skill": 84, "interference": 58, "warmth": 40 },
+      { "id": "letter-baek", "name": "entity.editor.letter-baek.name", "pitch": "entity.editor.letter-baek.pitch", "skill": 66, "interference": 36, "warmth": 70 }
+    ]
+  },
+  "rush": {
+    "settlementCycle": 60,
+    "payPunctuality": 0.6,
+    "promoPower": 0.35,
+    "editors": [
+      { "id": "rush-gang", "name": "entity.editor.rush-gang.name", "pitch": "entity.editor.rush-gang.pitch", "skill": 50, "interference": 82, "warmth": 25 },
+      { "id": "rush-moon", "name": "entity.editor.rush-moon.name", "pitch": "entity.editor.rush-moon.pitch", "skill": 58, "interference": 68, "warmth": 45 }
+    ]
+  }
+}

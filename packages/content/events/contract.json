@@ -196,6 +196,9 @@
       {
         "kind": "quality",
         "amount": -1
+      },
+      {
+        "kind": "reassignEditor"
       }
     ]
   },
@@ -319,6 +322,248 @@
             "kind": "condition",
             "stat": "drive",
             "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "late-payout-inquiry",
+    "category": "contract",
+    "title": "event.late-payout-inquiry.title",
+    "text": "event.late-payout-inquiry.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 4,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "contractDelays",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "ask",
+        "label": "event.late-payout-inquiry.choice.ask",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -0.5
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "event.late-payout-inquiry.choice.wait",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "promo-chase",
+    "category": "contract",
+    "title": "event.promo-chase.title",
+    "text": "event.promo-chase.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 4,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "contractPromoMissed",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "chase",
+        "label": "event.promo-chase.choice.chase",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "promotion",
+            "days": 6
+          }
+        ]
+      },
+      {
+        "id": "let",
+        "label": "event.promo-chase.choice.let",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "red-pen-weekend",
+    "category": "contract",
+    "title": "event.red-pen-weekend.title",
+    "text": "event.red-pen-weekend.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 3,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "contractSkill",
+        "op": "gte",
+        "value": 60
+      },
+      {
+        "key": "contractInterference",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.red-pen-weekend.choice.accept",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "partial",
+        "label": "event.red-pen-weekend.choice.partial",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "warm-call",
+    "category": "contract",
+    "title": "event.warm-call.title",
+    "text": "event.warm-call.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 3,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "contractWarmth",
+        "op": "gte",
+        "value": 65
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "schedule-squeeze",
+    "category": "contract",
+    "title": "event.schedule-squeeze.title",
+    "text": "event.schedule-squeeze.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 3,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "contractInterference",
+        "op": "gte",
+        "value": 65
+      }
+    ],
+    "choices": [
+      {
+        "id": "comply",
+        "label": "event.schedule-squeeze.choice.comply",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "ask-change",
+        "label": "event.schedule-squeeze.choice.ask-change",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "reassignEditor"
           }
         ]
       }

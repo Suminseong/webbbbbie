@@ -1,6 +1,7 @@
 import { channels, sourceText, tagUnlocks } from "@webbbbbie/content";
 import type { Content, Platform } from "@webbbbbie/content";
 import { blankSources, clamp, serial, sum, terminal } from "./author";
+import { traitsOf } from "./contracts";
 import { accrue, activeContract } from "./economy";
 import { spendingEffect } from "./work";
 import type { LifeState, Work } from "./model";
@@ -37,13 +38,14 @@ function exposure(
   const company = content.world.companies.find(
     (candidate) => candidate.id === contract?.companyId,
   );
-  const promoted = !!(
+  // Promotion strength is the company's hidden promoPower inside the agreed window.
+  const promoStrength =
     contract &&
     company &&
-    company.honesty >= 45 &&
     day >= contract.promotionStart &&
     day <= contract.promotionEnd
-  );
+      ? traitsOf(content, company.id).promoPower
+      : 0;
   // A slot's traffic is shared with competing works: one work receives
   // trafficShare of it, scaled by its appeal (quality squared and the
   // author's commercial sense), so ordinary works stay small (NFR-003, R-03).
@@ -101,7 +103,7 @@ function exposure(
         ? 1
         : 0,
     PROMOTION:
-      (promoted || day <= work.stats.promotionUntil ? 1 : 0) +
+      Math.max(promoStrength, day <= work.stats.promotionUntil ? 1 : 0) +
       (serializing
         ? spendingEffect(state, content, "promo") *
           content.balance.spending.promoExposure
@@ -144,6 +146,7 @@ export function advanceReaders(
   work: Work,
   platform: Platform,
   content: Content,
+  day = 0,
 ) {
   const { market } = content.balance;
   let views = 0;
@@ -157,6 +160,9 @@ export function advanceReaders(
   if (current <= 0 || work.status === "TAKEN_DOWN")
     return { views, paidViews, latest, lost };
   const groupCount = Math.ceil(current / market.groupSize);
+  // Per-chapter aggregates of this day's reading (no reader objects).
+  const readAdd = Array<number>(current).fill(0);
+  const dropAdd = Array<number>(current).fill(0);
   const paidBefore = work.paidFrom === null ? current : work.paidFrom - 1;
   for (let age = 0; age < platform.ages.length; age += 1) {
     const pool = work.readers[age];
@@ -169,7 +175,11 @@ export function advanceReaders(
       waiting * clamp(attrition * (posted ? 0.16 : 0.28), 0, 0.5);
     let caught = waiting - waitingLoss;
     lost += waitingLoss;
+    // Waiting readers had read everything up to the latest earlier chapter.
+    const waitingAt = (posted ? previous : current) - 1;
+    if (waitingAt >= 0) dropAdd[waitingAt] += waitingLoss;
     if (posted) {
+      for (let n = previous; n < current; n += 1) readAdd[n] += caught;
       views += caught * posted;
       paidViews +=
         caught * Math.max(0, current - Math.max(previous, paidBefore));
@@ -187,6 +197,13 @@ export function advanceReaders(
       const moving = flow - exits;
       next[group] += stayed;
       lost += exits;
+      // A reader who stops inside the group read a uniform share of it, so
+      // chapter i of the group is read by moving + exits * (1 - (i + .5)/span)
+      // readers and exits/span readers stop right after it.
+      for (let step = 0; step < span; step += 1) {
+        readAdd[from + step] += moving + exits * (1 - (step + 0.5) / span);
+        dropAdd[from + step] += exits / span;
+      }
       views += (moving + exits * 0.5) * span;
       paidViews +=
         (moving + exits * 0.5) *
@@ -203,7 +220,33 @@ export function advanceReaders(
     work.caughtUp[age] = caught;
   }
   work.stats.favorites += newFans;
+  logChapters(work, readAdd, dropAdd, day);
   return { views, paidViews, latest, lost };
+}
+
+/** Output-only log: rounded to 0.01 so saves stay small; never feeds back. */
+function logChapters(
+  work: Work,
+  reads: readonly number[],
+  drops: readonly number[],
+  day: number,
+) {
+  const log = work.chapters ?? {
+    complete: false,
+    since: day,
+    reads: [],
+    drops: [],
+  };
+  const merge = (old: readonly number[], add: readonly number[]) =>
+    add.map(
+      (value, index) => Math.round(((old[index] ?? 0) + value) * 100) / 100,
+    );
+  work.chapters = {
+    complete: log.complete,
+    since: log.since,
+    reads: merge(log.reads, reads),
+    drops: merge(log.drops, drops),
+  };
 }
 
 export function resolveAudience(
@@ -235,6 +278,7 @@ export function resolveAudience(
       work,
       platform,
       content,
+      day,
     );
     work.stats.views = views;
     work.stats.totalViews += views;

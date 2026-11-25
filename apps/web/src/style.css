@@ -834,3 +834,23 @@ button.danger:hover:not(:disabled) {
 .life .listing .list-row > :nth-child(n + 2) {
   text-align: right;
 }
+
+.funnel {
+  margin-top: 12px;
+}
+.funnel p {
+  margin: 4px 0;
+}
+.funnel-rows {
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 6px 0 0;
+  padding: 0 0 0 4px;
+  list-style: none;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.funnel-rows li {
+  padding: 2px 0;
+  overflow-wrap: anywhere;
+}

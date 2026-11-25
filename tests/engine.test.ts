@@ -646,6 +646,18 @@ describe("content expansion and balance safeguards", () => {
       promotionStart: 500,
       promotionEnd: 501,
       status: "ACTIVE",
+      editorId: null,
+      settlementCycle: 30,
+      record: {
+        contracts: 0,
+        settlements: 0,
+        delays: 0,
+        lastDelayDay: null,
+        promo: "PENDING",
+        feedback: 0,
+        pressure: 0,
+        editorChanges: 0,
+      },
     });
     state.works[0].contractId = "C-1";
     const next = engine.advance(state, 1).state;

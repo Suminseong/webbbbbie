@@ -120,6 +120,28 @@ const author = z.object({
   purchases: z.record(natural).default({}),
   lastRoutine: labor.nullable(),
 });
+/** What the player has observed about a contract; hidden traits stay in content. */
+const contractRecord = z.object({
+  /** Company history only: contracts signed with this company. */
+  contracts: natural.default(0),
+  settlements: natural.default(0),
+  delays: natural.default(0),
+  lastDelayDay: natural.nullable().default(null),
+  promo: z.enum(["PENDING", "KEPT", "DELAYED"]).default("PENDING"),
+  feedback: natural.default(0),
+  pressure: natural.default(0),
+  editorChanges: natural.default(0),
+});
+/** Chapter-level reads and drop-offs of one work (aggregate, no reader objects). */
+const chapterLog = z.object({
+  /** False when the save predates the log: only counts since `since` are known. */
+  complete: z.boolean(),
+  since: natural,
+  /** reads[n-1]: readers who read chapter n. */
+  reads: z.array(volume),
+  /** drops[n-1]: readers whose last read chapter was n and who then left. */
+  drops: z.array(volume),
+});
 const workStats = z.object({
   newReaders: volume,
   newByAge: ageBands,
@@ -166,6 +188,7 @@ const work = z.object({
   hiatusKind: z.enum(["RECOVER", "STOCK"]).nullable(),
   manual: z.boolean(),
   history: z.array(history),
+  chapters: chapterLog.nullable().default(null),
   hiatusUntil: natural.nullable(),
   /** Forced rest has a minimum duration; a voluntary hiatus may end early. */
   hiatusLockedUntil: natural.nullable().default(null),
@@ -190,6 +213,9 @@ const work = z.object({
     .nullable(),
 });
 const contract = z.object({
+  editorId: word.nullable().default(null),
+  settlementCycle: natural.default(30),
+  record: contractRecord.default({}),
   id: word,
   workId: word,
   companyId: word,
@@ -211,6 +237,7 @@ const selectedEvent = z.object({
   choiceIds: z.array(word),
   resolvedChoice: word.nullable(),
   offerCompanyId: word.nullable(),
+  offerEditorId: word.nullable().default(null),
   followUpId: word.nullable(),
   status: z.enum(["PENDING", "RESOLVED"]),
 });
@@ -277,6 +304,8 @@ export const stateSchema = z.object({
   ledgerCarry: z.record(ledgerKind, amount),
   /** Monotonic ledger ID counter; IDs stay unique after compaction. */
   ledgerSeq: natural,
+  /** Aggregated observations per company across all contracts. */
+  companyRecords: z.record(contractRecord).default({}),
   flags: z.array(word),
   eventLast: z.record(natural),
   eventCount: z.record(natural),
@@ -303,6 +332,8 @@ export const envelopeSchema = z.object({
 export type LifeState = z.infer<typeof stateSchema>;
 export type Author = z.infer<typeof author>;
 export type Work = z.infer<typeof work>;
+export type ContractRecord = z.infer<typeof contractRecord>;
+export type ChapterLog = z.infer<typeof chapterLog>;
 export type Contract = z.infer<typeof contract>;
 export type EventInstance = z.infer<typeof selectedEvent>;
 export type Target = z.infer<typeof target>;
@@ -316,7 +347,7 @@ export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
 export const SCHEMA_VERSION = 3;
-export const RULES_VERSION = "0.3.1";
+export const RULES_VERSION = "0.3.2";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];

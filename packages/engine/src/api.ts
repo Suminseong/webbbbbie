@@ -1,4 +1,5 @@
 import {
+  companyTraits,
   defaultContent,
   matchingText,
   oneTimeExpenses,
@@ -122,9 +123,18 @@ function copyForCommand(state: LifeState): LifeState {
       history: [...work.history],
       end: work.end ? { ...work.end } : null,
     })),
-    contracts: state.contracts.map((entry) => ({ ...entry })),
+    contracts: state.contracts.map((entry) => ({
+      ...entry,
+      record: { ...entry.record },
+    })),
     ledger: [...state.ledger],
     ledgerCarry: { ...state.ledgerCarry },
+    companyRecords: Object.fromEntries(
+      Object.entries(state.companyRecords).map(([id, entry]) => [
+        id,
+        { ...entry },
+      ]),
+    ),
     flags: [...state.flags],
     eventLast: { ...state.eventLast },
     eventCount: { ...state.eventCount },
@@ -135,13 +145,21 @@ function copyForCommand(state: LifeState): LifeState {
   };
 }
 
+const LEGACY_HASH_030 = "ea70dee1";
+const LEGACY_HASH_031 = "3916f2ee";
+
 export function createEngine(
   content: Content = defaultContent,
   lifeEnd: LifeEndPolicy = neverEnd,
 ) {
-  const previousContentHash = fingerprint(JSON.stringify(content));
   const contentHash = fingerprint(
-    JSON.stringify({ content, playerActionRules, oneTimeExpenses, tagUnlocks }),
+    JSON.stringify({
+      content,
+      playerActionRules,
+      oneTimeExpenses,
+      tagUnlocks,
+      companyTraits,
+    }),
   );
   const keep = content.balance.events;
   function addLog(state: LifeState, events: readonly EngineEvent[]) {
@@ -164,6 +182,7 @@ export function createEngine(
       ledger: [],
       ledgerCarry: {},
       ledgerSeq: 0,
+      companyRecords: {},
       flags: [],
       eventLast: {},
       eventCount: {},
@@ -338,10 +357,16 @@ export function createEngine(
       version.schemaVersion === SCHEMA_VERSION &&
       version.rulesVersion === RULES_VERSION &&
       version.contentHash === contentHash;
-    const previous =
+    // Content changed since these releases, so their hashes are fixed values.
+    const fromV030 =
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.0" &&
-      version.contentHash === previousContentHash;
+      version.contentHash === LEGACY_HASH_030;
+    const fromV031 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.1" &&
+      version.contentHash === LEGACY_HASH_031;
+    const previous = fromV030 || fromV031;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }
@@ -426,6 +451,12 @@ export function createEngine(
     if (previous) {
       state.rulesVersion = RULES_VERSION;
       state.contentHash = contentHash;
+      if (fromV030) migrateFromV030(state);
+    }
+    return { ok: true, state };
+  }
+  function migrateFromV030(state: LifeState) {
+    {
       const newTags = new Set(tagUnlocks.map((tag) => sourceText(tag.textId)));
       const schedules = new Set(cadences.map((item) => String(item.mask)));
       for (const entry of createAuthor(state.seed, content).aptitudes) {
@@ -439,7 +470,6 @@ export function createEngine(
           state.author.aptitudes.push(entry);
       }
     }
-    return { ok: true, state };
   }
 
   return {

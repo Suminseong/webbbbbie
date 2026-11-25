@@ -30,9 +30,40 @@ const labor = z.object({
   sleep: natural,
   community: natural,
   ego: natural,
+  plot: z.record(natural),
+  rest: natural,
   writing: z.record(natural),
   unused: natural,
 });
+const spendLevel = natural.max(3);
+const timePolicy = z.object({
+  sleep: natural,
+  plot: natural,
+  community: natural,
+  ego: natural,
+  rest: natural,
+});
+const spendPolicy = z.object({
+  meals: spendLevel,
+  gear: spendLevel,
+  health: spendLevel,
+  research: spendLevel,
+  leisure: spendLevel,
+  promo: spendLevel,
+});
+const policy = z.object({
+  time: timePolicy,
+  spend: spendPolicy,
+  autoPlan: z.boolean(),
+});
+const ledgerKind = z.enum([
+  "SALARY",
+  "PAYOUT",
+  "LIVING",
+  "EVENT",
+  "ADVANCE",
+  "SPEND",
+]);
 const ability = keyed(abilityKeys, score);
 const condition = keyed(conditionKeys, score);
 const social = keyed(socialKeys, score);
@@ -70,9 +101,22 @@ const author = z.object({
     ["consumption", "community", "multitask", "deadlineTolerance"] as const,
     score,
   ),
-  specialStates: z.array(z.object({ key: word, until: natural })),
+  specialStates: z.array(
+    z.object({
+      key: word,
+      until: natural,
+      since: natural,
+      cause: word.nullable(),
+    }),
+  ),
+  policy,
+  /** Text IDs explaining why the last day's plan was not followed. */
+  deviations: z.array(word),
+  lastPlan: labor.nullable(),
   aptitudes: z.array(aptitude),
   cash: amount,
+  /** Spending charged at the next settlement (accrues daily). */
+  spendAccrued: volume,
   lastRoutine: labor.nullable(),
 });
 const workStats = z.object({
@@ -91,6 +135,7 @@ const workStats = z.object({
   promotionUntil: amount,
   missedReason: z.enum(["HIATUS", "NO_STOCK"]).nullable(),
 });
+const history = z.tuple([natural, volume, volume]);
 const work = z.object({
   id: word,
   title: word,
@@ -109,6 +154,15 @@ const work = z.object({
   quality: score,
   consistency: score,
   attachment: score,
+  /** Plot preparation (0–100): invested by plot time, spent by new chapters. */
+  prep: score,
+  stockTarget: natural,
+  priority: natural.min(1).max(3),
+  /** Extra chapters the player asked for; consumed by the next days. */
+  rush: natural,
+  hiatusKind: z.enum(["RECOVER", "STOCK"]).nullable(),
+  manual: z.boolean(),
+  history: z.array(history),
   hiatusUntil: natural.nullable(),
   resumeTo: activeStatus.nullable(),
   paidFrom: natural.nullable(),
@@ -166,7 +220,7 @@ const scheduled = z.object({
 const ledger = z.object({
   id: word,
   day: natural,
-  kind: z.enum(["SALARY", "PAYOUT", "LIVING", "EVENT", "ADVANCE"]),
+  kind: ledgerKind,
   amount,
   workId: word.nullable(),
   ref: word,
@@ -182,6 +236,7 @@ const engineEvent = z.object({
     "CHAPTER_MISSED",
     "WORK_STATUS_CHANGED",
     "STATE_CHANGED",
+    "COMMAND",
     "PAYOUT",
     "DAY_CLOSED",
   ]),
@@ -213,10 +268,7 @@ export const stateSchema = z.object({
   contracts: z.array(contract),
   ledger: z.array(ledger),
   /** Totals of ledger entries compacted out of `ledger`, by kind. */
-  ledgerCarry: z.record(
-    z.enum(["SALARY", "PAYOUT", "LIVING", "EVENT", "ADVANCE"]),
-    amount,
-  ),
+  ledgerCarry: z.record(ledgerKind, amount),
   /** Monotonic ledger ID counter; IDs stay unique after compaction. */
   ledgerSeq: natural,
   flags: z.array(word),
@@ -228,6 +280,8 @@ export const stateSchema = z.object({
   eventHistory: z.array(selectedEvent),
   archive: z.array(z.tuple([word, word.nullable(), word.nullable()])),
   pending: selectedEvent.nullable(),
+  /** Set when the author ends their writing life (16번 §10). */
+  ending: z.object({ day: natural, reason: z.literal("VOLUNTARY") }).nullable(),
   log: z.array(engineEvent),
   summaries: z.array(summary),
 });
@@ -255,8 +309,8 @@ export type ConditionStat = (typeof conditionKeys)[number];
 export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
-export const SCHEMA_VERSION = 2;
-export const RULES_VERSION = "0.2.0";
+export const SCHEMA_VERSION = 3;
+export const RULES_VERSION = "0.3.0";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];
@@ -264,3 +318,7 @@ export type AdvanceResult = {
 };
 export type CommandError =
   "E_NO_PENDING" | "E_INVALID_CHOICE" | "E_SAVE_CORRUPT" | "E_SAVE_VERSION";
+export type PlayerCommandError =
+  "E_ENDED" | "E_NO_WORK" | "E_NOT_ALLOWED" | "E_INVALID_PLAN" | "E_LIMIT";
+export type TimePolicy = z.infer<typeof timePolicy>;
+export type SpendPolicy = z.infer<typeof spendPolicy>;

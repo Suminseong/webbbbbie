@@ -2,6 +2,7 @@ import { channels } from "@webbbbbie/content";
 import type { Content, Platform } from "@webbbbbie/content";
 import { blankSources, clamp, serial, sum, terminal } from "./author";
 import { accrue, activeContract } from "./economy";
+import { spendingEffect } from "./work";
 import type { LifeState, Work } from "./model";
 import { rand, stream } from "./rng";
 
@@ -43,10 +44,18 @@ function exposure(
   // trafficShare of it, scaled by its appeal (quality squared and the
   // author's commercial sense), so ordinary works stay small (NFR-003, R-03).
   const quality = work.quality / 100;
+  // Hidden per-work luck is heavy-tailed: most works are ignored and a few
+  // catch on (16번 §8). Rational form keeps results engine-independent.
+  const draw = rand(state.seed, work.startDay, stream.CREATION, 60 + index);
+  const luck =
+    options.luckFloor +
+    ((1 - options.luckFloor) * draw) / (1 - options.luckTail * draw);
   const appeal =
     options.trafficShare *
     quality *
     quality *
+    quality *
+    luck *
     (0.75 + state.author.abilities.commercial / 200);
   const fit =
     appeal *
@@ -82,7 +91,12 @@ function exposure(
       work.published - work.paidFrom < 7
         ? 1
         : 0,
-    PROMOTION: promoted || day <= work.stats.promotionUntil ? 1 : 0,
+    PROMOTION:
+      (promoted || day <= work.stats.promotionUntil ? 1 : 0) +
+      (serializing
+        ? spendingEffect(state, content, "promo") *
+          content.balance.spending.promoExposure
+        : 0),
     COMMUNITY:
       (state.flags.includes("community_tip") ? 0.22 : 0) +
       loyalty.recognition / 200,
@@ -217,6 +231,9 @@ export function resolveAudience(
     work.stats.totalViews += views;
     work.stats.latestViews = latest;
     work.stats.lost = lost;
+    work.history.push([day, views, work.stats.newReaders]);
+    if (work.history.length > content.balance.plan.historyKeep)
+      work.history.shift();
     if (work.status !== "TAKEN_DOWN")
       gained += accrue(state, work, day, views, paidViews, content);
   }

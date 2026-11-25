@@ -47,12 +47,14 @@ export function transitionWork(
   } else if (previous === "HIATUS") {
     work.resumeTo = null;
     work.hiatusUntil = null;
+    work.hiatusKind = null;
     if (!terminal(to)) work.lastResume = day;
   }
   work.status = to;
   if (to === "SERIAL_PAID" && work.paidFrom === null)
     work.paidFrom = work.published + 1;
   if (to === "SERIAL_PAID" || terminal(to)) work.paidEligibleDay = null;
+  if (to !== "HIATUS") work.rush = 0;
   if (to === "TAKEN_DOWN") {
     work.readers = [[], [], [], [], []];
     work.caughtUp = [0, 0, 0, 0, 0];
@@ -91,7 +93,11 @@ export function prepareWorks(
 ) {
   const { author } = state;
   const { writing } = content.balance;
-  if (!state.works.some(activeWork) && author.startPath) {
+  if (
+    author.policy.autoPlan &&
+    !state.works.some(activeWork) &&
+    author.startPath
+  ) {
     // After the last work ends the author rests for a seeded number of days
     // before planning the next one (C-15 family, balance.life.rest*).
     const lastEnd = Math.max(
@@ -126,18 +132,16 @@ export function prepareWorks(
   }
 }
 
-function allocateWriting(
+/** Splits whole units across works by weight (largest remainder). */
+function allocate(
   works: Work[],
   available: number,
   unit: number,
-  target: number,
+  weigh: (work: Work) => number,
 ): Record<string, number> {
   if (!works.length) return {};
-  const units = Math.floor(available / unit);
-  const weights = works.map(
-    (work) =>
-      Math.max(0.5, target - work.stock) * (0.5 + work.attachment / 100),
-  );
+  const units = Math.floor(Math.max(0, available) / unit);
+  const weights = works.map(weigh);
   const total = sum(weights);
   const slots = weights.map((weight) => (units * weight) / total);
   const whole = slots.map(Math.floor);
@@ -151,13 +155,37 @@ function allocateWriting(
   );
 }
 
+/** A work the author can write into: serializing, or on a stock-building hiatus. */
+export const writable = (work: Work) =>
+  serial(work) || (work.status === "HIATUS" && work.hiatusKind === "STOCK");
+
+/** Effective spending levels: nothing is spent while broke or in a cut state. */
+export function spendingLevels(state: LifeState, content: Content) {
+  const { author } = state;
+  const cut = specialModifiers(author, content).spendCut || author.cash <= 0;
+  const levels = cut
+    ? { meals: 0, gear: 0, health: 0, research: 0, leisure: 0, promo: 0 }
+    : author.policy.spend;
+  return { levels, cut };
+}
+
+export function spendingEffect(
+  state: LifeState,
+  content: Content,
+  category: keyof LifeState["author"]["policy"]["spend"],
+) {
+  return content.balance.spending.efficiency[
+    spendingLevels(state, content).levels[category]
+  ];
+}
+
 export function planRoutine(
   state: LifeState,
   content: Content,
   day: number,
 ): Routine {
   const { author } = state;
-  const { time, writing: rules } = content.balance;
+  const { time, writing: rules, plan } = content.balance;
   const job = content.world.jobs.find(
     (candidate) => candidate.id === author.jobId,
   )!;
@@ -165,7 +193,15 @@ export function planRoutine(
     Math.floor(
       rand(state.seed, day, stream.ROUTINE, 0) * (2 * job.irregularity + 1),
     ) - job.irregularity;
-  const work = Math.max(0, job.slots + jitter);
+  const special = specialModifiers(author, content);
+  const deviations: string[] = [];
+  const planned = author.policy.time;
+  const jobUnits = Math.max(0, job.slots + jitter);
+  const work = Math.min(
+    time.day - time.living - time.minSleep,
+    jobUnits + special.workExtra,
+  );
+  if (work > jobUnits) deviations.push("label.deviation.extra-work");
   const active = state.works.filter(serial);
   const pressure = active.filter((item) => item.stock < 2).length;
   const push =
@@ -173,45 +209,116 @@ export function planRoutine(
     author.condition.health >= rules.resumeHealth &&
     rand(state.seed, day, stream.ROUTINE, 1) <
       (author.condition.drive + author.traits.deadlineTolerance) / 180;
-  const sleep = Math.max(
-    time.minSleep,
-    time.sleep - (push ? time.deadlinePressure + pressure - 1 : 0),
-  );
-  const free = time.day - work - time.living - sleep;
-  const special = specialModifiers(author, content);
-  const community = Math.min(
-    free,
-    time.communityMax + special.communityBonus,
-    Math.floor(
-      (author.traits.community * rand(state.seed, day, stream.ROUTINE, 2)) / 19,
+  let sleep = planned.sleep;
+  if (push) {
+    sleep = Math.max(
+      time.minSleep,
+      sleep - (time.deadlinePressure + pressure - 1),
+    );
+    if (sleep < planned.sleep) deviations.push("label.deviation.deadline-push");
+  }
+  const free = time.day - work - time.living;
+  sleep = Math.min(sleep, free);
+  const left = free - sleep;
+  // Impulses add community and ego time beyond the plan (16번 §3, §7).
+  const impulse = (index: number, trait: number) =>
+    rand(state.seed, day, stream.ROUTINE, index) < trait / 220 ? 1 : 0;
+  let community = Math.min(
+    left,
+    Math.max(
+      planned.community,
+      Math.min(
+        time.communityMax + special.communityBonus,
+        planned.community +
+          special.communityBonus +
+          impulse(2, author.traits.community),
+      ),
     ),
   );
-  const ego = Math.min(
-    free - community,
-    time.egoMax + special.egoBonus,
-    state.works.some((item) => item.published > 0)
-      ? Math.floor(
-          ((author.condition.stress + 30) *
-            rand(state.seed, day, stream.ROUTINE, 3)) /
-            25,
-        ) + special.egoBonus
-      : 0,
+  if (community > planned.community)
+    deviations.push("label.deviation.community-impulse");
+  const posted = state.works.some((item) => item.published > 0);
+  let ego = posted
+    ? Math.min(
+        left - community,
+        Math.max(
+          planned.ego,
+          Math.min(
+            time.egoMax + special.egoBonus,
+            planned.ego +
+              special.egoBonus +
+              impulse(3, author.condition.stress + 20),
+          ),
+        ),
+      )
+    : 0;
+  if (ego > planned.ego) deviations.push("label.deviation.ego-impulse");
+  const writers = state.works.filter(
+    (item) => writable(item) || item.status === "PLANNING",
   );
-  const writing = allocateWriting(
-    active,
-    free - community - ego,
+  let plot = writers.length ? planned.plot : 0;
+  let rest = planned.rest + (writers.length ? 0 : planned.plot);
+  // A crowded day squeezes rest first, then ego, community and plot time.
+  let overflow = community + ego + plot + rest - left;
+  if (overflow > 0) {
+    deviations.push("label.deviation.squeezed");
+    const cut = (value: number) => {
+      const taken = Math.min(value, overflow);
+      overflow -= taken;
+      return value - taken;
+    };
+    rest = cut(rest);
+    ego = cut(ego);
+    community = cut(community);
+    plot = cut(plot);
+  }
+  const remaining = left - community - ego - plot - rest;
+  const plotBy = allocate(
+    writers,
+    plot,
+    1,
+    (item) =>
+      item.priority *
+      (item.status === "PLANNING" ? 1.4 : 1) *
+      (115 - item.prep),
+  );
+  const writing = allocate(
+    state.works.filter(writable),
+    remaining,
     time.workUnit,
-    rules.targetStock,
+    (item) =>
+      item.priority *
+      Math.max(0.5, item.stockTarget - item.stock) *
+      (0.5 + item.attachment / 100) *
+      (item.rush > 0 ? 3 : 1),
   );
-  return {
+  const writtenPlot = sum(Object.values(plotBy));
+  rest += plot - writtenPlot;
+  const routine: Routine = {
     work,
     living: time.living,
     sleep,
     community,
     ego,
+    plot: plotBy,
+    rest,
     writing,
-    unused: free - community - ego - sum(Object.values(writing)),
+    unused: remaining - sum(Object.values(writing)),
   };
+  author.lastPlan = {
+    work: jobUnits,
+    living: time.living,
+    sleep: planned.sleep,
+    community: planned.community,
+    ego: planned.ego,
+    plot: { total: planned.plot },
+    rest: planned.rest,
+    writing: {},
+    unused: 0,
+  };
+  author.deviations = deviations;
+  void plan;
+  return routine;
 }
 
 export function writeAndPublish(
@@ -222,9 +329,13 @@ export function writeAndPublish(
   events: EngineEvent[],
 ) {
   const { author } = state;
-  const { writing } = content.balance;
+  const { writing, plan, spending } = content.balance;
   const special = specialModifiers(author, content);
+  const gear =
+    1 + spending.gearWriting * spendingEffect(state, content, "gear");
+  const research = spendingEffect(state, content, "research");
   let posted = 0;
+  const writers = state.works.filter(writable).length || 1;
   for (const [index, work] of state.works.entries()) {
     work.stats.publishedToday = 0;
     work.stats.missedReason = null;
@@ -241,8 +352,20 @@ export function writeAndPublish(
         work.id,
       );
     }
-    if (!serial(work)) continue;
+    // Plot time and research spending build preparation; it also fades.
+    const invested = routine.plot[work.id] ?? 0;
+    if (work.status === "PLANNING" || writable(work)) {
+      work.prep = clamp(
+        work.prep +
+          invested * plan.prepGain * (0.7 + author.abilities.insight / 200) +
+          (research * spending.researchPrep) / writers -
+          plan.prepDecay,
+      );
+    }
+    if (!writable(work)) continue;
     const allotted = routine.writing[work.id] ?? 0;
+    const readiness = clamp(work.prep / 60, 0, 1);
+    const prepFactor = plan.prepFloor + (1 - plan.prepFloor) * readiness;
     if (allotted > 0) {
       const aptitudes = relevantAptitudes(author, work);
       const average = aptitudes.length
@@ -258,29 +381,59 @@ export function writeAndPublish(
           writing.stressPenalty *
             Math.max(0, (author.condition.stress - 50) / 50),
       );
-      work.stock +=
-        allotted *
+      // Long sessions lose efficiency (16번 §4).
+      const hours =
+        allotted <= plan.overtimeAt
+          ? allotted
+          : plan.overtimeAt +
+            (allotted - plan.overtimeAt) * plan.overtimeEfficiency;
+      const produced =
+        hours *
         (writing.base + writing.speedFactor * author.abilities.speed) *
         condition *
         fit *
-        special.writing;
+        special.writing *
+        gear *
+        prepFactor;
+      work.stock += produced;
+      work.prep = clamp(work.prep - produced * plan.prepCost);
       const quality =
-        (author.abilities.style + author.abilities.vocabulary + average + 105) /
-        4;
+        ((author.abilities.style +
+          author.abilities.vocabulary +
+          average +
+          105) /
+          4) *
+        (0.84 + 0.16 * readiness) *
+        (1 - 0.1 * Math.max(0, (author.condition.fatigue - 60) / 40));
       const variation =
         (rand(state.seed, day, stream.WRITING, index) - 0.5) * 0.35;
       work.quality = clamp(
         work.quality + (quality - work.quality) * 0.012 + variation,
       );
+      work.consistency = clamp(
+        work.consistency + (work.prep - 45) * 0.004 + (readiness - 0.5) * 0.1,
+      );
       learnAptitude(state, work, day, allotted >= 8 ? 2 : 1, content);
     }
-    if (planned && work.stock >= 1) {
+    if (!serial(work)) continue;
+    const bonus = work.rush > 0 ? 1 : 0;
+    const quota = (planned ? 1 : 0) + bonus;
+    let count = 0;
+    while (count < quota && work.stock >= 1) {
       work.stock -= 1;
       work.published += 1;
-      work.stats.publishedToday = 1;
+      count += 1;
+    }
+    if (bonus) {
+      work.rush -= 1;
+      changeCondition(author, "stress", plan.rushStress * count);
+      changeCondition(author, "fatigue", plan.rushFatigue * count);
+    }
+    if (count > 0) {
+      work.stats.publishedToday = count;
       work.stats.lastPosted = day;
       work.stats.streakMissed = 0;
-      posted += 1;
+      posted += count;
       record(
         events,
         "CHAPTER_POSTED",
@@ -386,21 +539,35 @@ export function updateCondition(
 ) {
   const { author } = state;
   const rules = content.balance.condition;
+  const { plan, spending } = content.balance;
   const special = specialModifiers(author, content);
   const allotted = sum(Object.values(routine.writing));
-  const workload = routine.work + allotted;
+  const plotted = sum(Object.values(routine.plot));
+  const workload = routine.work + allotted + plotted * 0.5;
+  const restUnits =
+    (routine.rest + routine.unused * 0.5) *
+    (0.7 + author.abilities.resilience / 200) *
+    special.restMult;
+  const meals = spendingEffect(state, content, "meals");
+  const gearEase = spendingEffect(state, content, "gear");
+  const medical = spendingEffect(state, content, "health");
+  const leisure = spendingEffect(state, content, "leisure");
   changeCondition(
     author,
     "health",
-    routine.sleep < rules.healthySleep
+    (routine.sleep < rules.healthySleep
       ? -(rules.healthySleep - routine.sleep) * rules.healthLoss
-      : rules.healthRecovery,
+      : rules.healthRecovery) +
+      spending.mealsHealth * meals +
+      spending.healthRecovery * medical,
   );
   changeCondition(
     author,
     "fatigue",
     Math.max(0, workload - rules.fatigueThreshold) * rules.fatigueGain -
-      (routine.sleep - rules.fatigueSleepBase) * rules.fatigueRecovery,
+      (routine.sleep - rules.fatigueSleepBase) * rules.fatigueRecovery -
+      restUnits * plan.restFatigue -
+      spending.gearFatigue * gearEase,
   );
   const missed = state.works.filter(
     (work) => work.stats.streakMissed >= rules.missedThreshold && serial(work),
@@ -412,6 +579,9 @@ export function updateCondition(
     missed * rules.missedStress +
       routine.ego * 0.32 +
       (routine.sleep < rules.healthySleep ? 0.6 : -rules.restStress) -
+      restUnits * plan.restStress -
+      spending.mealsStress * meals -
+      spending.leisureStress * leisure -
       (traction ? rules.successStress : 0) +
       special.stressDaily -
       // Homeostasis: stress drifts back toward its baseline every day.
@@ -423,7 +593,17 @@ export function updateCondition(
     (routine.sleep - 12) * 0.2 +
       (traction ? 0.45 : -0.12) -
       (author.condition.stress > 65 ? 0.6 : 0) +
+      restUnits * plan.restDrive +
+      spending.leisureDrive * leisure +
       special.driveDaily -
       rules.drivePull * (author.condition.drive - rules.driveBaseline),
   );
+  // Spending accrues daily and is charged at settlement.
+  const { levels } = spendingLevels(state, content);
+  author.spendAccrued +=
+    sum(
+      (Object.keys(levels) as (keyof typeof levels)[]).map(
+        (key) => spending[key][levels[key]],
+      ),
+    ) / content.balance.economy.settlementDays;
 }

@@ -183,6 +183,9 @@ export function settle(
     ),
     "living",
   );
+  const spent = Math.floor(state.author.spendAccrued);
+  state.author.spendAccrued -= spent;
+  transaction(state, day, "SPEND", -spent, "spending");
   for (const work of state.works) {
     if (work.status === "TAKEN_DOWN") continue;
     const payout = work.revenue.accrued - work.revenue.paid;

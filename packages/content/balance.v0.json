@@ -67,7 +67,9 @@
     "bestFavorites": 1400,
     "backlistHalfLife": 90,
     "backlistFavorites": 1400,
-    "trafficShare": 0.08
+    "trafficShare": 0.00011,
+    "luckFloor": 0.25,
+    "luckTail": 0.997
   },
   "economy": {
     "settlementDays": 30,
@@ -109,5 +111,51 @@
     "saveMaxBytes": 1048576,
     "sampleWorks": 10,
     "sampleDays": 7300
+  },
+  "plan": {
+    "defaultSleep": 14,
+    "defaultPlot": 2,
+    "defaultCommunity": 1,
+    "defaultEgo": 1,
+    "defaultRest": 2,
+    "maxTitle": 30,
+    "maxTags": 3,
+    "stockTargetMax": 15,
+    "prepStart": 40,
+    "prepGain": 3.2,
+    "prepDecay": 0.25,
+    "prepCost": 4,
+    "prepFloor": 0.78,
+    "overtimeAt": 8,
+    "overtimeEfficiency": 0.6,
+    "restStress": 0.3,
+    "restDrive": 0.2,
+    "restFatigue": 0.9,
+    "rushFatigue": 4,
+    "rushStress": 1.2,
+    "dropReputation": -3,
+    "dropStress": 4,
+    "hiatusRecover": 1.0,
+    "defaultTarget": 130,
+    "historyKeep": 30,
+    "sideWage": 5500
+  },
+  "spending": {
+    "meals": [0, 70000, 150000, 260000],
+    "gear": [0, 40000, 110000, 230000],
+    "health": [0, 30000, 90000, 190000],
+    "research": [0, 30000, 80000, 170000],
+    "leisure": [0, 40000, 100000, 210000],
+    "promo": [0, 50000, 130000, 300000],
+    "efficiency": [0, 1, 1.6, 1.9],
+    "mealsHealth": 0.22,
+    "mealsStress": 0.1,
+    "gearWriting": 0.035,
+    "gearFatigue": 0.35,
+    "healthRecovery": 0.15,
+    "researchPrep": 0.7,
+    "leisureStress": 0.3,
+    "leisureDrive": 0.18,
+    "promoExposure": 0.35
   }
 }

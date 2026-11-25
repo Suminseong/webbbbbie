@@ -16,7 +16,8 @@ import {
   unlockedTagChapters,
 } from "./commands";
 import { spendingLevels } from "./work";
-import type { LifeState, Work } from "./model";
+import { traitsOf } from "./contracts";
+import type { ContractRecord, LifeState, Work } from "./model";
 
 export const statusNames = {
   PLANNING: text("label.work-status.planning"),
@@ -158,6 +159,35 @@ function trend(work: Work, span: number) {
   };
 }
 
+/**
+ * Chapter funnel from the aggregate log. Rate for chapter n is
+ * reads(n) / reads(n-1); chapter 1 has no denominator. A log that started
+ * after the work began (old save) is flagged `partial`; chapters nobody read
+ * in the log window stay null rather than being estimated.
+ */
+export function chapterFunnel(work: Work) {
+  const log = work.chapters;
+  const reads = log?.reads ?? [];
+  const drops = log?.drops ?? [];
+  const rows = reads.map((value, index) => {
+    const before = index > 0 ? reads[index - 1] : 0;
+    return {
+      chapter: index + 1,
+      reads: value,
+      drops: drops[index] ?? 0,
+      previous: index > 0 ? before : null,
+      rate: index > 0 && before > 0 ? value / before : null,
+    };
+  });
+  return {
+    known: !!log && rows.length > 0,
+    partial: !!log && !log.complete,
+    since: log?.since ?? null,
+    firstReads: rows.length ? rows[0].reads : null,
+    rows,
+  };
+}
+
 export function workView(work: Work, content: Content) {
   const platform = content.platforms.find(
     (candidate) => candidate.id === work.platformId,
@@ -225,11 +255,12 @@ export function workView(work: Work, content: Content) {
     canResume: work.status === "HIATUS",
     canDrop:
       serial(work) || work.status === "HIATUS" || work.status === "PLANNING",
-    firstViews: Math.floor(work.stats.totalNew),
+    inflow: Math.floor(work.stats.totalNew),
+    funnel: chapterFunnel(work),
     activeReaders: Math.floor(
       sum(work.readers.map((pool) => sum(pool))) + sum(work.caughtUp),
     ),
-    retention:
+    latestPerInflow:
       work.stats.totalNew > 0
         ? (work.stats.latestViews || 0) / Math.max(1, work.stats.totalNew)
         : 0,
@@ -259,6 +290,37 @@ export function workView(work: Work, content: Content) {
   };
 }
 
+const promoNames = {
+  PENDING: text("label.contract.promo.pending"),
+  KEPT: text("label.contract.promo.kept"),
+  DELAYED: text("label.contract.promo.delayed"),
+};
+
+/** Public editor introduction only; skill, interference and warmth stay hidden. */
+function editorView(
+  content: Content,
+  companyId: string,
+  editorId: string | null,
+) {
+  const editor = traitsOf(content, companyId).editors.find(
+    (item) => item.id === editorId,
+  );
+  return editor ? { name: text(editor.name), pitch: text(editor.pitch) } : null;
+}
+
+/** What the player has seen from earlier contracts with the same company. */
+function companyHistory(record: ContractRecord | undefined) {
+  return record && record.contracts > 0
+    ? {
+        contracts: record.contracts,
+        settlements: record.settlements,
+        delays: record.delays,
+        promo: promoNames[record.promo],
+        promoKnown: record.promo !== "PENDING",
+      }
+    : null;
+}
+
 export function pendingView(state: LifeState, content: Content) {
   const pending = state.pending;
   if (!pending) return null;
@@ -284,6 +346,9 @@ export function pendingView(state: LifeState, content: Content) {
       })),
     offer: company
       ? {
+          settlementCycle: traitsOf(content, company.id).settlementCycle,
+          editor: editorView(content, company.id, pending.offerEditorId),
+          history: companyHistory(state.companyRecords[company.id]),
           name: matchingText(
             "entity.company." + company.id + ".name",
             company.name,
@@ -345,6 +410,17 @@ export function contractViews(state: LifeState, content: Content) {
     advance: entry.advance,
     promise: displayName("entity.company", entry.promise),
     status: entry.status,
+    settlementCycle: entry.settlementCycle,
+    editor: editorView(content, entry.companyId, entry.editorId),
+    observed: {
+      settlements: entry.record.settlements,
+      delays: entry.record.delays,
+      promo: promoNames[entry.record.promo],
+      promoKnown: entry.record.promo !== "PENDING",
+      feedback: entry.record.feedback,
+      pressure: entry.record.pressure,
+      editorChanges: entry.record.editorChanges,
+    },
   }));
 }
 

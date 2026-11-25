@@ -264,6 +264,7 @@ export function blankWork(
     hiatusKind: null,
     manual: spec.manual,
     history: [],
+    chapters: { complete: true, since: day, reads: [], drops: [] },
     hiatusUntil: null,
     hiatusLockedUntil: null,
     resumeTo: null,

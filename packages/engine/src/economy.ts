@@ -1,6 +1,8 @@
 import type { Content } from "@webbbbbie/content";
 import { text } from "@webbbbbie/content";
 import { clamp, record, sum, workTitle } from "./author";
+import { blankRecord, editorOf, observe, traitsOf } from "./contracts";
+import { rand, stream } from "./rng";
 import type { EngineEvent, LedgerEntry, LifeState, Work } from "./model";
 
 export function transaction(
@@ -86,11 +88,14 @@ export function updateContracts(
       );
       continue;
     }
-    const company = content.world.companies.find(
-      (candidate) => candidate.id === contract.companyId,
-    )!;
+    const traits = traitsOf(content, contract.companyId);
+    const { skill, interference, warmth } = editorOf(content, contract);
     if (day === contract.promotionStart) {
-      const honored = company.honesty >= 45;
+      const honored = traits.promoPower >= 0.5;
+      contract.record.promo = honored ? "KEPT" : "DELAYED";
+      const history = (state.companyRecords[contract.companyId] ??=
+        blankRecord());
+      history.promo = honored ? "KEPT" : "DELAYED";
       record(
         events,
         "STATE_CHANGED",
@@ -106,11 +111,16 @@ export function updateContracts(
         work.id,
       );
     }
-    if (day - contract.signedDay > 0 && (day - contract.signedDay) % 12 === 0) {
-      if (company.interference >= 65) {
+    // A warmer editor checks in more often; the outcome depends on the
+    // editor's hidden skill and interference (observed, never listed).
+    const interval = 8 + Math.round((100 - warmth) / 12);
+    const age = day - contract.signedDay;
+    if (age > 0 && age % interval === 0) {
+      if (interference >= 65) {
         state.author.condition.stress = clamp(
           state.author.condition.stress + 2,
         );
+        observe(state, contract, "pressure");
         record(
           events,
           "STATE_CHANGED",
@@ -120,8 +130,13 @@ export function updateContracts(
           }),
           work.id,
         );
-      } else if (company.skill >= 60) {
+      } else if (skill >= 60) {
         work.quality = clamp(work.quality + 1.5);
+        if (warmth >= 70)
+          state.author.condition.drive = clamp(
+            state.author.condition.drive + 1,
+          );
+        observe(state, contract, "feedback");
         record(
           events,
           "STATE_CHANGED",
@@ -186,10 +201,38 @@ export function settle(
   const spent = Math.floor(state.author.spendAccrued);
   state.author.spendAccrued -= spent;
   transaction(state, day, "SPEND", -spent, "spending");
-  for (const work of state.works) {
+  for (const [index, work] of state.works.entries()) {
     if (work.status === "TAKEN_DOWN") continue;
     const payout = work.revenue.accrued - work.revenue.paid;
     if (payout <= 0) continue;
+    const contract = activeContract(state, work, day);
+    if (contract) {
+      // A contract pays on its own public cycle; an unpunctual company
+      // (hidden) may postpone one payout but never two in a row.
+      const months = Math.max(1, Math.round(contract.settlementCycle / 30));
+      const month = Math.round(day / content.balance.economy.settlementDays);
+      const postponed =
+        contract.record.lastDelayDay ===
+        day - content.balance.economy.settlementDays;
+      if (!postponed && month % months !== 0) continue;
+      const { payPunctuality } = traitsOf(content, contract.companyId);
+      const late =
+        !postponed &&
+        rand(state.seed, day, stream.ECONOMY, 60 + index) > payPunctuality;
+      if (late) {
+        contract.record.lastDelayDay = day;
+        observe(state, contract, "delays");
+        record(
+          events,
+          "STATE_CHANGED",
+          day,
+          text("engine.log.payout-delayed", { work_title: workTitle(work) }),
+          work.id,
+        );
+        continue;
+      }
+      observe(state, contract, "settlements");
+    }
     work.revenue.paid += payout;
     transaction(state, day, "PAYOUT", payout, "settlement:" + work.id, work.id);
     record(

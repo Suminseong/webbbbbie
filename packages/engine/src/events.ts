@@ -10,6 +10,7 @@ import {
   record,
   sum,
 } from "./author";
+import { blankRecord, editorOf, observe, traitsOf } from "./contracts";
 import { activeContract, transaction } from "./economy";
 import type {
   EngineEvent,
@@ -127,6 +128,26 @@ function matches(
     case "contracted":
       actual = Number(!!work && !!activeContract(state, work, day));
       break;
+    case "contractDelays":
+    case "contractPromoMissed":
+    case "contractSkill":
+    case "contractInterference":
+    case "contractWarmth": {
+      const contract = work ? activeContract(state, work, day) : undefined;
+      if (!contract) break;
+      const person = editorOf(content, contract);
+      actual =
+        rule.key === "contractDelays"
+          ? contract.record.delays
+          : rule.key === "contractPromoMissed"
+            ? Number(contract.record.promo === "DELAYED")
+            : rule.key === "contractSkill"
+              ? person.skill
+              : rule.key === "contractInterference"
+                ? person.interference
+                : person.warmth;
+      break;
+    }
     case "completedWorks":
       actual = state.works.filter(
         (item) => item.end?.reason === "COMPLETED",
@@ -254,6 +275,7 @@ export function originEvent(state: LifeState, content: Content): EventInstance {
       .map((choice) => choice.id),
     resolvedChoice: null,
     offerCompanyId: null,
+    offerEditorId: null,
     followUpId: null,
     status: "PENDING",
   };
@@ -340,6 +362,9 @@ export function selectEvent(
     (candidate) => targetWeight(one.def, targetWork(state, candidate)),
     rand(state.seed, day, stream.TARGET, 0),
   );
+  const offerCompany = one.def.offer
+    ? pick(content.world.companies, rand(state.seed, day, stream.TARGET, 1))
+    : null;
   return {
     id: "EV-" + day,
     defId: one.def.id,
@@ -348,9 +373,12 @@ export function selectEvent(
     target,
     choiceIds: one.def.choices?.map((choice) => choice.id) ?? [],
     resolvedChoice: null,
-    offerCompanyId: one.def.offer
-      ? pick(content.world.companies, rand(state.seed, day, stream.TARGET, 1))
-          .id
+    offerCompanyId: offerCompany?.id ?? null,
+    offerEditorId: offerCompany
+      ? (pick(
+          traitsOf(content, offerCompany.id).editors,
+          rand(state.seed, day, stream.TARGET, 2),
+        )?.id ?? null)
       : null,
     followUpId: one.scheduled ?? null,
     status: "PENDING",
@@ -381,7 +409,11 @@ function signContract(
     promotionStart: day + 4,
     promotionEnd: day + 14,
     status: "ACTIVE",
+    editorId: instance.offerEditorId,
+    settlementCycle: traitsOf(content, company.id).settlementCycle,
+    record: blankRecord(),
   });
+  (state.companyRecords[company.id] ??= blankRecord()).contracts += 1;
   work.contractId = id;
   transaction(state, day, "ADVANCE", company.advance, id, work.id);
 }
@@ -486,6 +518,24 @@ function applyEffect(
           day + effect.days,
         );
       break;
+    case "reassignEditor": {
+      const contract = state.contracts.find(
+        (item) => item.id === instance.target.id,
+      );
+      const others = contract
+        ? traitsOf(content, contract.companyId).editors.filter(
+            (item) => item.id !== contract.editorId,
+          )
+        : [];
+      if (contract && others.length) {
+        contract.editorId = pick(
+          others,
+          rand(state.seed, day, stream.TARGET, 3),
+        ).id;
+        observe(state, contract, "editorChanges");
+      }
+      break;
+    }
     case "clearSpecial":
       author.specialStates = author.specialStates.filter(
         (item) => item.key !== effect.key,

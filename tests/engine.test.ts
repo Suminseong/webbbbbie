@@ -216,7 +216,9 @@ describe("production systems", () => {
       secondRoutine.sleep,
       secondRoutine.community,
       secondRoutine.ego,
+      secondRoutine.rest,
       secondRoutine.unused,
+      ...Object.values(secondRoutine.plot),
       ...Object.values(secondRoutine.writing),
     ];
     expect(allocated.reduce((a, b) => a + b, 0)).toBe(48);
@@ -423,7 +425,9 @@ describe("content and long-run stability", () => {
               time.sleep +
               time.community +
               time.ego +
+              time.rest +
               time.unused +
+              Object.values(time.plot).reduce((a, b) => a + b, 0) +
               Object.values(time.writing).reduce((a, b) => a + b, 0),
           ).toBe(48);
         }
@@ -523,7 +527,12 @@ describe("content expansion and balance safeguards", () => {
     const base = published();
     base.works[0].stock = 0;
     const ill = structuredClone(base);
-    ill.author.specialStates.push({ key: "내글구려병", until: 3 });
+    ill.author.specialStates.push({
+      key: "내글구려병",
+      until: 3,
+      since: 0,
+      cause: null,
+    });
     const plain = quiet.advance(base, 1).state;
     const sick = quiet.advance(ill, 1).state;
     expect(sick.works[0].stock).toBeLessThan(plain.works[0].stock);

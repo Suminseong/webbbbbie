@@ -1030,5 +1030,1091 @@
     "group_id": "label.aptitude-grade",
     "context": "추측 또는 확신 단계에 공개되는 적성 등급.",
     "constraints": "등급 순서와 의미를 유지."
+  },
+  "engine.log.cmd-auto-off": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "자동 기획을 끌 때 남는 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-auto-on": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "자동 기획을 켤 때 남는 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-drop": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "플레이어가 작품을 연중 처리했을 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-hiatus": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "플레이어가 휴재를 지시했을 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-plan": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "플레이어가 새 작품을 기획했을 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-policy": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "작품 방침 변경 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-resume": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "휴재 작품 재개 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-retire": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "인생 종료 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-revise": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "연재 전 기획 수정 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-rush": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "연참 지시 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-rush-cancel": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "연참 취소 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-spend": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "소비 방침 변경 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.cmd-time": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "시간 배분 변경 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.forced-hiatus": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "지속 상태가 작품을 강제 휴재시킬 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.forced-new-work": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "지속 상태로 새 작품이 생길 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.forced-rush-end": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "지속 상태로 급완결할 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.state-onset": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "지속 상태가 발병했을 때 일지. 원인 문구가 이어진다.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "engine.log.state-relief": {
+    "category": "SYSTEM",
+    "group_id": "engine.log",
+    "context": "지속 상태가 조건 해소로 끝났을 때 일지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.deviation.community-impulse": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.deviation",
+    "context": "계획과 실제 시간이 어긋난 이유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.deviation.deadline-push": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.deviation",
+    "context": "마감 압박으로 수면을 줄인 이유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.deviation.ego-impulse": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.deviation",
+    "context": "계획보다 에고서칭을 한 이유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.deviation.extra-work": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.deviation",
+    "context": "특수 상태로 본업 시간이 늘어난 이유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.deviation.squeezed": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.deviation",
+    "context": "계획 합계가 가용 시간을 넘어 줄인 이유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.ledger.spend": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.ledger",
+    "context": "원장 항목: 소비 방침으로 쓴 돈.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-cause.unknown": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-cause",
+    "context": "원인이 기록되지 않은 상태의 원인 문구.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-cause.low-cash": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-cause",
+    "context": "현생이슈의 원인 문구.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-cause.high-stress": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-cause",
+    "context": "우울의 원인 문구.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-cause.overwork": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-cause",
+    "context": "번아웃의 원인 문구.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-hint.life-issue": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-hint",
+    "context": "현생이슈 해소 단서. 공개 가능한 정보만.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-hint.depression": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-hint",
+    "context": "우울 해소 단서.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-hint.burnout": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-hint",
+    "context": "번아웃 해소 단서.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-hint.bad-writing": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-hint",
+    "context": "내글구려병 해소 단서.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-hint.new-itch": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-hint",
+    "context": "신작병 해소 단서.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "label.state-hint.finish-fixation": {
+    "category": "DESCRIPTIONS",
+    "group_id": "label.state-hint",
+    "context": "완결병 해소 단서.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "entity.special.life-issue": {
+    "category": "DESCRIPTIONS",
+    "group_id": "entity.special",
+    "context": "돈 부족으로 시작되는 지속 상태 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "entity.special.depression": {
+    "category": "DESCRIPTIONS",
+    "group_id": "entity.special",
+    "context": "멘헤라 장기화 상태 이름. 실제 질환의 진단 표현이 아닌 게임 상태.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "entity.special.burnout": {
+    "category": "DESCRIPTIONS",
+    "group_id": "entity.special",
+    "context": "과로 누적 상태 이름. 게임 상태.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.cadence-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.ended": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.hiatus-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.no-path": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.no-work": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.not-droppable": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.not-hiatus": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.not-serial": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.platform-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.priority-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.retire-pending": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.revise-locked": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.rush-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.sleep-min": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.spend-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.stock-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.tags-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.time-invalid": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.time-over": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.title-empty": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.unknown-genre": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.work-closed": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "system.command.work-limit": {
+    "category": "SYSTEM",
+    "group_id": "system.command",
+    "context": "명령 거부 사유.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.author.cash": {
+    "category": "UI",
+    "group_id": "ui.author",
+    "context": "작가 패널의 현금 잔액 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.author.pending-income": {
+    "category": "UI",
+    "group_id": "ui.author",
+    "context": "작가 패널에서 아직 지급받지 못한 누적 수익 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.author.spend-due": {
+    "category": "UI",
+    "group_id": "ui.author",
+    "context": "다음 정산에 빠질 소비 누적액 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.cadence": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "작품 방침 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.days-value": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "일수 선택지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.drop": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "작품을 연중하는 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.drop-confirm": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연중 확인 문구.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.drop-no": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연중 취소 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.drop-yes": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연중 확정 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.heading": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "작품 상세의 명령 구역 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.hiatus": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "휴재 지시 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.hiatus-days": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "휴재 기간 입력.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.hiatus-kind": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "회복형·비축형 선택 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.policy-save": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "작품 방침 저장 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.priority": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "다작 시간 배분 우선순위 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.priority-1": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "우선순위 선택지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.priority-2": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "우선순위 선택지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.priority-3": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "우선순위 선택지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.resume": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "휴재 작품 재개 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.revise": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연재 전 작품 기획 수정 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.rush": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연참 지시 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.rush-cancel": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연참 취소 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.rush-days": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "연참 일수 선택 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.stock-target": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "작품별 비축분 목표 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.cmd.title": {
+    "category": "UI",
+    "group_id": "ui.cmd",
+    "context": "작품 제목 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-community": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-ego": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-empty": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 표가 비었을 때.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-heading": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표 제목. 칸은 30분 단위.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-planned": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "표의 열 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-plot": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-rest": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-sleep": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-used": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "표의 열 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-work": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.actual-writing": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획·실제 시간 표의 행 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.apply": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간·소비 방침 적용 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.auto-plan": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "자동 기획 토글 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.deviation-heading": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "계획대로 되지 않은 이유 목록 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-cut": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비가 강제로 끊겼을 때 안내.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-effect-gear": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목이 영향을 주는 곳.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-effect-health": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목이 영향을 주는 곳.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-effect-leisure": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목이 영향을 주는 곳.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-effect-meals": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목이 영향을 주는 곳.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-effect-promo": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목이 영향을 주는 곳.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-effect-research": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목이 영향을 주는 곳.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-gear": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-heading": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 방침 구역 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-health": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-intro": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 구역 소개.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-leisure": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-level": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 단계 선택지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-meals": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-promo": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.spend-research": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "소비 항목 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-community": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-ego": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-heading": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 구역 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-hint": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 안내.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-intro": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 소개. 본업은 직업별 기본 시간.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-over": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분이 초과했을 때 안내.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-plot": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-rest": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-sleep": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "시간 배분 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.life.time-writing": {
+    "category": "UI",
+    "group_id": "ui.life",
+    "context": "남는 집필 시간 표시 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.cadence": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.cadence-value": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "연재 주기 선택지.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.cancel": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 취소 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.create": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 확정 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.edit-heading": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "연재 전 기획 수정 폼 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.genre": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.heading": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 폼 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.intro": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 소개. 제목이 흥행에 영향 없음을 알린다.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.material": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.open": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 폼 열기 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.platform": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 기획 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.platform-tags": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "선택한 플랫폼의 독자 선호 태그 안내.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.save": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "기획 수정 저장 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.slots": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "동시 연재 가능 작품 수 표시.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.tags": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "태그 선택 구역 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.title": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "신작 제목 입력 라벨.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.title-note": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "기획 폼 하단 안내. 숨은 정보 비노출.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.plan.title-placeholder": {
+    "category": "UI",
+    "group_id": "ui.plan",
+    "context": "제목 입력 자리표시.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.retire.button": {
+    "category": "UI",
+    "group_id": "ui.retire",
+    "context": "인생 종료 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.retire.done": {
+    "category": "UI",
+    "group_id": "ui.retire",
+    "context": "종료 후 표시.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.retire.heading": {
+    "category": "UI",
+    "group_id": "ui.retire",
+    "context": "인생 종료 구역 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.retire.no": {
+    "category": "UI",
+    "group_id": "ui.retire",
+    "context": "인생 종료 취소 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.retire.note": {
+    "category": "UI",
+    "group_id": "ui.retire",
+    "context": "인생 종료 안내.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.retire.yes": {
+    "category": "UI",
+    "group_id": "ui.retire",
+    "context": "인생 종료 확정 버튼.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.state.cause": {
+    "category": "UI",
+    "group_id": "ui.state",
+    "context": "지속 상태의 원인 표시.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.state.heading": {
+    "category": "UI",
+    "group_id": "ui.state",
+    "context": "지속 상태 목록 접근성 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.state.since": {
+    "category": "UI",
+    "group_id": "ui.state",
+    "context": "지속 상태 경과일.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.best": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.best-value": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목 값.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.cash": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.chapters": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.contracts": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.earned": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.favorites": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.job": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.label": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 화면 소제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.restart": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 안내.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.title": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 제목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.views": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.works": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.summary.works-value": {
+    "category": "UI",
+    "group_id": "ui.summary",
+    "context": "결산 항목 값.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.tab.life": {
+    "category": "UI",
+    "group_id": "ui.tab",
+    "context": "시간 배분과 소비 방침 탭.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.active-readers": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.attachment": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.consistency": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.first-views": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표. 누적 유입과 같다.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.hiatus-recover": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "휴재 방식 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.hiatus-stock": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "휴재 방식 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.prep": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.quality": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.retention": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.rush-badge": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "연참 중 표시.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.spark-label": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "조회수 막대그래프 접근성 이름.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.trend-30": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.trend-7": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세 지표.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
+  },
+  "ui.work.trend-value": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "기간별 추이 값.",
+    "constraints": "기능 설명과 변수 {{...}}를 유지."
   }
 }

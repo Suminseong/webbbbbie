@@ -46,7 +46,9 @@ test("[FR-UI-001/003/005] starts at day 0 and accepts choice, day and speed cont
       level: 1,
     }),
   ).toBeVisible();
-  await page.getByRole("combobox", { name: text("ui.clock.speed-label") }).selectOption("10");
+  await page
+    .getByRole("combobox", { name: text("ui.clock.speed-label") })
+    .selectOption("10");
   await page.getByRole("button", { name: text("ui.clock.play") }).click();
   // Auto play runs through ordinary days and stops at the next major choice
   // (seed 42 with first options: day 9). The confirmed day stays frozen.
@@ -60,11 +62,13 @@ test("[FR-UI-001/003/005] starts at day 0 and accepts choice, day and speed cont
   await expect(dayHeading).toHaveText(waitingDay);
   await page.locator(".event-options button").first().click();
   await expect(dayHeading).not.toHaveText(waitingDay);
-  await page.getByRole("button", { name: text("ui.clock.paused"), exact: true }).click();
+  await page
+    .getByRole("button", { name: text("ui.clock.paused"), exact: true })
+    .click();
   await expect(page.getByTestId("phase")).toHaveText(text("ui.clock.paused"));
-  await expect(page.getByRole("combobox", { name: text("ui.clock.speed-label") })).toHaveValue(
-    "10",
-  );
+  await expect(
+    page.getByRole("combobox", { name: text("ui.clock.speed-label") }),
+  ).toHaveValue("10");
   expect(errors).toEqual([]);
 });
 
@@ -184,4 +188,28 @@ test("[FR-UI-002/004] renders independent works, aggregate readership, aptitude,
     .getByRole("button", { name: text("ui.tab.log"), exact: true })
     .click();
   await expect(page.locator(".list-row").first()).toBeVisible();
+});
+
+test("[16번 §3,§10] plans a work with a free title, shows time policy and ends the life", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.locator(".event-options button").first().click();
+  await page.getByRole("button", { name: text("ui.plan.open") }).click();
+  await page.fill("#plan-title", "<i>자유 제목</i>");
+  await page.locator("#plan-tag-0").check({ force: true });
+  await page.getByRole("button", { name: text("ui.plan.create") }).click();
+  // The title is rendered as text, never as markup.
+  await expect(page.locator("[data-work]")).toHaveCount(2);
+  await expect(
+    page.getByRole("heading", { name: "<i>자유 제목</i>" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: text("ui.tab.life") }).click();
+  await expect(page.locator("#life-sleep")).toBeVisible();
+  await page.getByRole("button", { name: text("ui.tab.save") }).click();
+  await page.getByRole("button", { name: text("ui.retire.button") }).click();
+  await page.getByRole("button", { name: text("ui.retire.yes") }).click();
+  await expect(
+    page.getByRole("heading", { name: text("ui.summary.title", { days: 0 }) }),
+  ).toBeVisible();
 });

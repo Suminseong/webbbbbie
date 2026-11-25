@@ -53,13 +53,25 @@ export function specialModifiers(author: Author, content: Content) {
     driveDaily: 0,
     egoBonus: 0,
     communityBonus: 0,
+    workExtra: 0,
+    spendCut: false,
+    restMult: 1,
   };
   for (const active of author.specialStates) {
     const def = content.specials.find((item) => item.key === active.key);
     if (!def) continue;
     result.writing *= def.writing;
     result.stressDaily += def.stressDaily;
-    result.driveDaily += def.driveDaily;
+    // Authors react differently to the same pressure (16번 §7): a tolerant
+    // author is driven to earn, a fragile one loses motivation.
+    result.driveDaily +=
+      def.driveDaily +
+      (author.traits.deadlineTolerance >= 50
+        ? (def.driveHigh ?? 0)
+        : (def.driveLow ?? 0));
+    result.workExtra += def.workExtra ?? 0;
+    result.spendCut ||= def.spendCut ?? false;
+    result.restMult *= def.restMult ?? 1;
     result.egoBonus += def.egoBonus;
     result.communityBonus += def.communityBonus;
   }
@@ -165,58 +177,80 @@ export function createAuthor(seed: number, content: Content): Author {
       deadlineTolerance: trait(24),
     },
     specialStates: [],
+    policy: {
+      time: {
+        sleep: balance.plan.defaultSleep,
+        plot: balance.plan.defaultPlot,
+        community: balance.plan.defaultCommunity,
+        ego: balance.plan.defaultEgo,
+        rest: balance.plan.defaultRest,
+      },
+      spend: {
+        meals: 1,
+        gear: 0,
+        health: 0,
+        research: 0,
+        leisure: 0,
+        promo: 0,
+      },
+      autoPlan: true,
+    },
+    deviations: [],
+    lastPlan: null,
     aptitudes: generateAptitudes(seed, content),
     cash: life.startCash + Math.floor(draw(5) * 140000),
+    spendAccrued: 0,
     lastRoutine: null,
   };
 }
 
-export function createWork(
+export type WorkSpec = {
+  title: string;
+  genre: string;
+  material: string;
+  tags: string[];
+  platformId: string;
+  target: number;
+  mask: number;
+  manual: boolean;
+};
+
+export function blankWork(
   state: LifeState,
-  content: Content,
   day: number,
   path: StartPath,
-) {
-  if (
-    state.works.filter(activeWork).length >= content.balance.life.maxActiveWorks
-  )
-    return;
-  const index = state.works.length;
-  const template = pick(
-    content.world.works,
-    rand(state.seed, day, stream.CREATION, 32 + index * 2),
-  );
+  spec: WorkSpec,
+  content: Content,
+): Work {
   const author = state.author;
-  const platform = weighted(
-    content.platforms,
-    (candidate) =>
-      1 + template.tags.filter((tag) => candidate.tags.includes(tag)).length,
-    rand(state.seed, day, stream.CREATION, 33 + index * 2),
-  );
-  const name = state.works.some((work) => work.title === template.title)
-    ? template.title + " · " + (index + 1)
-    : template.title;
   const quality = clamp(
     32 + author.abilities.style * 0.55 + (path === "PLAGIARISM" ? 5 : 0),
   );
-  state.works.push({
-    id: "W-" + (index + 1),
-    title: name,
-    genre: template.genre,
-    material: template.material,
-    tags: [...template.tags],
+  return {
+    id: "W-" + (state.works.length + 1),
+    title: spec.title,
+    genre: spec.genre,
+    material: spec.material,
+    tags: [...spec.tags],
     startPath: path,
-    platformId: platform.id,
+    platformId: spec.platformId,
     contractId: null,
     status: "PLANNING",
     startDay: day,
-    targetChapters: template.target,
+    targetChapters: spec.target,
     published: 0,
     stock: 0,
-    mask: template.mask,
+    mask: spec.mask,
     quality,
     consistency: 56,
     attachment: 42 + author.traits.multitask * 0.32,
+    prep: content.balance.plan.prepStart,
+    stockTarget: content.balance.writing.targetStock,
+    priority: 2,
+    rush: 0,
+    hiatusKind: null,
+    manual: spec.manual,
+    history: [],
     hiatusUntil: null,
     resumeTo: null,
     paidFrom: null,
@@ -243,7 +277,51 @@ export function createWork(
     },
     revenue: { accrued: 0, paid: 0 },
     end: null,
-  });
+  };
+}
+
+export function createWork(
+  state: LifeState,
+  content: Content,
+  day: number,
+  path: StartPath,
+) {
+  if (
+    state.works.filter(activeWork).length >= content.balance.life.maxActiveWorks
+  )
+    return;
+  const index = state.works.length;
+  const template = pick(
+    content.world.works,
+    rand(state.seed, day, stream.CREATION, 32 + index * 2),
+  );
+  const platform = weighted(
+    content.platforms,
+    (candidate) =>
+      1 + template.tags.filter((tag) => candidate.tags.includes(tag)).length,
+    rand(state.seed, day, stream.CREATION, 33 + index * 2),
+  );
+  const name = state.works.some((work) => work.title === template.title)
+    ? template.title + " · " + (index + 1)
+    : template.title;
+  state.works.push(
+    blankWork(
+      state,
+      day,
+      path,
+      {
+        title: name,
+        genre: template.genre,
+        material: template.material,
+        tags: template.tags,
+        platformId: platform.id,
+        target: template.target,
+        mask: template.mask,
+        manual: false,
+      },
+      content,
+    ),
+  );
 }
 
 export function relevantAptitudes(author: Author, work: Work) {

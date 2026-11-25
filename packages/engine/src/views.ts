@@ -5,7 +5,9 @@ import {
   text,
 } from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
-import { sum } from "./author";
+import { serial, sum } from "./author";
+import { cadences, maskCadence, maxFreeUnits, planOptions } from "./commands";
+import { spendingLevels } from "./work";
 import type { LifeState, Work } from "./model";
 
 export const statusNames = {
@@ -52,6 +54,7 @@ export const ledgerNames = {
   LIVING: text("label.ledger.living"),
   EVENT: text("label.ledger.event"),
   ADVANCE: text("label.ledger.advance"),
+  SPEND: text("label.ledger.spend"),
 };
 export const aptitudeNames = {
   GENRE: text("label.aptitude-kind.genre"),
@@ -103,18 +106,39 @@ export function authorView(state: LifeState, content: Content) {
     abilities: { ...author.abilities },
     condition: { ...author.condition },
     social: { ...author.social },
-    states: author.specialStates.map((status) => ({
-      name: displayName(
-        "entity.special",
-        content.specials.find((item) => item.key === status.key)?.name ??
-          status.key,
-      ),
-      until: status.until,
-    })),
+    states: author.specialStates.map((status) => {
+      const def = content.specials.find((item) => item.key === status.key);
+      return {
+        key: status.key,
+        name: displayName("entity.special", def?.name ?? status.key),
+        until: status.until,
+        since: status.since,
+        days: Math.max(0, state.day - status.since),
+        cause: status.cause ? text(status.cause) : null,
+        hint: def?.hint ? text(def.hint) : null,
+        lifts: !!def?.release,
+      };
+    }),
     cash: author.cash,
+    pendingIncome: sum(
+      state.works.map((work) => work.revenue.accrued - work.revenue.paid),
+    ),
+    spendDue: Math.floor(author.spendAccrued),
+    deviations: author.deviations.map((id) => text(id)),
+    plan: author.lastPlan
+      ? { ...author.lastPlan, plot: { ...author.lastPlan.plot } }
+      : null,
     routine: author.lastRoutine
       ? { ...author.lastRoutine, writing: { ...author.lastRoutine.writing } }
       : null,
+  };
+}
+
+function trend(work: Work, span: number) {
+  const recent = work.history.slice(-span);
+  return {
+    views: Math.floor(sum(recent.map((item) => item[1]))),
+    newReaders: Math.floor(sum(recent.map((item) => item[2]))),
   };
 }
 
@@ -166,6 +190,43 @@ export function workView(work: Work, content: Content) {
     accrued: work.revenue.accrued,
     paid: work.revenue.paid,
     missedReason: work.stats.missedReason,
+    prep: Math.floor(work.prep),
+    consistency: Math.floor(work.consistency),
+    attachment: Math.floor(work.attachment),
+    stockTarget: work.stockTarget,
+    priority: work.priority,
+    rush: work.rush,
+    hiatusKind: work.hiatusKind,
+    hiatusUntil: work.hiatusUntil,
+    perWeek: maskCadence(work.mask),
+    manual: work.manual,
+    canRevise: work.status === "PLANNING",
+    canRush: serial(work),
+    canHiatus: serial(work),
+    canResume: work.status === "HIATUS",
+    canDrop: serial(work) || work.status === "HIATUS",
+    firstViews: Math.floor(work.stats.totalNew),
+    activeReaders: Math.floor(
+      sum(work.readers.map((pool) => sum(pool))) + sum(work.caughtUp),
+    ),
+    retention:
+      work.stats.totalNew > 0
+        ? (work.stats.latestViews || 0) / Math.max(1, work.stats.totalNew)
+        : 0,
+    trend: {
+      d7: trend(work, 7),
+      d14: trend(work, 14),
+      d30: trend(work, 30),
+    },
+    history: work.history.map(([day, views, news]) => ({
+      day,
+      views: Math.floor(views),
+      newReaders: Math.floor(news),
+    })),
+    platformId: work.platformId,
+    rawGenre: work.genre,
+    rawMaterial: work.material,
+    rawTags: [...work.tags],
     end: work.end
       ? {
           day: work.end.day,
@@ -278,5 +339,71 @@ export function ledgerView(state: LifeState) {
     /** Totals of entries older than the retention window, by kind. */
     carried: { ...state.ledgerCarry },
     entries: state.ledger.map((entry) => ({ ...entry })),
+  };
+}
+
+export function planOptionsView(content: Content) {
+  const options = planOptions(content);
+  return {
+    genres: options.genres.map((value) => ({
+      value,
+      label: displayName("entity.genre", value),
+    })),
+    materials: options.materials.map((value) => ({
+      value,
+      label: displayName("entity.material", value),
+    })),
+    tags: options.tags.map((value) => ({
+      value,
+      label: displayName("entity.tag", value),
+    })),
+    platforms: content.platforms.map((platform) => ({
+      id: platform.id,
+      label: matchingText(
+        "entity.platform." + platform.id + ".name",
+        platform.name,
+      ),
+      tags: platform.tags.map((tag) => displayName("entity.tag", tag)),
+    })),
+    cadences: cadences.map((item) => item.perWeek),
+    maxTitle: content.balance.plan.maxTitle,
+    maxTags: content.balance.plan.maxTags,
+    stockTargetMax: content.balance.plan.stockTargetMax,
+    maxActiveWorks: content.balance.life.maxActiveWorks,
+  };
+}
+
+export function lifeSettingsView(state: LifeState, content: Content) {
+  const { author } = state;
+  const spending = content.balance.spending;
+  const job = content.world.jobs.find((item) => item.id === author.jobId)!;
+  const free = maxFreeUnits(state, content);
+  const time = author.policy.time;
+  const planned =
+    time.sleep + time.plot + time.community + time.ego + time.rest;
+  const { levels, cut } = spendingLevels(state, content);
+  const categories = (
+    ["meals", "gear", "health", "research", "leisure", "promo"] as const
+  ).map((key) => ({
+    key,
+    level: author.policy.spend[key],
+    effective: levels[key],
+    costs: [...spending[key]],
+  }));
+  return {
+    autoPlan: author.policy.autoPlan,
+    time: { ...time },
+    jobUnits: job.slots,
+    jobIrregularity: job.irregularity,
+    living: content.balance.time.living,
+    free,
+    writing: Math.max(0, free - planned),
+    minSleep: content.balance.time.minSleep,
+    spend: categories,
+    spendCut: cut,
+    monthly: categories.reduce(
+      (total, item) => total + item.costs[item.effective],
+      0,
+    ),
   };
 }

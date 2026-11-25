@@ -498,7 +498,7 @@ function entityContexts(out: Map<string, Context>) {
       "해당 회사의 제안 카드에 보이는 프로모션·편집 지원 약속. 계약 체결 후 실제 이행과 구별.",
     );
   }
-  for (const state of specials) {
+  for (const state of specials as unknown as SpecialDef[]) {
     add(
       state.name,
       "사건으로 부여·갱신되면 작가 패널에 남은 기한과 같이 표시되는 상태 이름. " +

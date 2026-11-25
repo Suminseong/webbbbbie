@@ -413,6 +413,8 @@ function applyEffect(
         author.specialStates.push({
           key: effect.key,
           until: day + effect.days,
+          since: day,
+          cause: null,
         });
       break;
     }

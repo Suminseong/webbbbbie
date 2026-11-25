@@ -1,5 +1,5 @@
 {
-  "lifeEnd": "none",
+  "lifeEnd": "voluntary",
   "allowFalseConviction": false,
   "minimumReleaseEvents": 300,
   "completionReach": {

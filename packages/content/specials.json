@@ -6,7 +6,22 @@
     "stressDaily": 0.4,
     "driveDaily": -0.6,
     "egoBonus": 1,
-    "communityBonus": 0
+    "communityBonus": 0,
+    "min": 14,
+    "release": [
+      {
+        "metric": "stress",
+        "op": "lte",
+        "value": 40
+      },
+      {
+        "metric": "drive",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "hiatusChance": 0.03,
+    "hint": "label.state-hint.bad-writing"
   },
   {
     "key": "신작병",
@@ -15,7 +30,17 @@
     "stressDaily": 0,
     "driveDaily": 0.4,
     "egoBonus": 0,
-    "communityBonus": 0
+    "communityBonus": 0,
+    "min": 7,
+    "release": [
+      {
+        "metric": "drive",
+        "op": "lte",
+        "value": 45
+      }
+    ],
+    "newWorkChance": 0.06,
+    "hint": "label.state-hint.new-itch"
   },
   {
     "key": "완결병",
@@ -24,7 +49,17 @@
     "stressDaily": 0.3,
     "driveDaily": -0.3,
     "egoBonus": 0,
-    "communityBonus": 0
+    "communityBonus": 0,
+    "min": 7,
+    "release": [
+      {
+        "metric": "drive",
+        "op": "gte",
+        "value": 62
+      }
+    ],
+    "rushEndChance": 0.025,
+    "hint": "label.state-hint.finish-fixation"
   },
   {
     "key": "통계창 중독",
@@ -88,5 +123,111 @@
     "driveDaily": 0.6,
     "egoBonus": 0,
     "communityBonus": 0
+  },
+  {
+    "key": "현생이슈",
+    "name": "entity.special.life-issue",
+    "writing": 0.95,
+    "stressDaily": 0.45,
+    "driveDaily": 0,
+    "egoBonus": 0,
+    "communityBonus": 0,
+    "cause": "label.state-cause.low-cash",
+    "min": 7,
+    "max": 120,
+    "onset": {
+      "when": [
+        {
+          "metric": "cash",
+          "op": "lte",
+          "value": 120000
+        }
+      ],
+      "chance": 0.25
+    },
+    "release": [
+      {
+        "metric": "cash",
+        "op": "gte",
+        "value": 450000
+      }
+    ],
+    "workExtra": 4,
+    "driveHigh": 0.5,
+    "driveLow": -0.35,
+    "spendCut": true,
+    "hint": "label.state-hint.life-issue"
+  },
+  {
+    "key": "우울",
+    "name": "entity.special.depression",
+    "writing": 0.72,
+    "stressDaily": 0.1,
+    "driveDaily": -0.45,
+    "egoBonus": 0,
+    "communityBonus": 0,
+    "cause": "label.state-cause.high-stress",
+    "min": 10,
+    "max": 120,
+    "onset": {
+      "when": [
+        {
+          "metric": "stress",
+          "op": "gte",
+          "value": 50
+        },
+        {
+          "metric": "drive",
+          "op": "lte",
+          "value": 45
+        }
+      ],
+      "chance": 0.1
+    },
+    "release": [
+      {
+        "metric": "stress",
+        "op": "lte",
+        "value": 42
+      },
+      {
+        "metric": "drive",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "hint": "label.state-hint.depression",
+    "restMult": 0.5
+  },
+  {
+    "key": "번아웃",
+    "name": "entity.special.burnout",
+    "writing": 0.6,
+    "stressDaily": -0.2,
+    "driveDaily": -0.2,
+    "egoBonus": 0,
+    "communityBonus": 0,
+    "cause": "label.state-cause.overwork",
+    "min": 5,
+    "max": 45,
+    "onset": {
+      "when": [
+        {
+          "metric": "fatigue",
+          "op": "gte",
+          "value": 80
+        }
+      ],
+      "chance": 0.3
+    },
+    "release": [
+      {
+        "metric": "fatigue",
+        "op": "lte",
+        "value": 40
+      }
+    ],
+    "hiatusChance": 1,
+    "hint": "label.state-hint.burnout"
   }
 ]

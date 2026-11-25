@@ -4,10 +4,28 @@ import { createAuthor, record, sum } from "./author";
 import {
   compactLedger,
   settle,
+  transaction,
   updateContracts,
   updateDemand,
 } from "./economy";
+import {
+  dropWork as buildDropWork,
+  hiatusWork as buildHiatusWork,
+  lifeSummary,
+  planWork as buildPlanWork,
+  resumeWork as buildResumeWork,
+  retire as buildRetire,
+  reviseWork as buildReviseWork,
+  runCommand,
+  rushWork as buildRushWork,
+  setAutoPlan as buildSetAutoPlan,
+  setSpendPolicy as buildSetSpendPolicy,
+  setTimePolicy as buildSetTimePolicy,
+  setWorkPolicy as buildSetWorkPolicy,
+} from "./commands";
+import type { WorkPlan, WorkPolicyPatch } from "./commands";
 import { applyEvent, originEvent, selectEvent } from "./events";
+import { applyStateBehaviors, updateStates } from "./states";
 import {
   envelopeSchema,
   neverEnd,
@@ -21,6 +39,8 @@ import type {
   EventInstance,
   LifeEndPolicy,
   LifeState,
+  SpendPolicy,
+  TimePolicy,
 } from "./model";
 import { resolveAudience } from "./readership";
 import { fingerprint } from "./rng";
@@ -28,6 +48,8 @@ import {
   aptitudeView,
   authorView,
   contractViews,
+  lifeSettingsView,
+  planOptionsView,
   ledgerView,
   pendingView,
   workView,
@@ -48,6 +70,9 @@ export type {
   LifeEndPolicy,
 } from "./model";
 export { abilityNames, conditionNames, ledgerNames } from "./views";
+export { cadences } from "./commands";
+export type { WorkPlan, WorkPolicyPatch } from "./commands";
+export type { PlayerCommandError, SpendPolicy, TimePolicy } from "./model";
 
 type ChoiceResult =
   | { ok: true; state: LifeState; events: EngineEvent[] }
@@ -67,6 +92,12 @@ function copyForCommand(state: LifeState): LifeState {
       condition: { ...author.condition },
       social: { ...author.social },
       specialStates: author.specialStates.map((entry) => ({ ...entry })),
+      policy: {
+        ...author.policy,
+        time: { ...author.policy.time },
+        spend: { ...author.policy.spend },
+      },
+      deviations: [...author.deviations],
       aptitudes: author.aptitudes.map((entry) => ({ ...entry })),
     },
     works: state.works.map((work) => ({
@@ -76,6 +107,7 @@ function copyForCommand(state: LifeState): LifeState {
       readers: [...work.readers],
       caughtUp: [...work.caughtUp],
       flags: [...work.flags],
+      history: [...work.history],
       end: work.end ? { ...work.end } : null,
     })),
     contracts: state.contracts.map((entry) => ({ ...entry })),
@@ -126,6 +158,7 @@ export function createEngine(
       eventHistory: [],
       archive: [],
       pending: null,
+      ending: null,
       log: [],
       summaries: [],
     };
@@ -149,8 +182,19 @@ export function createEngine(
       (status) => day < status.until,
     );
     prepareWorks(state, content, day, events);
+    applyStateBehaviors(state, content, day, events);
     const time = planRoutine(state, content, day);
     state.author.lastRoutine = time;
+    // Extra shifts forced by a state (현생이슈) pay a small day wage.
+    const extra = time.work - (state.author.lastPlan?.work ?? time.work);
+    if (extra > 0)
+      transaction(
+        state,
+        day,
+        "SALARY",
+        extra * content.balance.plan.sideWage,
+        "sidejob",
+      );
     const posted = writeAndPublish(state, content, time, day, events);
     updateContracts(state, content, day, events);
     const gained = resolveAudience(state, content, day);
@@ -158,6 +202,7 @@ export function createEngine(
     compactLedger(state, content, day);
     finishWorks(state, content, day, events);
     updateCondition(state, content, time);
+    updateStates(state, content, day, events);
     updateDemand(state);
     state.day = day;
     state.summaries.push({
@@ -237,6 +282,15 @@ export function createEngine(
     return { ok: true, state: next, events };
   }
 
+  function command(
+    state: LifeState,
+    run: Parameters<typeof runCommand>[3],
+  ): ReturnType<typeof runCommand> {
+    const outcome = runCommand(state, copyForCommand(state), content, run);
+    if (outcome.ok) addLog(outcome.state, outcome.events);
+    return outcome;
+  }
+
   function serialize(state: LifeState) {
     return JSON.stringify({
       format: "webnovel-life-save",
@@ -312,6 +366,7 @@ export function createEngine(
       state.schemaVersion !== SCHEMA_VERSION ||
       state.rulesVersion !== RULES_VERSION ||
       state.contentHash !== contentHash ||
+      (state.phase === "ENDED") !== !!state.ending ||
       (state.phase === "AWAITING_CHOICE") !== !!agenda ||
       !!pending !== !!agenda ||
       state.archive.length !==
@@ -360,6 +415,34 @@ export function createEngine(
     choose,
     serialize,
     deserialize,
+    planWork: (state: LifeState, plan: WorkPlan) =>
+      command(state, buildPlanWork(plan)),
+    reviseWork: (state: LifeState, id: string, plan: WorkPlan) =>
+      command(state, buildReviseWork(id, plan)),
+    setWorkPolicy: (state: LifeState, id: string, patch: WorkPolicyPatch) =>
+      command(state, buildSetWorkPolicy(id, patch)),
+    rushWork: (state: LifeState, id: string, days: number) =>
+      command(state, buildRushWork(id, days)),
+    hiatusWork: (
+      state: LifeState,
+      id: string,
+      kind: "RECOVER" | "STOCK",
+      days: number,
+    ) => command(state, buildHiatusWork(id, kind, days)),
+    resumeWork: (state: LifeState, id: string) =>
+      command(state, buildResumeWork(id)),
+    dropWork: (state: LifeState, id: string) =>
+      command(state, buildDropWork(id)),
+    setTimePolicy: (state: LifeState, plan: TimePolicy) =>
+      command(state, buildSetTimePolicy(plan)),
+    setSpendPolicy: (state: LifeState, plan: SpendPolicy) =>
+      command(state, buildSetSpendPolicy(plan)),
+    setAutoPlan: (state: LifeState, on: boolean) =>
+      command(state, buildSetAutoPlan(on)),
+    retire: (state: LifeState) => command(state, buildRetire()),
+    getLifeSummary: (state: LifeState) => lifeSummary(state, content),
+    getPlanOptions: () => planOptionsView(content),
+    getLifeSettings: (state: LifeState) => lifeSettingsView(state, content),
     getAuthorView: (state: LifeState) => authorView(state, content),
     getWorkViews: (state: LifeState) =>
       state.works.map((work) => workView(work, content)),
@@ -396,6 +479,20 @@ export function createEngine(
 }
 
 export const {
+  planWork,
+  reviseWork,
+  setWorkPolicy,
+  rushWork,
+  hiatusWork,
+  resumeWork,
+  dropWork,
+  setTimePolicy,
+  setSpendPolicy,
+  setAutoPlan,
+  retire,
+  getLifeSummary,
+  getPlanOptions,
+  getLifeSettings,
   createLife,
   advance,
   choose,

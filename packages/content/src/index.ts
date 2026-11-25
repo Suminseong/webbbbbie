@@ -338,6 +338,8 @@ const balance = z
         bestFavorites: days,
         backlistHalfLife: days,
         trafficShare: probability.positive(),
+        luckFloor: probability,
+        luckTail: probability,
         backlistFavorites: days,
       })
       .strict(),
@@ -384,6 +386,54 @@ const balance = z
       "recognitionCap",
       "completionTrust",
     ] as const),
+    plan: numeric([
+      "defaultSleep",
+      "defaultPlot",
+      "defaultCommunity",
+      "defaultEgo",
+      "defaultRest",
+      "maxTitle",
+      "maxTags",
+      "stockTargetMax",
+      "prepStart",
+      "prepGain",
+      "prepDecay",
+      "prepCost",
+      "prepFloor",
+      "overtimeAt",
+      "overtimeEfficiency",
+      "restStress",
+      "restDrive",
+      "restFatigue",
+      "rushFatigue",
+      "rushStress",
+      "dropReputation",
+      "dropStress",
+      "hiatusRecover",
+      "defaultTarget",
+      "historyKeep",
+      "sideWage",
+    ] as const),
+    spending: z
+      .object({
+        meals: z.array(natural).length(4),
+        gear: z.array(natural).length(4),
+        health: z.array(natural).length(4),
+        research: z.array(natural).length(4),
+        leisure: z.array(natural).length(4),
+        promo: z.array(natural).length(4),
+        efficiency: z.array(finite.nonnegative()).length(4),
+        mealsHealth: finite,
+        mealsStress: finite,
+        gearWriting: finite,
+        gearFatigue: finite,
+        healthRecovery: finite,
+        researchPrep: finite,
+        leisureStress: finite,
+        leisureDrive: finite,
+        promoExposure: finite,
+      })
+      .strict(),
     limits: z
       .object({
         dailyMeanMs: finite.positive(),
@@ -448,6 +498,10 @@ const world = z.object({
     )
     .min(1),
 });
+const metric = z.enum(["cash", "health", "fatigue", "stress", "drive"]);
+const stateRule = z
+  .object({ metric, op: z.enum(["gte", "lte"]), value: finite })
+  .strict();
 const special = z
   .object({
     key: label,
@@ -457,12 +511,31 @@ const special = z
     driveDaily: finite,
     egoBonus: natural.max(4),
     communityBonus: natural.max(4),
+    /** Sustained-state rules (16번 §7); absent for plain timed states. */
+    cause: label.optional(),
+    min: natural.optional(),
+    max: days.optional(),
+    onset: z
+      .object({ when: z.array(stateRule).min(1), chance: probability })
+      .strict()
+      .optional(),
+    release: z.array(stateRule).optional(),
+    workExtra: natural.max(12).optional(),
+    sleepLoss: natural.max(8).optional(),
+    driveHigh: finite.optional(),
+    driveLow: finite.optional(),
+    hiatusChance: probability.optional(),
+    newWorkChance: probability.optional(),
+    rushEndChance: probability.optional(),
+    spendCut: z.boolean().optional(),
+    restMult: finite.positive().optional(),
+    hint: label.optional(),
   })
   .strict();
 
 const policies = z
   .object({
-    lifeEnd: z.literal("none"),
+    lifeEnd: z.enum(["none", "voluntary"]),
     allowFalseConviction: z.boolean(),
     minimumReleaseEvents: days,
     completionReach: numeric(
@@ -675,10 +748,13 @@ export const defaultContent = parseContent({
     })),
   },
   policies: policyData,
-  specials: specialData.map((state) => ({
-    ...state,
-    name: sourceText(state.name),
-  })),
+  specials: (specialData as unknown[]).map((raw) => {
+    const state = raw as { name: string };
+    return {
+      ...(raw as object),
+      name: sourceText(state.name),
+    };
+  }),
   events: eventData.map((event) => ({
     ...event,
     title: sourceText(event.title),

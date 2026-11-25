@@ -1,0 +1,9 @@
+{
+  "extraWritingSlots": 2,
+  "healthWritingFloor": 20,
+  "fatigueWritingCeiling": 97,
+  "stressRiskStart": 85,
+  "driveRiskStart": 10,
+  "stressFailureScale": 0.025,
+  "driveFailureScale": 0.04
+}

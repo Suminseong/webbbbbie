@@ -117,6 +117,7 @@ const author = z.object({
   cash: amount,
   /** Spending charged at the next settlement (accrues daily). */
   spendAccrued: volume,
+  purchases: z.record(natural).default({}),
   lastRoutine: labor.nullable(),
 });
 const workStats = z.object({
@@ -160,10 +161,14 @@ const work = z.object({
   priority: natural.min(1).max(3),
   /** Extra chapters the player asked for; consumed by the next days. */
   rush: natural,
+  /** A one-day extra writing request, charged from the shared free-time budget. */
+  extraWriting: z.boolean().default(false),
   hiatusKind: z.enum(["RECOVER", "STOCK"]).nullable(),
   manual: z.boolean(),
   history: z.array(history),
   hiatusUntil: natural.nullable(),
+  /** Forced rest has a minimum duration; a voluntary hiatus may end early. */
+  hiatusLockedUntil: natural.nullable().default(null),
   resumeTo: activeStatus.nullable(),
   paidFrom: natural.nullable(),
   paidEligibleDay: natural.nullable(),
@@ -237,6 +242,7 @@ const engineEvent = z.object({
     "WORK_STATUS_CHANGED",
     "STATE_CHANGED",
     "COMMAND",
+    "WORK_ORDER",
     "PAYOUT",
     "DAY_CLOSED",
   ]),
@@ -310,7 +316,7 @@ export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
 export const SCHEMA_VERSION = 3;
-export const RULES_VERSION = "0.3.0";
+export const RULES_VERSION = "0.3.1";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];

@@ -1,10 +1,14 @@
-import { channels } from "@webbbbbie/content";
+import { channels, sourceText, tagUnlocks } from "@webbbbbie/content";
 import type { Content, Platform } from "@webbbbbie/content";
 import { blankSources, clamp, serial, sum, terminal } from "./author";
 import { accrue, activeContract } from "./economy";
 import { spendingEffect } from "./work";
 import type { LifeState, Work } from "./model";
 import { rand, stream } from "./rng";
+
+const unlockedTagPlatforms = new Map(
+  tagUnlocks.map((item) => [sourceText(item.textId), new Set(item.platforms)]),
+);
 
 function exposure(
   state: LifeState,
@@ -60,7 +64,12 @@ function exposure(
   const fit =
     appeal *
     (0.53 +
-      work.tags.filter((tag) => platform.tags.includes(tag)).length * 0.13 +
+      work.tags.filter(
+        (tag) =>
+          platform.tags.includes(tag) ||
+          unlockedTagPlatforms.get(tag)?.has(platform.id),
+      ).length *
+        0.13 +
       state.author.abilities[platform.strength] * 0.004) *
     (0.85 + rand(state.seed, day, stream.EXPOSURE, index) * 0.3);
   // Backlist and organic discovery of an ended work fade hyperbolically with

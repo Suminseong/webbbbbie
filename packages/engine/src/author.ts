@@ -1,4 +1,10 @@
-import { abilityKeys, channels, sourceText } from "@webbbbbie/content";
+import {
+  abilityKeys,
+  channels,
+  displayWorkTitle,
+  sourceText,
+  tagUnlocks,
+} from "@webbbbbie/content";
 import type {
   AptitudeKind,
   Channel,
@@ -16,6 +22,7 @@ import type {
   Work,
 } from "./model";
 import { pick, rand, stream, weighted } from "./rng";
+import { cadences } from "./cadences";
 
 export const serial = (work: Work) =>
   work.status === "SERIAL_FREE" || work.status === "SERIAL_PAID";
@@ -25,6 +32,8 @@ export const terminal = (status: WorkStatus) =>
   status === "DROPPED" ||
   status === "TAKEN_DOWN";
 export const activeWork = (work: Work) => !terminal(work.status);
+export const workTitle = (work: Work) =>
+  work.manual ? work.title : displayWorkTitle(work.title);
 export const clamp = (value: number, min = 0, max = 100) =>
   Math.min(max, Math.max(min, value));
 export const sum = (values: readonly number[]) =>
@@ -114,6 +123,8 @@ function generateAptitudes(seed: number, content: Content): Aptitude[] {
   }
   for (const platform of content.platforms)
     keys.push(["PLATFORM", platform.id]);
+  for (const tag of tagUnlocks) keys.push(["TAG", sourceText(tag.textId)]);
+  for (const cadence of cadences) keys.push(["SCHEDULE", String(cadence.mask)]);
   const unique = [
     ...new Map(keys.map((value) => [value.join("/"), value])).values(),
   ];
@@ -200,6 +211,7 @@ export function createAuthor(seed: number, content: Content): Author {
     aptitudes: generateAptitudes(seed, content),
     cash: life.startCash + Math.floor(draw(5) * 140000),
     spendAccrued: 0,
+    purchases: {},
     lastRoutine: null,
   };
 }
@@ -248,10 +260,12 @@ export function blankWork(
     stockTarget: content.balance.writing.targetStock,
     priority: 2,
     rush: 0,
+    extraWriting: false,
     hiatusKind: null,
     manual: spec.manual,
     history: [],
     hiatusUntil: null,
+    hiatusLockedUntil: null,
     resumeTo: null,
     paidFrom: null,
     paidEligibleDay: null,

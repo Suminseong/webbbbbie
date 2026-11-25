@@ -1,5 +1,5 @@
 import type { Content, WorkStatus } from "@webbbbbie/content";
-import { displayWorkTitle, text } from "@webbbbbie/content";
+import { playerActionRules, text } from "@webbbbbie/content";
 import {
   activeWork,
   specialModifiers,
@@ -13,6 +13,7 @@ import {
   serial,
   sum,
   terminal,
+  workTitle,
 } from "./author";
 import type { EngineEvent, LifeState, Routine, Work } from "./model";
 import { rand, stream } from "./rng";
@@ -21,7 +22,7 @@ export function canTransition(from: WorkStatus, to: WorkStatus) {
   if (from === to) return false;
   if (to === "TAKEN_DOWN") return from !== "PLANNING";
   if (terminal(from)) return false;
-  if (from === "PLANNING") return to === "SERIAL_FREE";
+  if (from === "PLANNING") return to === "SERIAL_FREE" || to === "DROPPED";
   if (to === "HIATUS" || to === "SERIAL_PAID" || to === "SERIAL_FREE") {
     if (from === "HIATUS") return to === "SERIAL_PAID" || to === "SERIAL_FREE";
     return to === "HIATUS" || (from === "SERIAL_FREE" && to === "SERIAL_PAID");
@@ -35,6 +36,7 @@ export function transitionWork(
   day: number,
   events: EngineEvent[],
   hiatusDays = 7,
+  forced = true,
 ) {
   if (!canTransition(work.status, to)) return;
   const previous = work.status;
@@ -44,9 +46,11 @@ export function transitionWork(
   ) {
     work.resumeTo = previous;
     work.hiatusUntil = day + hiatusDays;
+    work.hiatusLockedUntil = forced ? day + hiatusDays : null;
   } else if (previous === "HIATUS") {
     work.resumeTo = null;
     work.hiatusUntil = null;
+    work.hiatusLockedUntil = null;
     work.hiatusKind = null;
     if (!terminal(to)) work.lastResume = day;
   }
@@ -54,6 +58,31 @@ export function transitionWork(
   if (to === "SERIAL_PAID" && work.paidFrom === null)
     work.paidFrom = work.published + 1;
   if (to === "SERIAL_PAID" || terminal(to)) work.paidEligibleDay = null;
+  if (terminal(to) && work.rush > 0) {
+    record(
+      events,
+      "WORK_ORDER",
+      day,
+      text("engine.log.extra-post-failed", {
+        work_title: workTitle(work),
+        reason: text("label.command-result.status"),
+      }),
+      work.id,
+    );
+  }
+  if (terminal(to) && work.extraWriting) {
+    record(
+      events,
+      "WORK_ORDER",
+      day,
+      text("engine.log.extra-write-failed", {
+        work_title: workTitle(work),
+        reason: text("label.command-result.status"),
+      }),
+      work.id,
+    );
+    work.extraWriting = false;
+  }
   if (to !== "HIATUS") work.rush = 0;
   if (to === "TAKEN_DOWN") {
     work.readers = [[], [], [], [], []];
@@ -78,7 +107,7 @@ export function transitionWork(
     "WORK_STATUS_CHANGED",
     day,
     text("engine.log.status", {
-      work_title: displayWorkTitle(work.title),
+      work_title: workTitle(work),
       status: text(label),
     }),
     work.id,
@@ -289,8 +318,7 @@ export function planRoutine(
     (item) =>
       item.priority *
       Math.max(0.5, item.stockTarget - item.stock) *
-      (0.5 + item.attachment / 100) *
-      (item.rush > 0 ? 3 : 1),
+      (0.5 + item.attachment / 100),
   );
   const writtenPlot = sum(Object.values(plotBy));
   rest += plot - writtenPlot;
@@ -313,12 +341,46 @@ export function planRoutine(
     ego: planned.ego,
     plot: { total: planned.plot },
     rest: planned.rest,
-    writing: {},
+    writing: {
+      total: Math.max(
+        0,
+        time.day -
+          jobUnits -
+          time.living -
+          planned.sleep -
+          planned.community -
+          planned.ego -
+          planned.plot -
+          planned.rest,
+      ),
+    },
     unused: 0,
   };
   author.deviations = deviations;
   void plan;
   return routine;
+}
+
+function writingFailure(state: LifeState, day: number) {
+  const { health, fatigue, stress, drive } = state.author.condition;
+  const rules = playerActionRules;
+  if (health <= rules.healthWritingFloor) return "health";
+  if (fatigue >= rules.fatigueWritingCeiling) return "fatigue";
+  const resilience = state.author.abilities.resilience;
+  const risk = 1.2 - resilience * 0.006;
+  if (
+    stress >= rules.stressRiskStart &&
+    rand(state.seed, day, stream.WRITING, 10000) <
+      (stress - rules.stressRiskStart + 1) * rules.stressFailureScale * risk
+  )
+    return "stress";
+  if (
+    drive <= rules.driveRiskStart &&
+    rand(state.seed, day, stream.WRITING, 10001) <
+      (rules.driveRiskStart - drive + 1) * rules.driveFailureScale * risk
+  )
+    return "drive";
+  return null;
 }
 
 export function writeAndPublish(
@@ -336,10 +398,14 @@ export function writeAndPublish(
   const research = spendingEffect(state, content, "research");
   let posted = 0;
   const writers = state.works.filter(writable).length || 1;
+  const failed = writingFailure(state, day);
+  if (failed && Object.values(routine.writing).some((slots) => slots > 0))
+    author.deviations.push("label.deviation.write-" + failed);
   for (const [index, work] of state.works.entries()) {
     work.stats.publishedToday = 0;
     work.stats.missedReason = null;
     const planned = (work.mask & (1 << ((day - 1) % 7))) !== 0;
+    const stockBeforeWriting = work.stock;
     if (work.status === "HIATUS" && planned) {
       work.stats.missedReason = "HIATUS";
       record(
@@ -347,7 +413,7 @@ export function writeAndPublish(
         "CHAPTER_MISSED",
         day,
         text("engine.log.missed-hiatus", {
-          work_title: displayWorkTitle(work.title),
+          work_title: workTitle(work),
         }),
         work.id,
       );
@@ -362,11 +428,53 @@ export function writeAndPublish(
           plan.prepDecay,
       );
     }
-    if (!writable(work)) continue;
+    let extraSlots = 0;
+    if (work.extraWriting) {
+      work.extraWriting = false;
+      const slots = playerActionRules.extraWritingSlots;
+      const reason = !writable(work)
+        ? "status"
+        : (failed ??
+          (routine.rest + routine.unused < slots ? "no-time" : null));
+      if (reason) {
+        record(
+          events,
+          "WORK_ORDER",
+          day,
+          text("engine.log.extra-write-failed", {
+            work_title: workTitle(work),
+            reason: text("label.command-result." + reason),
+          }),
+          work.id,
+        );
+      } else {
+        const fromUnused = Math.min(routine.unused, slots);
+        routine.unused -= fromUnused;
+        routine.rest -= slots - fromUnused;
+        routine.writing[work.id] = (routine.writing[work.id] ?? 0) + slots;
+        extraSlots = slots;
+      }
+    }
+    if (!writable(work)) {
+      if (work.rush > 0) {
+        work.rush = 0;
+        record(
+          events,
+          "WORK_ORDER",
+          day,
+          text("engine.log.extra-post-failed", {
+            work_title: workTitle(work),
+            reason: text("label.command-result.status"),
+          }),
+          work.id,
+        );
+      }
+      continue;
+    }
     const allotted = routine.writing[work.id] ?? 0;
     const readiness = clamp(work.prep / 60, 0, 1);
     const prepFactor = plan.prepFloor + (1 - plan.prepFloor) * readiness;
-    if (allotted > 0) {
+    if (allotted > 0 && !failed) {
       const aptitudes = relevantAptitudes(author, work);
       const average = aptitudes.length
         ? sum(aptitudes.map((item) => item.trueValue)) / aptitudes.length
@@ -382,11 +490,12 @@ export function writeAndPublish(
             Math.max(0, (author.condition.stress - 50) / 50),
       );
       // Long sessions lose efficiency (16번 §4).
-      const hours =
-        allotted <= plan.overtimeAt
-          ? allotted
+      const effectiveSlots = (slots: number) =>
+        slots <= plan.overtimeAt
+          ? slots
           : plan.overtimeAt +
-            (allotted - plan.overtimeAt) * plan.overtimeEfficiency;
+            (slots - plan.overtimeAt) * plan.overtimeEfficiency;
+      const hours = effectiveSlots(allotted);
       const produced =
         hours *
         (writing.base + writing.speedFactor * author.abilities.speed) *
@@ -396,6 +505,22 @@ export function writeAndPublish(
         gear *
         prepFactor;
       work.stock += produced;
+      if (extraSlots > 0) {
+        record(
+          events,
+          "WORK_ORDER",
+          day,
+          text("engine.log.extra-write-done", {
+            work_title: workTitle(work),
+            hours: extraSlots / 2,
+            chapters: (
+              (produced * (hours - effectiveSlots(allotted - extraSlots))) /
+              hours
+            ).toFixed(2),
+          }),
+          work.id,
+        );
+      }
       work.prep = clamp(work.prep - produced * plan.prepCost);
       const quality =
         ((author.abilities.style +
@@ -415,19 +540,61 @@ export function writeAndPublish(
       );
       learnAptitude(state, work, day, allotted >= 8 ? 2 : 1, content);
     }
-    if (!serial(work)) continue;
-    const bonus = work.rush > 0 ? 1 : 0;
-    const quota = (planned ? 1 : 0) + bonus;
+    if (!serial(work)) {
+      if (work.rush > 0) {
+        work.rush = 0;
+        record(
+          events,
+          "WORK_ORDER",
+          day,
+          text("engine.log.extra-post-failed", {
+            work_title: workTitle(work),
+            reason: text("label.command-result.status"),
+          }),
+          work.id,
+        );
+      }
+      continue;
+    }
     let count = 0;
-    while (count < quota && work.stock >= 1) {
+    if (planned && work.stock >= 1 && work.published < work.targetChapters) {
       work.stock -= 1;
       work.published += 1;
       count += 1;
     }
-    if (bonus) {
+    if (work.rush > 0) {
       work.rush -= 1;
-      changeCondition(author, "stress", plan.rushStress * count);
-      changeCondition(author, "fatigue", plan.rushFatigue * count);
+      const enoughStock = stockBeforeWriting >= (planned ? 2 : 1);
+      const beforeTarget = work.published < work.targetChapters;
+      if (enoughStock && beforeTarget && work.stock >= 1) {
+        work.stock -= 1;
+        work.published += 1;
+        count += 1;
+        record(
+          events,
+          "WORK_ORDER",
+          day,
+          text("engine.log.extra-post-done", {
+            work_title: workTitle(work),
+          }),
+          work.id,
+        );
+      } else {
+        record(
+          events,
+          "WORK_ORDER",
+          day,
+          text("engine.log.extra-post-failed", {
+            work_title: workTitle(work),
+            reason: text(
+              beforeTarget
+                ? "label.command-result.no-stock"
+                : "label.command-result.target",
+            ),
+          }),
+          work.id,
+        );
+      }
     }
     if (count > 0) {
       work.stats.publishedToday = count;
@@ -439,7 +606,7 @@ export function writeAndPublish(
         "CHAPTER_POSTED",
         day,
         text("engine.log.posted", {
-          work_title: displayWorkTitle(work.title),
+          work_title: workTitle(work),
           chapter: work.published,
         }),
         work.id,
@@ -452,7 +619,7 @@ export function writeAndPublish(
         "CHAPTER_MISSED",
         day,
         text("engine.log.missed-stock", {
-          work_title: displayWorkTitle(work.title),
+          work_title: workTitle(work),
         }),
         work.id,
       );
@@ -526,7 +693,7 @@ export function finishWorks(
       events,
       "STATE_CHANGED",
       day,
-      text("engine.log.growth", { work_title: displayWorkTitle(work.title) }),
+      text("engine.log.growth", { work_title: workTitle(work) }),
       work.id,
     );
   }

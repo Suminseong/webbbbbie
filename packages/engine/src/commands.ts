@@ -1,5 +1,11 @@
 import type { Content } from "@webbbbbie/content";
-import { displayName, displayWorkTitle, text } from "@webbbbbie/content";
+import {
+  displayName,
+  oneTimeExpenses,
+  sourceText,
+  tagUnlocks,
+  text,
+} from "@webbbbbie/content";
 import {
   activeWork,
   blankWork,
@@ -8,6 +14,7 @@ import {
   record,
   serial,
   sum,
+  workTitle,
 } from "./author";
 import type {
   EngineEvent,
@@ -17,6 +24,9 @@ import type {
   TimePolicy,
 } from "./model";
 import { transitionWork } from "./work";
+import { groupDigits, transaction } from "./economy";
+import { cadences } from "./cadences";
+export { cadences, maskCadence } from "./cadences";
 
 export type CommandOutcome =
   | { ok: true; state: LifeState; events: EngineEvent[] }
@@ -27,21 +37,6 @@ export type CommandOutcome =
       error: PlayerCommandError;
       reason: string;
     };
-
-/** Weekly posting cadences the player can choose (post days per week). */
-export const cadences = [
-  { perWeek: 1, mask: 1 },
-  { perWeek: 2, mask: 17 },
-  { perWeek: 3, mask: 21 },
-  { perWeek: 4, mask: 85 },
-  { perWeek: 5, mask: 31 },
-  { perWeek: 6, mask: 63 },
-  { perWeek: 7, mask: 127 },
-] as const;
-export const maskCadence = (mask: number) =>
-  cadences.reduce((best, item) =>
-    Math.abs(item.mask - mask) < Math.abs(best.mask - mask) ? item : best,
-  ).perWeek;
 
 type Run = (
   state: LifeState,
@@ -62,6 +57,14 @@ export function runCommand(
       events: [],
       error: "E_ENDED",
       reason: text("system.command.ended"),
+    };
+  if (original.phase === "AWAITING_CHOICE")
+    return {
+      ok: false,
+      state: original,
+      events: [],
+      error: "E_NOT_ALLOWED",
+      reason: text("system.command.choice-pending"),
     };
   const events: EngineEvent[] = [];
   const failure = run(copy, content, events);
@@ -89,8 +92,15 @@ export function planOptions(content: Content) {
   return {
     genres: unique(content.world.works.map((work) => work.genre)),
     materials: unique(content.world.works.map((work) => work.material)),
-    tags: unique(content.world.works.flatMap((work) => work.tags)),
+    tags: unique([
+      ...content.world.works.flatMap((work) => work.tags),
+      ...tagUnlocks.map((tag) => sourceText(tag.textId)),
+    ]),
   };
+}
+
+export function unlockedTagChapters(state: LifeState) {
+  return Math.max(0, ...state.works.map((work) => work.published));
 }
 
 export type WorkPlan = {
@@ -102,7 +112,12 @@ export type WorkPlan = {
   perWeek: number;
 };
 
-function validatePlan(plan: WorkPlan, content: Content) {
+function validatePlan(
+  plan: WorkPlan,
+  content: Content,
+  state: LifeState,
+  previousTags: string[] = [],
+) {
   const options = planOptions(content);
   const title = clean(plan.title, content.balance.plan.maxTitle);
   const tags = [...new Set(plan.tags)];
@@ -118,6 +133,18 @@ function validatePlan(plan: WorkPlan, content: Content) {
     tags.some((tag) => !options.tags.includes(tag))
   )
     return fail("E_INVALID_PLAN", "system.command.tags-invalid");
+  const chapters = unlockedTagChapters(state);
+  if (
+    tags.some((name) =>
+      tagUnlocks.some(
+        (tag) =>
+          sourceText(tag.textId) === name &&
+          chapters < tag.publishedChapters &&
+          !previousTags.includes(name),
+      ),
+    )
+  )
+    return fail("E_NOT_ALLOWED", "system.command.tag-locked");
   if (!content.platforms.some((item) => item.id === plan.platformId))
     return fail("E_INVALID_PLAN", "system.command.platform-invalid");
   if (!cadences.some((item) => item.perWeek === plan.perWeek))
@@ -134,7 +161,7 @@ export function planWork(plan: WorkPlan): Run {
       content.balance.life.maxActiveWorks
     )
       return fail("E_LIMIT", "system.command.work-limit");
-    const checked = validatePlan(plan, content);
+    const checked = validatePlan(plan, content, state);
     if ("error" in checked) return checked;
     const template = content.world.works.find(
       (work) => work.genre === plan.genre,
@@ -174,9 +201,10 @@ export function reviseWork(id: string, plan: WorkPlan): Run {
     if (!work) return fail("E_NO_WORK", "system.command.no-work");
     if (work.status !== "PLANNING")
       return fail("E_NOT_ALLOWED", "system.command.revise-locked");
-    const checked = validatePlan(plan, content);
+    const checked = validatePlan(plan, content, state, work.tags);
     if ("error" in checked) return checked;
     work.title = checked.title;
+    work.manual = true;
     work.genre = plan.genre;
     work.material = plan.material;
     work.tags = checked.tags;
@@ -209,6 +237,7 @@ export function setWorkPolicy(id: string, patch: WorkPolicyPatch): Run {
       const title = clean(patch.title, content.balance.plan.maxTitle);
       if (!title) return fail("E_INVALID_PLAN", "system.command.title-empty");
       work.title = title;
+      work.manual = true;
     }
     if (patch.perWeek !== undefined) {
       const cadence = cadences.find((item) => item.perWeek === patch.perWeek);
@@ -234,7 +263,7 @@ export function setWorkPolicy(id: string, patch: WorkPolicyPatch): Run {
       "COMMAND",
       state.day,
       text("engine.log.cmd-policy", {
-        work_title: displayWorkTitle(work.title),
+        work_title: workTitle(work),
       }),
       work.id,
     );
@@ -256,12 +285,48 @@ export function rushWork(id: string, days: number): Run {
       "COMMAND",
       state.day,
       text(days ? "engine.log.cmd-rush" : "engine.log.cmd-rush-cancel", {
-        work_title: displayWorkTitle(work.title),
+        work_title: workTitle(work),
         days,
       }),
       work.id,
     );
     void content;
+  };
+}
+
+/** Add a one-hour writing attempt to the next day, using rest or unused time. */
+export function extraWrite(id: string, requested: boolean): Run {
+  return (state, _content, events) => {
+    const work = findWork(state, id);
+    if (!work) return fail("E_NO_WORK", "system.command.no-work");
+    if (
+      requested &&
+      !serial(work) &&
+      !(work.status === "HIATUS" && work.hiatusKind === "STOCK")
+    )
+      return fail("E_NOT_ALLOWED", "system.command.no-writing");
+    if (work.extraWriting === requested)
+      return fail(
+        "E_NOT_ALLOWED",
+        requested
+          ? "system.command.writing-already-queued"
+          : "system.command.writing-not-queued",
+      );
+    work.extraWriting = requested;
+    record(
+      events,
+      "COMMAND",
+      state.day,
+      text(
+        requested
+          ? "engine.log.cmd-extra-write"
+          : "engine.log.cmd-extra-cancel",
+        {
+          work_title: workTitle(work),
+        },
+      ),
+      work.id,
+    );
   };
 }
 
@@ -277,15 +342,14 @@ export function hiatusWork(
       return fail("E_NOT_ALLOWED", "system.command.not-serial");
     if (!natural(days) || days < 1 || days > 60)
       return fail("E_INVALID_PLAN", "system.command.hiatus-invalid");
-    transitionWork(work, "HIATUS", state.day, events, days);
+    transitionWork(work, "HIATUS", state.day, events, days + 1, false);
     work.hiatusKind = kind;
-    work.hiatusUntil = state.day + days;
     record(
       events,
       "COMMAND",
       state.day,
       text("engine.log.cmd-hiatus", {
-        work_title: displayWorkTitle(work.title),
+        work_title: workTitle(work),
         days,
       }),
       work.id,
@@ -300,13 +364,17 @@ export function resumeWork(id: string): Run {
     if (!work) return fail("E_NO_WORK", "system.command.no-work");
     if (work.status !== "HIATUS")
       return fail("E_NOT_ALLOWED", "system.command.not-hiatus");
+    if (work.hiatusLockedUntil !== null && state.day < work.hiatusLockedUntil)
+      return fail("E_NOT_ALLOWED", "system.command.hiatus-forced");
+    if (state.author.condition.health < content.balance.writing.resumeHealth)
+      return fail("E_NOT_ALLOWED", "system.command.resume-health");
     transitionWork(work, work.resumeTo ?? "SERIAL_FREE", state.day, events);
     record(
       events,
       "COMMAND",
       state.day,
       text("engine.log.cmd-resume", {
-        work_title: displayWorkTitle(work.title),
+        work_title: workTitle(work),
       }),
       work.id,
     );
@@ -319,10 +387,11 @@ export function dropWork(id: string): Run {
   return (state, content, events) => {
     const work = findWork(state, id);
     if (!work) return fail("E_NO_WORK", "system.command.no-work");
-    if (!serial(work) && work.status !== "HIATUS")
-      return fail("E_NOT_ALLOWED", "system.command.not-droppable");
+    if (!serial(work) && work.status !== "HIATUS" && work.status !== "PLANNING")
+      return fail("E_NOT_ALLOWED", "system.command.cannot-drop");
     transitionWork(work, "DROPPED", state.day, events);
     work.rush = 0;
+    work.extraWriting = false;
     const { plan } = content.balance;
     changeSocial(state.author, "reputation", plan.dropReputation);
     changeCondition(state.author, "stress", plan.dropStress);
@@ -330,7 +399,7 @@ export function dropWork(id: string): Run {
       events,
       "COMMAND",
       state.day,
-      text("engine.log.cmd-drop", { work_title: displayWorkTitle(work.title) }),
+      text("engine.log.cmd-drop", { work_title: workTitle(work) }),
       work.id,
     );
   };
@@ -372,6 +441,36 @@ export function setSpendPolicy(plan: SpendPolicy): Run {
       return fail("E_INVALID_PLAN", "system.command.spend-invalid");
     state.author.policy.spend = { ...plan };
     record(events, "COMMAND", state.day, text("engine.log.cmd-spend"));
+  };
+}
+
+/** Immediate, bounded purchases are distinct from the recurring spending policy. */
+export function purchase(id: string): Run {
+  return (state, _content, events) => {
+    const item = oneTimeExpenses.find((entry) => entry.id === id);
+    if (!item) return fail("E_INVALID_PLAN", "system.purchase.invalid");
+    const previous = state.author.purchases[id];
+    if (previous !== undefined && state.day < previous + item.cooldownDays)
+      return fail("E_NOT_ALLOWED", "system.purchase.cooldown");
+    if (state.author.cash < item.cost)
+      return fail("E_NOT_ALLOWED", "system.purchase.insufficient");
+    transaction(state, state.day, "SPEND", -item.cost, "purchase:" + id);
+    state.author.purchases[id] = state.day;
+    for (const [stat, amount] of Object.entries(item.effects))
+      changeCondition(
+        state.author,
+        stat as keyof typeof state.author.condition,
+        amount,
+      );
+    record(
+      events,
+      "COMMAND",
+      state.day,
+      text("engine.log.purchase", {
+        item: text("entity.purchase." + id + ".name"),
+        cost: groupDigits(item.cost),
+      }),
+    );
   };
 }
 
@@ -420,7 +519,7 @@ export function lifeSummary(state: LifeState, content: Content) {
     chapters: sum(works.map((work) => work.published)),
     totalViews: Math.floor(sum(works.map((work) => work.stats.totalViews))),
     bestViews: best ? Math.floor(best.stats.totalViews) : 0,
-    bestTitle: best ? displayWorkTitle(best.title) : null,
+    bestTitle: best ? workTitle(best) : null,
     bestFavorites: Math.floor(
       Math.max(0, ...works.map((work) => work.stats.favorites)),
     ),

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import { createEngine } from "@webbbbbie/engine";
+import { appliedTexts, originalTexts } from "@webbbbbie/content";
 import type { LifeState } from "@webbbbbie/engine";
 import { withEvents } from "../packages/content/test-fixtures/content";
 
@@ -64,6 +66,31 @@ describe("[16번 §3] player commands", () => {
     expect(run("가나다")).toEqual(run("완전히 다른 아주 긴 제목 ABC 123"));
   });
 
+  it("keeps an explicitly entered title even when a matching generated title has an edited translation", () => {
+    const titleId = Object.keys(originalTexts).find((id) =>
+      id.startsWith("entity.work."),
+    )!;
+    const original = originalTexts[titleId];
+    const edits = appliedTexts as Record<string, string>;
+    const previous = edits[titleId];
+    try {
+      edits[titleId] = "교정된 자동 생성 제목";
+      const automatic = started();
+      automatic.works[0].title = original;
+      expect(quiet.getWorkViews(automatic)[0].title).toBe(
+        "교정된 자동 생성 제목",
+      );
+      const named = ok(
+        quiet.setWorkPolicy(automatic, "W-1", { title: original }),
+      ).state;
+      expect(named.works[0].manual).toBe(true);
+      expect(quiet.getWorkViews(named)[0].title).toBe(original);
+    } finally {
+      if (previous === undefined) delete edits[titleId];
+      else edits[titleId] = previous;
+    }
+  });
+
   it("changes tags and platform effects but only before the first chapter", () => {
     const state = ok(quiet.planWork(started(), plan("원본"))).state;
     const id = state.works.at(-1)!.id;
@@ -75,17 +102,231 @@ describe("[16번 §3] player commands", () => {
     expect(quiet.reviseWork(later, id, plan("늦음")).ok).toBe(false);
   });
 
-  it("rushes extra chapters from stock and costs health", () => {
+  it("unlocks additional tags by completed episode count without exposing aptitude", () => {
+    const base = started();
+    const available = quiet.getPlanOptions(base);
+    const locked = available.tags.find((item) => item.required === 10)!;
+    expect(locked).toMatchObject({ unlocked: false, label: "느린 성장" });
+    expect(
+      quiet.planWork(base, { ...plan("새 태그"), tags: [locked.value] }),
+    ).toMatchObject({ ok: false, state: base, error: "E_NOT_ALLOWED" });
+    const experienced = structuredClone(base);
+    experienced.works[0].published = 10;
+    const next = quiet.getPlanOptions(experienced);
+    expect(
+      next.tags.find((item) => item.value === locked.value)?.unlocked,
+    ).toBe(true);
+    expect(
+      next.platforms.find((platform) => platform.id === "read")?.tags,
+    ).toContain(locked.label);
+    const created = ok(
+      quiet.planWork(experienced, {
+        ...plan("열린 태그"),
+        tags: [locked.value],
+        platformId: "read",
+      }),
+    ).state;
+    expect(created.works.at(-1)?.tags).toContain(locked.value);
+    const publicAptitude = quiet
+      .getAptitudeView(created)
+      .find((item) => item.key === locked.label);
+    expect(publicAptitude).toMatchObject({ stage: "UNKNOWN", estimate: null });
+    expect(publicAptitude).not.toHaveProperty("trueValue");
+    const schedules = created.author.aptitudes
+      .filter((item) => item.kind === "SCHEDULE")
+      .map((item) => item.key);
+    expect(schedules).toEqual(
+      expect.arrayContaining(["1", "17", "21", "85", "31", "63", "127"]),
+    );
+  });
+
+  it("posts extra chapters from existing stock without charging writing time or fatigue", () => {
     const base = serializing();
     base.works[0].mask = 1;
     const rushed = ok(quiet.rushWork(base, "W-1", 3)).state;
     const normal = quiet.advance(base, 3).state;
     const fast = quiet.advance(rushed, 3).state;
     expect(fast.works[0].published).toBeGreaterThan(normal.works[0].published);
-    expect(fast.author.condition.fatigue).toBeGreaterThan(
-      normal.author.condition.fatigue,
-    );
+    expect(fast.author.condition.fatigue).toBe(normal.author.condition.fatigue);
     expect(fast.works[0].rush).toBe(0);
+  });
+
+  it("does not count a newly written chapter as previously stockpiled", () => {
+    const base = serializing();
+    base.works[0].stock = 0;
+    base.works[0].mask = 0;
+    const result = quiet.advance(
+      ok(quiet.rushWork(base, "W-1", 1)).state,
+    ).state;
+    expect(result.works[0].published).toBe(base.works[0].published);
+    expect(result.works[0].stock).toBeGreaterThan(0);
+    expect(
+      result.log.some(
+        (event) =>
+          event.type === "WORK_ORDER" && event.message.includes("부족"),
+      ),
+    ).toBe(true);
+  });
+
+  it("spends one shared hour for extra writing and processes it once across save and reload", () => {
+    const base = serializing();
+    const policy = quiet.getLifeSettings(base).time;
+    const planned = ok(quiet.setTimePolicy(base, { ...policy, rest: 6 })).state;
+    const queued = ok(quiet.extraWrite(planned, "W-1", true)).state;
+    expect(quiet.extraWrite(queued, "W-1", true).ok).toBe(false);
+    const load = quiet.deserialize(quiet.serialize(queued));
+    if (!load.ok) throw new Error(load.error);
+    const done = quiet.advance(queued).state;
+    const restored = quiet.advance(load.state).state;
+    const normal = quiet.advance(planned).state;
+    expect(quiet.serialize(done)).toBe(quiet.serialize(restored));
+    expect(done.author.lastRoutine!.writing["W-1"]).toBe(
+      normal.author.lastRoutine!.writing["W-1"] + 2,
+    );
+    expect(
+      done.author.lastRoutine!.rest + done.author.lastRoutine!.unused,
+    ).toBe(
+      normal.author.lastRoutine!.rest + normal.author.lastRoutine!.unused - 2,
+    );
+    expect(done.works[0].extraWriting).toBe(false);
+    expect(
+      done.log.filter(
+        (event) =>
+          event.type === "WORK_ORDER" && event.message.includes("추가 집필"),
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("records an actual failure when poor health blocks a scheduled writing attempt", () => {
+    const base = serializing();
+    base.author.condition.health = 10;
+    const queued = ok(quiet.extraWrite(base, "W-1", true)).state;
+    const result = quiet.advance(queued).state;
+    expect(result.works[0].stock).toBeLessThanOrEqual(base.works[0].stock);
+    expect(result.works[0].extraWriting).toBe(false);
+    expect(result.author.deviations).toContain("label.deviation.write-health");
+    expect(
+      result.log.some(
+        (event) =>
+          event.type === "WORK_ORDER" && event.message.includes("건강"),
+      ),
+    ).toBe(true);
+  });
+
+  it("rejects a queued extra session if no shared free time remains", () => {
+    const base = serializing();
+    const { free } = quiet.getLifeSettings(base);
+    const plan = { sleep: 8, plot: free - 8, community: 0, ego: 0, rest: 0 };
+    const planned = ok(quiet.setTimePolicy(base, plan)).state;
+    const scheduled = ok(quiet.extraWrite(planned, "W-1", true)).state;
+    const done = quiet.advance(scheduled).state;
+    expect(done.works[0].extraWriting).toBe(false);
+    expect(
+      done.log.some(
+        (event) =>
+          event.type === "WORK_ORDER" && event.message.includes("시간"),
+      ),
+    ).toBe(true);
+    const time = done.author.lastRoutine!;
+    expect(
+      time.work +
+        time.living +
+        time.sleep +
+        time.community +
+        time.ego +
+        time.rest +
+        time.unused +
+        Object.values(time.plot).reduce((a, b) => a + b, 0) +
+        Object.values(time.writing).reduce((a, b) => a + b, 0),
+    ).toBe(48);
+  });
+
+  it("preserves a forced hiatus against an immediate resume and reports an interrupted order", () => {
+    const engine = createEngine(withEvents("forced-hiatus"));
+    const start = engine.createLife(42);
+    const pending = engine.getPending(start)!;
+    let state = ok(
+      engine.choose(start, pending.id, pending.choices[0].id),
+    ).state;
+    state.works[0].status = "SERIAL_FREE";
+    state.works[0].published = 12;
+    state.works[0].stock = 8;
+    state.author.condition.health = 30;
+    state = ok(engine.rushWork(state, "W-1", 1)).state;
+    state = ok(engine.extraWrite(state, "W-1", true)).state;
+    const day = engine.advance(state).state;
+    expect(day.works[0].status).toBe("HIATUS");
+    expect(day.works[0].rush).toBe(0);
+    expect(day.works[0].extraWriting).toBe(false);
+    expect(day.log.filter((event) => event.type === "WORK_ORDER")).toHaveLength(
+      2,
+    );
+    expect(engine.resumeWork(day, "W-1")).toMatchObject({
+      ok: false,
+      error: "E_NOT_ALLOWED",
+    });
+  });
+
+  it("blocks management while an event choice is pending", () => {
+    const engine = createEngine(withEvents("critique"));
+    let state = engine.createLife(42);
+    const first = engine.getPending(state)!;
+    state = ok(engine.choose(state, first.id, first.choices[0].id)).state;
+    state.works[0].status = "SERIAL_FREE";
+    state.works[0].published = 12;
+    state.works[0].stock = 5;
+    state = engine.advance(state).state;
+    expect(state.phase).toBe("AWAITING_CHOICE");
+    expect(engine.dropWork(state, "W-1")).toMatchObject({
+      ok: false,
+      state,
+      error: "E_NOT_ALLOWED",
+    });
+    expect(engine.extraWrite(state, "W-1", true)).toMatchObject({
+      ok: false,
+      state,
+    });
+    const loaded = engine.deserialize(engine.serialize(state));
+    if (!loaded.ok) throw new Error(loaded.error);
+    const pending = engine.getPending(loaded.state)!;
+    const choice = ok(
+      engine.choose(loaded.state, pending.id, pending.choices[0].id),
+    ).state;
+    expect(choice.archive).toHaveLength(2);
+    expect(engine.choose(choice, pending.id, pending.choices[0].id).ok).toBe(
+      false,
+    );
+  });
+
+  it("keeps a voluntary hiatus for its requested duration and permits early recovery", () => {
+    const base = serializing();
+    const paused = ok(quiet.hiatusWork(base, "W-1", "STOCK", 2)).state;
+    expect(quiet.advance(paused, 2).state.works[0].status).toBe("HIATUS");
+    expect(quiet.advance(paused, 3).state.works[0].status).toBe("SERIAL_FREE");
+    expect(ok(quiet.resumeWork(paused, "W-1")).state.works[0].status).toBe(
+      "SERIAL_FREE",
+    );
+  });
+
+  it("loads a real deployed 0.3.0 save and preserves its queued command", () => {
+    const fixture = readFileSync(
+      new URL("./fixtures/save-v0.3.0.json", import.meta.url),
+      "utf8",
+    );
+    const product = createEngine();
+    const loaded = product.deserialize(fixture);
+    if (!loaded.ok) throw new Error(loaded.error);
+    expect(loaded.state.rulesVersion).toBe("0.3.1");
+    expect(loaded.state.day).toBe(5);
+    expect(loaded.state.works[0].rush).toBe(2);
+    expect(loaded.state.works[0].extraWriting).toBe(false);
+    expect(
+      product
+        .getAptitudeView(loaded.state)
+        .find((item) => item.key === "느린 성장"),
+    ).toMatchObject({ stage: "UNKNOWN", estimate: null });
+    expect(product.deserialize(product.serialize(loaded.state)).ok).toBe(true);
+    expect(product.advance(loaded.state).state.phase).not.toBe("ENDED");
   });
 
   it("hiatus stops posting; a stock hiatus keeps writing, a recovery hiatus rests", () => {
@@ -113,6 +354,57 @@ describe("[16번 §3] player commands", () => {
 });
 
 describe("[16번 §4,§6] time and spending", () => {
+  it("charges and records one-time purchases exactly once with cash and cooldown checks", () => {
+    const base = serializing();
+    base.author.cash = 200000;
+    base.author.condition.health = 60;
+    base.author.condition.fatigue = 30;
+    const receipt = ok(quiet.purchase(base, "medical")).state;
+    expect(base.author.cash).toBe(200000);
+    expect(receipt.author.cash).toBe(120000);
+    expect(receipt.author.condition.health).toBe(68);
+    expect(receipt.author.condition.fatigue).toBe(24);
+    expect(receipt.ledger.at(-1)).toMatchObject({
+      kind: "SPEND",
+      amount: -80000,
+      ref: "purchase:medical",
+    });
+    expect(quiet.purchase(receipt, "medical")).toMatchObject({
+      ok: false,
+      state: receipt,
+    });
+    const loaded = quiet.deserialize(quiet.serialize(receipt));
+    if (!loaded.ok) throw new Error(loaded.error);
+    expect(quiet.purchase(loaded.state, "medical").ok).toBe(false);
+    const broke = structuredClone(receipt);
+    broke.author.cash = 1;
+    expect(quiet.purchase(broke, "leisure")).toMatchObject({
+      ok: false,
+      state: broke,
+    });
+    expect(broke.ledger).toEqual(receipt.ledger);
+    const later = quiet.advance(receipt, 14).state;
+    expect(quiet.purchase(later, "medical").ok).toBe(true);
+  });
+
+  it("reports real ledger amounts in monthly income, expense and carried totals", () => {
+    let state = serializing();
+    state.author.cash = 200000;
+    state = ok(quiet.purchase(state, "medical")).state;
+    state = quiet.advance(state, 30).state;
+    const ledger = quiet.getLedgerView(state);
+    const first = ledger.months.find((month) => month.month === 1)!;
+    const entries = ledger.entries.filter((entry) => entry.day <= 30);
+    const income = entries
+      .filter((entry) => entry.amount > 0)
+      .reduce((sum, entry) => sum + entry.amount, 0);
+    const expense = -entries
+      .filter((entry) => entry.amount < 0)
+      .reduce((sum, entry) => sum + entry.amount, 0);
+    expect(first).toMatchObject({ income, expense, net: income - expense });
+    expect(expense).toBeGreaterThanOrEqual(80000);
+  });
+
   it("rejects plans over 24 hours and keeps every day at exactly 48 units", () => {
     const state = serializing();
     const info = quiet.getLifeSettings(state);
@@ -141,6 +433,23 @@ describe("[16번 §4,§6] time and spending", () => {
       Object.values(time.plot).reduce((a, b) => a + b, 0) +
       Object.values(time.writing).reduce((a, b) => a + b, 0);
     expect(total).toBe(48);
+  });
+
+  it("keeps the completed day's plan when tomorrow's policy changes", () => {
+    const initial = serializing();
+    const firstPolicy = { ...quiet.getLifeSettings(initial).time, rest: 2 };
+    const first = ok(quiet.setTimePolicy(initial, firstPolicy)).state;
+    const completed = quiet.advance(first).state;
+    const previousPlan = quiet.getAuthorView(completed).plan!;
+    const updated = ok(
+      quiet.setTimePolicy(completed, { ...firstPolicy, rest: 8 }),
+    ).state;
+    expect(quiet.getAuthorView(updated).plan).toEqual(previousPlan);
+    expect(quiet.getLifeSettings(updated).time.rest).toBe(8);
+    previousPlan.writing.total = -1;
+    expect(
+      quiet.getAuthorView(updated).plan!.writing.total,
+    ).toBeGreaterThanOrEqual(0);
   });
 
   it("trades writing today for plot preparation and long-run quality", () => {

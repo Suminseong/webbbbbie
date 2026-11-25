@@ -1,5 +1,8 @@
 import { z } from "zod";
 import balanceData from "../balance.v0.json";
+import playerActionData from "../player-actions.v0.json";
+import oneTimeExpenseData from "../one-time-expenses.v0.json";
+import tagUnlockData from "../tag-unlocks.v0.json";
 import platformData from "../platforms.json";
 import worldData from "../world.json";
 import policyData from "../policies.json";
@@ -124,6 +127,60 @@ function numeric<K extends string>(keys: readonly K[], value = finite) {
   return z.object(shape).strict();
 }
 const five = z.array(probability).length(5);
+export const playerActionRules = z
+  .object({
+    extraWritingSlots: days.max(48),
+    healthWritingFloor: natural.max(100),
+    fatigueWritingCeiling: natural.max(100),
+    stressRiskStart: natural.max(100),
+    driveRiskStart: natural.max(100),
+    stressFailureScale: probability,
+    driveFailureScale: probability,
+  })
+  .strict()
+  .parse(playerActionData);
+export const oneTimeExpenses = z
+  .array(
+    z
+      .object({
+        id: id,
+        cost: natural.positive(),
+        cooldownDays: natural.positive(),
+        effects: z
+          .object({
+            health: finite.optional(),
+            fatigue: finite.optional(),
+            stress: finite.optional(),
+            drive: finite.optional(),
+          })
+          .strict(),
+      })
+      .strict(),
+  )
+  .min(1)
+  .refine(
+    (entries) =>
+      new Set(entries.map((entry) => entry.id)).size === entries.length,
+    "Duplicate expense ID",
+  )
+  .parse(oneTimeExpenseData);
+export const tagUnlocks = z
+  .array(
+    z
+      .object({
+        id,
+        textId: z.string().min(1),
+        publishedChapters: natural.positive(),
+        platforms: z.array(id).min(1),
+      })
+      .strict(),
+  )
+  .refine(
+    (entries) =>
+      new Set(entries.map((entry) => entry.id)).size === entries.length,
+    "Duplicate unlocked tag ID",
+  )
+  .parse(tagUnlockData);
 const platform = z
   .object({
     id,

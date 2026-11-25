@@ -1,0 +1,20 @@
+[
+  {
+    "id": "slow-growth",
+    "textId": "entity.tag.unlock-slow-growth",
+    "publishedChapters": 10,
+    "platforms": ["read", "select"]
+  },
+  {
+    "id": "healing",
+    "textId": "entity.tag.unlock-healing",
+    "publishedChapters": 30,
+    "platforms": ["page", "read"]
+  },
+  {
+    "id": "politics",
+    "textId": "entity.tag.unlock-politics",
+    "publishedChapters": 60,
+    "platforms": ["series", "select"]
+  }
+]

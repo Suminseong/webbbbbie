@@ -1,4 +1,12 @@
-import { defaultContent, matchingText, text } from "@webbbbbie/content";
+import {
+  defaultContent,
+  matchingText,
+  oneTimeExpenses,
+  playerActionRules,
+  sourceText,
+  tagUnlocks,
+  text,
+} from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
 import { createAuthor, record, sum } from "./author";
 import {
@@ -10,9 +18,11 @@ import {
 } from "./economy";
 import {
   dropWork as buildDropWork,
+  extraWrite as buildExtraWrite,
   hiatusWork as buildHiatusWork,
   lifeSummary,
   planWork as buildPlanWork,
+  purchase as buildPurchase,
   resumeWork as buildResumeWork,
   retire as buildRetire,
   reviseWork as buildReviseWork,
@@ -44,6 +54,7 @@ import type {
 } from "./model";
 import { resolveAudience } from "./readership";
 import { fingerprint } from "./rng";
+import { cadences } from "./cadences";
 import {
   aptitudeView,
   authorView,
@@ -98,6 +109,7 @@ function copyForCommand(state: LifeState): LifeState {
         spend: { ...author.policy.spend },
       },
       deviations: [...author.deviations],
+      purchases: { ...author.purchases },
       aptitudes: author.aptitudes.map((entry) => ({ ...entry })),
     },
     works: state.works.map((work) => ({
@@ -127,7 +139,10 @@ export function createEngine(
   content: Content = defaultContent,
   lifeEnd: LifeEndPolicy = neverEnd,
 ) {
-  const contentHash = fingerprint(JSON.stringify(content));
+  const previousContentHash = fingerprint(JSON.stringify(content));
+  const contentHash = fingerprint(
+    JSON.stringify({ content, playerActionRules, oneTimeExpenses, tagUnlocks }),
+  );
   const keep = content.balance.events;
   function addLog(state: LifeState, events: readonly EngineEvent[]) {
     state.log = state.log.concat(events).slice(-keep.logKeep);
@@ -318,14 +333,16 @@ export function createEngine(
     ) {
       return { ok: false, error: "E_SAVE_CORRUPT" };
     }
-    if (
-      !("schemaVersion" in decoded) ||
-      !("rulesVersion" in decoded) ||
-      !("contentHash" in decoded) ||
-      decoded.schemaVersion !== SCHEMA_VERSION ||
-      decoded.rulesVersion !== RULES_VERSION ||
-      decoded.contentHash !== contentHash
-    ) {
+    const version = decoded as Record<string, unknown>;
+    const current =
+      version.schemaVersion === SCHEMA_VERSION &&
+      version.rulesVersion === RULES_VERSION &&
+      version.contentHash === contentHash;
+    const previous =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.0" &&
+      version.contentHash === previousContentHash;
+    if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }
     const parsed = envelopeSchema.safeParse(decoded);
@@ -363,9 +380,9 @@ export function createEngine(
     if (
       state.day !== parsed.data.savedAtDay ||
       state.phase !== parsed.data.phase ||
-      state.schemaVersion !== SCHEMA_VERSION ||
-      state.rulesVersion !== RULES_VERSION ||
-      state.contentHash !== contentHash ||
+      state.schemaVersion !== parsed.data.schemaVersion ||
+      state.rulesVersion !== parsed.data.rulesVersion ||
+      state.contentHash !== parsed.data.contentHash ||
       (state.phase === "ENDED") !== !!state.ending ||
       (state.phase === "AWAITING_CHOICE") !== !!agenda ||
       !!pending !== !!agenda ||
@@ -406,6 +423,22 @@ export function createEngine(
     ) {
       return { ok: false, error: "E_SAVE_CORRUPT" };
     }
+    if (previous) {
+      state.rulesVersion = RULES_VERSION;
+      state.contentHash = contentHash;
+      const newTags = new Set(tagUnlocks.map((tag) => sourceText(tag.textId)));
+      const schedules = new Set(cadences.map((item) => String(item.mask)));
+      for (const entry of createAuthor(state.seed, content).aptitudes) {
+        if (
+          ((entry.kind === "TAG" && newTags.has(entry.key)) ||
+            (entry.kind === "SCHEDULE" && schedules.has(entry.key))) &&
+          !state.author.aptitudes.some(
+            (item) => item.kind === entry.kind && item.key === entry.key,
+          )
+        )
+          state.author.aptitudes.push(entry);
+      }
+    }
     return { ok: true, state };
   }
 
@@ -423,6 +456,8 @@ export function createEngine(
       command(state, buildSetWorkPolicy(id, patch)),
     rushWork: (state: LifeState, id: string, days: number) =>
       command(state, buildRushWork(id, days)),
+    extraWrite: (state: LifeState, id: string, requested: boolean) =>
+      command(state, buildExtraWrite(id, requested)),
     hiatusWork: (
       state: LifeState,
       id: string,
@@ -437,11 +472,13 @@ export function createEngine(
       command(state, buildSetTimePolicy(plan)),
     setSpendPolicy: (state: LifeState, plan: SpendPolicy) =>
       command(state, buildSetSpendPolicy(plan)),
+    purchase: (state: LifeState, id: string) =>
+      command(state, buildPurchase(id)),
     setAutoPlan: (state: LifeState, on: boolean) =>
       command(state, buildSetAutoPlan(on)),
     retire: (state: LifeState) => command(state, buildRetire()),
     getLifeSummary: (state: LifeState) => lifeSummary(state, content),
-    getPlanOptions: () => planOptionsView(content),
+    getPlanOptions: (state?: LifeState) => planOptionsView(content, state),
     getLifeSettings: (state: LifeState) => lifeSettingsView(state, content),
     getAuthorView: (state: LifeState) => authorView(state, content),
     getWorkViews: (state: LifeState) =>
@@ -461,7 +498,7 @@ export function createEngine(
             item.day >= (range.from ?? 0) && item.day <= (range.to ?? Infinity),
         )
         .map((item) => ({ ...item })),
-    getLedgerView: ledgerView,
+    getLedgerView: (state: LifeState) => ledgerView(state, content),
     getAptitudeView: (state: LifeState) => aptitudeView(state, content),
     getContractViews: (state: LifeState) => contractViews(state, content),
     getDailySummary: (state: LifeState, day = state.day) => {
@@ -483,11 +520,13 @@ export const {
   reviseWork,
   setWorkPolicy,
   rushWork,
+  extraWrite,
   hiatusWork,
   resumeWork,
   dropWork,
   setTimePolicy,
   setSpendPolicy,
+  purchase,
   setAutoPlan,
   retire,
   getLifeSummary,

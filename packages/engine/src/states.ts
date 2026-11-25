@@ -1,6 +1,6 @@
 import type { Content, SpecialDef } from "@webbbbbie/content";
-import { displayName, displayWorkTitle, text } from "@webbbbbie/content";
-import { activeWork, createWork, record, serial } from "./author";
+import { displayName, text } from "@webbbbbie/content";
+import { activeWork, createWork, record, serial, workTitle } from "./author";
 import type { EngineEvent, LifeState } from "./model";
 import { rand, stream } from "./rng";
 import { transitionWork } from "./work";
@@ -101,7 +101,7 @@ export function applyStateBehaviors(
           day,
           text("engine.log.forced-hiatus", {
             state_name: name,
-            work_title: displayWorkTitle(work.title),
+            work_title: workTitle(work),
           }),
           work.id,
         );
@@ -117,7 +117,7 @@ export function applyStateBehaviors(
           day,
           text("engine.log.forced-rush-end", {
             state_name: name,
-            work_title: displayWorkTitle(work.title),
+            work_title: workTitle(work),
           }),
           work.id,
         );
@@ -139,7 +139,7 @@ export function applyStateBehaviors(
           day,
           text("engine.log.forced-new-work", {
             state_name: name,
-            work_title: displayWorkTitle(state.works[before].title),
+            work_title: workTitle(state.works[before]),
           }),
           state.works[before].id,
         );

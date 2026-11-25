@@ -1,6 +1,6 @@
 import type { Content } from "@webbbbbie/content";
-import { displayWorkTitle, text } from "@webbbbbie/content";
-import { clamp, record, sum } from "./author";
+import { text } from "@webbbbbie/content";
+import { clamp, record, sum, workTitle } from "./author";
 import type { EngineEvent, LedgerEntry, LifeState, Work } from "./model";
 
 export function transaction(
@@ -79,7 +79,7 @@ export function updateContracts(
             ? "engine.log.contract-expired"
             : "engine.log.contract-ended",
           {
-            work_title: displayWorkTitle(work.title),
+            work_title: workTitle(work),
           },
         ),
         work.id,
@@ -100,7 +100,7 @@ export function updateContracts(
             ? "engine.log.promotion-started"
             : "engine.log.promotion-delayed",
           {
-            work_title: displayWorkTitle(work.title),
+            work_title: workTitle(work),
           },
         ),
         work.id,
@@ -116,7 +116,7 @@ export function updateContracts(
           "STATE_CHANGED",
           day,
           text("engine.log.editor-pressure", {
-            work_title: displayWorkTitle(work.title),
+            work_title: workTitle(work),
           }),
           work.id,
         );
@@ -127,7 +127,7 @@ export function updateContracts(
           "STATE_CHANGED",
           day,
           text("engine.log.editor-feedback", {
-            work_title: displayWorkTitle(work.title),
+            work_title: workTitle(work),
           }),
           work.id,
         );
@@ -197,7 +197,7 @@ export function settle(
       "PAYOUT",
       day,
       text("engine.log.payout", {
-        work_title: displayWorkTitle(work.title),
+        work_title: workTitle(work),
         amount: groupDigits(payout),
       }),
       work.id,

@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 
 const loadCopy = (name: string): Record<string, string> =>
@@ -211,5 +212,200 @@ test("[16번 §3,§10] plans a work with a free title, shows time policy and end
   await page.getByRole("button", { name: text("ui.retire.yes") }).click();
   await expect(
     page.getByRole("heading", { name: text("ui.summary.title", { days: 0 }) }),
+  ).toBeVisible();
+});
+
+test("[TC-UI-006] manages works, a shared schedule, orders, expenses and saved state", async ({
+  page,
+}, info) => {
+  const errors: Error[] = [];
+  page.on("pageerror", (error) => errors.push(error));
+  await page.goto("/");
+  await page.locator(".event-options button").first().click();
+  await page.getByRole("button", { name: text("ui.plan.open") }).click();
+  await page.locator("#plan-title").fill("직접 정한 새 작품");
+  await page.locator("#plan-genre").selectOption({ index: 1 });
+  await page.locator("#plan-material").selectOption({ index: 1 });
+  await page.locator("#plan-platform").selectOption("nopia");
+  await expect(
+    page
+      .locator(".chip")
+      .filter({ hasText: "느린 성장" })
+      .getByRole("checkbox"),
+  ).toBeDisabled();
+  await expect(
+    page.getByText(text("ui.plan.tag-locked", { chapters: 10 })),
+  ).toBeVisible();
+  await page.locator("#plan-tag-0").check({ force: true });
+  await page.getByRole("button", { name: text("ui.plan.create") }).click();
+  const first = page.locator('[data-work="W-1"]');
+  const second = page.locator('[data-work="W-2"]');
+  await expect(
+    second.getByRole("heading", { name: "직접 정한 새 작품" }),
+  ).toBeVisible();
+  await expect(second.locator(".work-sub")).toContainText(
+    text("entity.platform.nopia.name"),
+  );
+  await expect(second.locator(".tags span")).toHaveCount(1);
+
+  await page
+    .getByRole("button", { name: text("ui.tab.life"), exact: true })
+    .click();
+  await page.locator("#life-rest").fill("8");
+  await page
+    .locator("#time-form")
+    .getByRole("button", { name: text("ui.life.apply") })
+    .click();
+  await page.screenshot({
+    path: info.outputPath("life-controls.png"),
+    fullPage: true,
+  });
+  const medical = page
+    .locator(".purchase-row")
+    .filter({ hasText: text("entity.purchase.medical.name") });
+  await medical
+    .getByRole("button", { name: text("ui.life.purchase-button") })
+    .click();
+  await expect(page.getByRole("status")).toContainText(
+    text("ui.life.purchase-done", {
+      item: text("entity.purchase.medical.name"),
+    }),
+  );
+  await expect(medical.getByRole("button")).toBeDisabled();
+  await page.locator('button[data-action="tab"][data-tab="works"]').click();
+
+  const step = async (day: number) => {
+    await page.getByRole("button", { name: text("ui.clock.step") }).click();
+    const choice = page.locator(".event-options button").first();
+    if (await choice.count()) await choice.click();
+    await expect(
+      page.getByRole("heading", {
+        name: day + text("ui.clock.day-unit"),
+        level: 1,
+      }),
+    ).toBeVisible();
+  };
+  await step(1);
+  await first
+    .getByRole("button", { name: text("ui.work.details-open") })
+    .click();
+  await first
+    .getByRole("button", { name: text("ui.cmd.extra-writing") })
+    .click();
+  await first
+    .getByRole("button", { name: text("ui.cmd.rush"), exact: true })
+    .click();
+  await expect(
+    first.getByRole("button", { name: text("ui.cmd.extra-cancel") }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: text("ui.tab.save"), exact: true })
+    .click();
+  const slot = page
+    .locator(".slot")
+    .filter({ hasText: text("ui.save.slot", { slot: 1 }) });
+  await slot
+    .getByRole("button", { name: text("ui.save.write"), exact: true })
+    .click();
+  await expect(page.getByRole("status")).toContainText(
+    text("system.save.saved", { slot: 1 }),
+  );
+  await step(2);
+  await page.locator('button[data-action="tab"][data-tab="works"]').click();
+  await expect(first.getByText(text("ui.cmd.order-results"))).toBeVisible();
+  await expect(first.locator(".work-commands")).toContainText("추가 집필");
+  await expect(first.locator(".work-commands")).toContainText("추가 등록");
+  await first.locator('[data-field="hiatus-kind"]').selectOption("STOCK");
+  await first.locator('[data-field="hiatus-days"]').fill("2");
+  await first
+    .getByRole("button", { name: text("ui.cmd.hiatus"), exact: true })
+    .click();
+  await expect(first.locator(".work-status")).toContainText(
+    text("label.work-status.hiatus"),
+  );
+  await step(3);
+  await first
+    .getByRole("button", { name: text("ui.cmd.resume"), exact: true })
+    .click();
+  await second
+    .getByRole("button", { name: text("ui.work.details-open") })
+    .click();
+  await second
+    .getByRole("button", { name: text("ui.cmd.drop"), exact: true })
+    .click();
+  await second
+    .getByRole("button", { name: text("ui.cmd.drop-yes"), exact: true })
+    .click();
+  await expect(second.locator(".work-status")).toHaveText(
+    text("label.work-status.dropped"),
+  );
+
+  await page
+    .getByRole("button", { name: text("ui.tab.save"), exact: true })
+    .click();
+  await slot
+    .getByRole("button", { name: text("ui.save.load"), exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: 1 + text("ui.clock.day-unit"),
+      level: 1,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: text("ui.tab.life"), exact: true })
+    .click();
+  await expect(page.locator("#life-rest")).toHaveValue("8");
+  await expect(medical.getByRole("button")).toBeDisabled();
+  await page
+    .getByRole("button", { name: text("ui.tab.money"), exact: true })
+    .click();
+  await page.getByText(text("ui.money.month-heading")).click();
+  await expect(page.getByText(/80,000원/).first()).toBeVisible();
+  await page.screenshot({
+    path: info.outputPath("economy.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page
+      .locator("html")
+      .evaluate((root) => root.scrollWidth <= root.clientWidth),
+  ).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test("[FR-SAVE-001] imports a deployed 0.3.0 save and keeps its queued work", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: text("ui.tab.save"), exact: true })
+    .click();
+  await page
+    .locator("#import-file")
+    .setInputFiles(
+      fileURLToPath(new URL("../fixtures/save-v0.3.0.json", import.meta.url)),
+    );
+  await expect(page.getByRole("status")).toContainText(
+    text("system.save.imported"),
+  );
+  await expect(
+    page.getByRole("heading", {
+      name: 5 + text("ui.clock.day-unit"),
+      level: 1,
+    }),
+  ).toBeVisible();
+  await page.locator('button[data-action="tab"][data-tab="works"]').click();
+  const first = page.locator('[data-work="W-1"]');
+  await expect(first.locator(".work-status")).toContainText(
+    text("ui.work.rush-badge", { days: 2 }),
+  );
+  await first
+    .getByRole("button", { name: text("ui.work.details-open") })
+    .click();
+  await expect(
+    first.getByRole("button", { name: text("ui.cmd.rush-cancel") }),
   ).toBeVisible();
 });

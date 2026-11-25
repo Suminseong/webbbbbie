@@ -27,6 +27,21 @@ for (let seed = 1; seed <= N; seed++) {
 }
 const q = (a: number[], p: number) =>
   a.sort((x, y) => x - y)[Math.floor(a.length * p)];
+const cnt = (values: number[]) => {
+  const bounds = [500, 1000, 5000, 20000, 100000, Infinity];
+  return bounds.map((upper, index) => {
+    const lower = index === 0 ? 0 : bounds[index - 1];
+    const count = values.filter(
+      (value) => value >= lower && value < upper,
+    ).length;
+    return {
+      count,
+      percent: values.length
+        ? Number(((count / values.length) * 100).toFixed(1))
+        : 0,
+    };
+  });
+};
 const all = rows.map((r) => r.views),
   h = rows.filter((r) => r.ch >= 100).map((r) => r.views);
 console.log(

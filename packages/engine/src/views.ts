@@ -1,12 +1,20 @@
 import {
   displayName,
-  displayWorkTitle,
+  oneTimeExpenses,
   matchingText,
+  sourceText,
+  tagUnlocks,
   text,
 } from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
-import { serial, sum } from "./author";
-import { cadences, maskCadence, maxFreeUnits, planOptions } from "./commands";
+import { serial, sum, workTitle } from "./author";
+import {
+  cadences,
+  maskCadence,
+  maxFreeUnits,
+  planOptions,
+  unlockedTagChapters,
+} from "./commands";
 import { spendingLevels } from "./work";
 import type { LifeState, Work } from "./model";
 
@@ -126,10 +134,18 @@ export function authorView(state: LifeState, content: Content) {
     spendDue: Math.floor(author.spendAccrued),
     deviations: author.deviations.map((id) => text(id)),
     plan: author.lastPlan
-      ? { ...author.lastPlan, plot: { ...author.lastPlan.plot } }
+      ? {
+          ...author.lastPlan,
+          plot: { ...author.lastPlan.plot },
+          writing: { ...author.lastPlan.writing },
+        }
       : null,
     routine: author.lastRoutine
-      ? { ...author.lastRoutine, writing: { ...author.lastRoutine.writing } }
+      ? {
+          ...author.lastRoutine,
+          writing: { ...author.lastRoutine.writing },
+          plot: { ...author.lastRoutine.plot },
+        }
       : null,
   };
 }
@@ -151,7 +167,7 @@ export function workView(work: Work, content: Content) {
   const byAge = distribute(work.stats.newByAge);
   return {
     id: work.id,
-    title: displayWorkTitle(work.title),
+    title: workTitle(work),
     genre: displayName("entity.genre", work.genre),
     material: displayName("entity.material", work.material),
     tags: work.tags.map((tag) => displayName("entity.tag", tag)),
@@ -196,15 +212,19 @@ export function workView(work: Work, content: Content) {
     stockTarget: work.stockTarget,
     priority: work.priority,
     rush: work.rush,
+    extraWriting: work.extraWriting,
     hiatusKind: work.hiatusKind,
     hiatusUntil: work.hiatusUntil,
     perWeek: maskCadence(work.mask),
     manual: work.manual,
     canRevise: work.status === "PLANNING",
     canRush: serial(work),
+    canExtraWrite:
+      serial(work) || (work.status === "HIATUS" && work.hiatusKind === "STOCK"),
     canHiatus: serial(work),
     canResume: work.status === "HIATUS",
-    canDrop: serial(work) || work.status === "HIATUS",
+    canDrop:
+      serial(work) || work.status === "HIATUS" || work.status === "PLANNING",
     firstViews: Math.floor(work.stats.totalNew),
     activeReaders: Math.floor(
       sum(work.readers.map((pool) => sum(pool))) + sum(work.caughtUp),
@@ -252,7 +272,7 @@ export function pendingView(state: LifeState, content: Content) {
     day: pending.day,
     title: matchingText("event." + def.id + ".title", def.title),
     text: matchingText("event." + def.id + ".body", def.text),
-    target: work ? displayWorkTitle(work.title) : null,
+    target: work ? workTitle(work) : null,
     choices: (def.choices ?? [])
       .filter((choice) => pending.choiceIds.includes(choice.id))
       .map((choice) => ({
@@ -309,13 +329,11 @@ export function aptitudeView(state: LifeState, content: Content) {
 }
 
 export function contractViews(state: LifeState, content: Content) {
+  const titles = new Map(state.works.map((work) => [work.id, workTitle(work)]));
   return state.contracts.map((entry) => ({
     id: entry.id,
     workId: entry.workId,
-    title: displayWorkTitle(
-      state.works.find((work) => work.id === entry.workId)?.title ??
-        entry.workId,
-    ),
+    title: titles.get(entry.workId) ?? entry.workId,
     company: displayName(
       "entity.company",
       content.world.companies.find((company) => company.id === entry.companyId)
@@ -330,7 +348,32 @@ export function contractViews(state: LifeState, content: Content) {
   }));
 }
 
-export function ledgerView(state: LifeState) {
+export function ledgerView(state: LifeState, content: Content) {
+  const monthLength = content.balance.economy.settlementDays;
+  const currentMonth = Math.max(1, Math.ceil(state.day / monthLength));
+  const horizon = state.day - content.balance.economy.ledgerKeepDays;
+  const months = Array.from(
+    { length: Math.min(6, currentMonth) },
+    (_, index) => currentMonth - index,
+  ).filter((month) => (month - 1) * monthLength + 1 >= horizon);
+  const totals = months.map((month) => {
+    const entries = state.ledger.filter(
+      (entry) => Math.max(1, Math.ceil(entry.day / monthLength)) === month,
+    );
+    const income = sum(
+      entries.filter((entry) => entry.amount > 0).map((entry) => entry.amount),
+    );
+    const expense = -sum(
+      entries.filter((entry) => entry.amount < 0).map((entry) => entry.amount),
+    );
+    return {
+      month,
+      current: month === currentMonth,
+      income,
+      expense,
+      net: income - expense,
+    };
+  });
   return {
     cash: state.author.cash,
     debt: Math.max(0, -state.author.cash),
@@ -339,11 +382,13 @@ export function ledgerView(state: LifeState) {
     /** Totals of entries older than the retention window, by kind. */
     carried: { ...state.ledgerCarry },
     entries: state.ledger.map((entry) => ({ ...entry })),
+    months: totals,
   };
 }
 
-export function planOptionsView(content: Content) {
+export function planOptionsView(content: Content, state?: LifeState) {
   const options = planOptions(content);
+  const chapters = state ? unlockedTagChapters(state) : 0;
   return {
     genres: options.genres.map((value) => ({
       value,
@@ -353,17 +398,34 @@ export function planOptionsView(content: Content) {
       value,
       label: displayName("entity.material", value),
     })),
-    tags: options.tags.map((value) => ({
-      value,
-      label: displayName("entity.tag", value),
-    })),
+    tags: options.tags.map((value) => {
+      const unlock = tagUnlocks.find(
+        (item) => sourceText(item.textId) === value,
+      );
+      const required = unlock?.publishedChapters ?? 0;
+      return {
+        value,
+        label: displayName("entity.tag", value),
+        unlocked: chapters >= required,
+        required,
+      };
+    }),
     platforms: content.platforms.map((platform) => ({
       id: platform.id,
       label: matchingText(
         "entity.platform." + platform.id + ".name",
         platform.name,
       ),
-      tags: platform.tags.map((tag) => displayName("entity.tag", tag)),
+      tags: [
+        ...platform.tags,
+        ...tagUnlocks
+          .filter(
+            (tag) =>
+              tag.platforms.includes(platform.id) &&
+              chapters >= tag.publishedChapters,
+          )
+          .map((tag) => sourceText(tag.textId)),
+      ].map((tag) => displayName("entity.tag", tag)),
     })),
     cadences: cadences.map((item) => item.perWeek),
     maxTitle: content.balance.plan.maxTitle,
@@ -405,5 +467,20 @@ export function lifeSettingsView(state: LifeState, content: Content) {
       (total, item) => total + item.costs[item.effective],
       0,
     ),
+    purchases: oneTimeExpenses.map((item) => {
+      const previous = state.author.purchases[item.id];
+      const availableDay =
+        previous === undefined ? state.day : previous + item.cooldownDays;
+      return {
+        id: item.id,
+        name: text("entity.purchase." + item.id + ".name"),
+        description: text("entity.purchase." + item.id + ".description"),
+        cost: item.cost,
+        cooldownDays: item.cooldownDays,
+        availableDay,
+        affordable: state.author.cash >= item.cost,
+        available: state.day >= availableDay && state.author.cash >= item.cost,
+      };
+    }),
   };
 }

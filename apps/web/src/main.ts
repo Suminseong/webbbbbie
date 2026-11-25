@@ -10,6 +10,7 @@ import {
   createLife,
   deserialize,
   dropWork,
+  extraWrite,
   getAptitudeView,
   getAuthorView,
   getContractViews,
@@ -24,6 +25,7 @@ import {
   hiatusWork,
   ledgerNames,
   planWork,
+  purchase,
   resumeWork,
   retire,
   reviseWork,
@@ -319,12 +321,25 @@ const cadenceOptions = (selected: number) =>
 
 function workCommands(work: ReturnType<typeof getWorkViews>[number]) {
   const id = escape(work.id);
+  if (getPending(state))
+    return `<p class="notice">${ui("system.command.choice-pending")}</p>`;
   if (confirmDrop === work.id)
     return `<div class="work-commands"><p>${ui("ui.cmd.drop-confirm", { title: work.title })}</p>
       <button class="danger" data-action="drop-yes" data-work-id="${id}">${ui("ui.cmd.drop-yes")}</button>
       <button data-action="drop-no">${ui("ui.cmd.drop-no")}</button></div>`;
   return `<div class="work-commands" data-commands="${id}">
     <h4>${ui("ui.cmd.heading")}</h4>
+    <p class="small-muted">${ui("ui.cmd.extra-cost")}</p>
+    ${(() => {
+      const outcomes = getEventLog(state)
+        .filter(
+          (event) => event.type === "WORK_ORDER" && event.workId === work.id,
+        )
+        .slice(-3);
+      return outcomes.length
+        ? `<div class="small-muted"><strong>${ui("ui.cmd.order-results")}</strong><ul>${outcomes.map((event) => `<li>${escape(event.message)}</li>`).join("")}</ul></div>`
+        : "";
+    })()}
     <div class="cmd-row">
       ${
         work.canRush
@@ -333,6 +348,14 @@ function workCommands(work: ReturnType<typeof getWorkViews>[number]) {
       ${work.rush ? `<button data-action="rush-cancel" data-work-id="${id}">${ui("ui.cmd.rush-cancel")}</button>` : ""}`
           : ""
       }
+    </div>
+    <div class="cmd-row">${
+      work.extraWriting
+        ? `<button data-action="extra-write-cancel" data-work-id="${id}">${ui("ui.cmd.extra-cancel")}</button>`
+        : work.canExtraWrite
+          ? `<button data-action="extra-write" data-work-id="${id}">${ui("ui.cmd.extra-writing")}</button>`
+          : ""
+    }
     </div>
     <div class="cmd-row">
       ${
@@ -371,7 +394,7 @@ function blankDraft(editing: string | null = null): PlanDraft {
 
 function renderPlanForm() {
   if (!planDraft) return "";
-  const options = getPlanOptions();
+  const options = getPlanOptions(state);
   const draft = planDraft;
   const choices = (
     list: { value: string; label: string }[],
@@ -395,7 +418,7 @@ function renderPlanForm() {
     </div>
     <p class="small-muted" id="plan-platform-tags">${ui("ui.plan.platform-tags", { tags: options.platforms.find((item) => item.id === draft.platformId)!.tags.join(", ") })}</p>
     <fieldset class="tag-picker"><legend>${ui("ui.plan.tags", { max: options.maxTags })}</legend>
-      ${options.tags.map((tag, index) => `<label class="chip"><input type="checkbox" data-tag="${escape(tag.value)}" id="plan-tag-${index}" ${draft.tags.includes(tag.value) ? "checked" : ""}><span>#${escape(tag.label)}</span></label>`).join("")}
+      ${options.tags.map((tag, index) => `<label class="chip ${tag.unlocked || draft.tags.includes(tag.value) ? "" : "locked"}"><input type="checkbox" data-tag="${escape(tag.value)}" id="plan-tag-${index}" ${draft.tags.includes(tag.value) ? "checked" : ""} ${tag.unlocked || draft.tags.includes(tag.value) ? "" : "disabled"}><span>#${escape(tag.label)}${tag.unlocked || draft.tags.includes(tag.value) ? "" : " · " + ui("ui.plan.tag-locked", { chapters: tag.required })}</span></label>`).join("")}
     </fieldset>
     <p class="small-muted">${ui("ui.plan.title-note")}</p>
     <div class="cmd-row"><button class="primary" type="submit">${ui(draft.editing ? "ui.plan.save" : "ui.plan.create")}</button>
@@ -424,6 +447,7 @@ function renderLife() {
     .join("");
   const plan = author.plan;
   const actual = author.routine;
+  const locked = !!getPending(state) || author.phase === "ENDED";
   const row = (
     key: string,
     planned: number | undefined,
@@ -434,6 +458,8 @@ function renderLife() {
     value ? Object.values(value).reduce((a, b) => a + b, 0) : undefined;
   return `<div class="life">
     <form id="time-form" class="panel plan-form">
+      ${locked ? `<p class="notice">${ui(author.phase === "ENDED" ? "system.command.ended" : "system.command.choice-pending")}</p>` : ""}
+      <fieldset class="life-fields" ${locked ? "disabled" : ""}>
       <div class="section-label">${ui("ui.life.time-heading")}</div>
       <p class="small-muted">${ui("ui.life.time-intro", { job: info.jobUnits, living: info.living, free: info.free })}</p>
       <div class="field-grid">${(["sleep", "plot", "community", "ego", "rest"] as const).map(field).join("")}
@@ -441,14 +467,31 @@ function renderLife() {
       <p class="small-muted">${ui(remain < 0 ? "ui.life.time-over" : "ui.life.time-hint", { over: -remain, min: info.minSleep })}</p>
       <div class="cmd-row"><button class="primary" type="submit">${ui("ui.life.apply")}</button>
       <label class="check"><input type="checkbox" id="auto-plan" ${info.autoPlan ? "checked" : ""}> ${ui("ui.life.auto-plan")}</label></div>
+      </fieldset>
     </form>
     <form id="spend-form" class="panel plan-form">
+      <fieldset class="life-fields" ${locked ? "disabled" : ""}>
       <div class="section-label">${ui("ui.life.spend-heading")}</div>
       <p class="small-muted">${ui("ui.life.spend-intro", { monthly: won(info.monthly) })}</p>
       ${info.spendCut ? `<p class="notice">${ui("ui.life.spend-cut")}</p>` : ""}
       ${spendRows}
       <div class="cmd-row"><button class="primary" type="submit">${ui("ui.life.apply")}</button></div>
+      </fieldset>
     </form>
+    <section class="panel plan-form">
+      <div class="section-label">${ui("ui.life.purchase-heading")}</div>
+      ${info.purchases
+        .map(
+          (item) => `<div class="purchase-row">
+        <div><strong>${escape(item.name)}</strong><p class="small-muted">${escape(item.description)}</p></div>
+        <div class="small-muted">${ui("ui.life.purchase-meta", { cost: won(item.cost), days: item.cooldownDays })}
+          ${state.day < item.availableDay ? `<p>${ui("ui.life.purchase-cooldown", { day: item.availableDay })}</p>` : !item.affordable ? `<p>${ui("ui.life.purchase-insufficient")}</p>` : ""}
+        </div>
+        <button type="button" data-action="purchase" data-purchase-id="${escape(item.id)}" ${locked || !item.available ? "disabled" : ""}>${ui("ui.life.purchase-button")}</button>
+      </div>`,
+        )
+        .join("")}
+    </section>
     <section class="panel listing">
       <div class="list-row"><strong>${ui("ui.life.actual-heading")}</strong><strong>${ui("ui.life.actual-planned")}</strong><strong>${ui("ui.life.actual-used")}</strong></div>
       ${
@@ -459,12 +502,33 @@ function renderLife() {
               row("ego", plan.ego, actual.ego),
               row("plot", sumRecord(plan.plot), sumRecord(actual.plot)),
               row("rest", plan.rest, actual.rest),
-              row("writing", info.writing, sumRecord(actual.writing)),
+              row(
+                "writing",
+                sumRecord(plan.writing),
+                sumRecord(actual.writing),
+              ),
               row("work", plan.work, actual.work),
+              row("living", plan.living, actual.living),
             ].join("")
           : `<p class="small-muted">${ui("ui.life.actual-empty")}</p>`
       }
       ${author.deviations.length ? `<h4>${ui("ui.life.deviation-heading")}</h4><ul class="deviations">${author.deviations.map((reason) => `<li>${escape(reason)}</li>`).join("")}</ul>` : ""}
+      ${
+        actual
+          ? `<h4>${ui("ui.life.work-allocation-heading")}</h4>${getWorkViews(
+              state,
+            )
+              .filter(
+                (work) =>
+                  (actual.writing[work.id] ?? 0) || (actual.plot[work.id] ?? 0),
+              )
+              .map(
+                (work) =>
+                  `<div class="list-row"><strong>${escape(work.title)}</strong><span>${ui("ui.life.work-allocation", { writing: actual.writing[work.id] ?? 0, plot: actual.plot[work.id] ?? 0 })}</span></div>`,
+              )
+              .join("")}`
+          : ""
+      }
     </section>
   </div>`;
 }
@@ -501,7 +565,7 @@ function tabContent() {
     const options = getPlanOptions();
     const open = works.filter((work) => !work.end).length;
     const canPlan =
-      getAuthorView(state).phase !== "ENDED" &&
+      getAuthorView(state).phase === "READY" &&
       open < options.maxActiveWorks &&
       getAuthorView(state).path !== null;
     return `${
@@ -521,6 +585,8 @@ function tabContent() {
           "EVENT_SELECTED",
           "CHOICE_RESOLVED",
           "WORK_STATUS_CHANGED",
+          "WORK_ORDER",
+          "COMMAND",
           "PAYOUT",
           "STATE_CHANGED",
         ].includes(event.type),
@@ -563,24 +629,47 @@ function tabContent() {
             (contract) => `
       <div class="list-row"><span class="small-muted">${ui(contract.status === "ACTIVE" ? "ui.contract.active" : contract.status === "EXPIRED" ? "ui.contract.expired" : "ui.contract.terminated")}</span>
       <strong>${escape(contract.company)} · ${escape(contract.title)}</strong>
-      <span>${ui("ui.contract.terms", { share: count(contract.share * 100), advance: won(contract.advance), day: contract.expiresDay })}</span></div>`,
+      <span>${ui("ui.contract.terms", { share: count(contract.share * 100), advance: won(contract.advance), day: contract.expiresDay })}<br>
+      ${ui("ui.contract.dates", { start: contract.signedDay, end: contract.expiresDay })}<br>
+      ${ui("ui.contract.promise", { promise: contract.promise })}</span></div>`,
           )
           .join("")}</div>`
       : empty(ui("ui.contract.empty"));
   }
   if (tab === "money") {
     const ledger = getLedgerView(state);
+    const purchaseNames = new Map(
+      getLifeSettings(state).purchases.map((item) => [item.id, item.name]),
+    );
     return `<section class="panel listing">
       <div class="money-head"><div><span class="section-label">${ui(ledger.debt ? "ui.money.debt" : "ui.money.cash")}</span><h2>${escape(won(ledger.cash))}</h2></div>
       <div><span class="small-muted">${ui("ui.money.income")}</span><strong>${escape(won(ledger.accrued))}</strong></div>
       <div><span class="small-muted">${ui("ui.money.paid")}</span><strong>${escape(won(ledger.paid))}</strong></div></div>
+      <details><summary>${ui("ui.money.month-heading")}</summary>
+        ${ledger.months.map((month) => `<div class="list-row"><strong>${ui("ui.money.month-value", { month: month.month })}${month.current ? " · " + ui("ui.money.month-current") : ""}</strong><span>${ui("ui.money.month-amounts", { income: won(month.income), expense: won(month.expense), net: won(month.net) })}</span></div>`).join("")}
+      </details>
+      ${
+        Object.keys(ledger.carried).length
+          ? `<details><summary>${ui("ui.money.carry-heading")}</summary>${Object.entries(
+              ledger.carried,
+            )
+              .map(
+                ([kind, amount]) =>
+                  `<div class="list-row"><strong>${escape(ledgerNames[kind as keyof typeof ledgerNames])}</strong><span>${escape(won(amount))}</span></div>`,
+              )
+              .join("")}</details>`
+          : ""
+      }
       ${ledger.entries
         .slice(-20)
         .reverse()
-        .map(
-          (entry) =>
-            `<div class="list-row"><span class="small-muted">${ui("ui.format.day", { day: entry.day })}</span><strong>${escape(ledgerNames[entry.kind])}</strong><span class="numeric">${entry.amount > 0 ? "+" : ""}${escape(won(entry.amount))}</span></div>`,
-        )
+        .map((entry) => {
+          const purchaseId = entry.ref.startsWith("purchase:")
+            ? entry.ref.slice("purchase:".length)
+            : "";
+          const name = purchaseNames.get(purchaseId) ?? ledgerNames[entry.kind];
+          return `<div class="list-row ledger-entry"><span class="small-muted">${ui("ui.format.day", { day: entry.day })}</span><strong>${escape(name)}</strong><span class="numeric">${entry.amount > 0 ? "+" : ""}${escape(won(entry.amount))}</span></div>`;
+        })
         .join("")}
     </section>`;
   }
@@ -771,6 +860,10 @@ function workAction(action: string, button: HTMLButtonElement) {
       return commit(rushWork(state, id, Number(field(root, "rush")?.value)));
     case "rush-cancel":
       return commit(rushWork(state, id, 0));
+    case "extra-write":
+      return commit(extraWrite(state, id, true));
+    case "extra-write-cancel":
+      return commit(extraWrite(state, id, false));
     case "hiatus":
       return commit(
         hiatusWork(
@@ -818,7 +911,7 @@ app.addEventListener("input", (event) => {
     if (key === "perWeek") planDraft.perWeek = Number(target.value);
     else if (key !== "tags" && key !== "editing") planDraft[key] = target.value;
     if (key === "platformId") {
-      const info = getPlanOptions().platforms.find(
+      const info = getPlanOptions(state).platforms.find(
         (item) => item.id === target.value,
       );
       const note = document.querySelector("#plan-platform-tags");
@@ -852,6 +945,14 @@ app.addEventListener("focusin", (event) => {
     target instanceof HTMLInputElement || target instanceof HTMLSelectElement
   ))
     return;
+  if (timer !== undefined && game.contains(target)) {
+    stop();
+    resumeAfterChoice = false;
+    const phase = game.querySelector('[data-testid="phase"]');
+    const play = game.querySelector<HTMLButtonElement>('[data-action="play"]');
+    if (phase) phase.textContent = text("ui.clock.paused");
+    if (play) play.textContent = text("ui.clock.play");
+  }
   if (target.dataset.life || target.dataset.spend) {
     const info = getLifeSettings(state);
     lifeDraft ??= {
@@ -954,6 +1055,7 @@ app.addEventListener("click", (event) => {
       render();
       break;
     case "plan-open":
+      stop();
       planDraft = blankDraft();
       render();
       break;
@@ -961,18 +1063,30 @@ app.addEventListener("click", (event) => {
       planDraft = null;
       render();
       break;
+    case "purchase": {
+      stop();
+      const item = getLifeSettings(state).purchases.find(
+        (entry) => entry.id === button.dataset.purchaseId,
+      );
+      if (item && commit(purchase(state, item.id)))
+        feedbackText(text("ui.life.purchase-done", { item: item.name }));
+      break;
+    }
     case "drop-no":
       confirmDrop = null;
       render();
       break;
     case "rush":
     case "rush-cancel":
+    case "extra-write":
+    case "extra-write-cancel":
     case "hiatus":
     case "resume":
     case "drop":
     case "drop-yes":
     case "revise":
     case "policy":
+      stop();
       workAction(action, button);
       break;
     case "retire":

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "medical",
+    "cost": 80000,
+    "cooldownDays": 14,
+    "effects": { "health": 8, "fatigue": -6 }
+  },
+  {
+    "id": "leisure",
+    "cost": 30000,
+    "cooldownDays": 7,
+    "effects": { "stress": -8, "drive": 5 }
+  },
+  {
+    "id": "coaching",
+    "cost": 80000,
+    "cooldownDays": 21,
+    "effects": { "drive": 11, "stress": 2 }
+  }
+]

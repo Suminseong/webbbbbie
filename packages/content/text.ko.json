@@ -1067,5 +1067,21 @@
   "event.promo-chase.result": "{{event_title}} · 결과 반영",
   "event.red-pen-weekend.result": "{{event_title}} · 결과 반영",
   "event.warm-call.result": "{{event_title}} · 결과 반영",
-  "event.schedule-squeeze.result": "{{event_title}} · 결과 반영"
+  "event.schedule-squeeze.result": "{{event_title}} · 결과 반영",
+  "ui.work.funnel-first-partial": "기록 시작 후 첫 화 열람",
+  "ui.work.chart-heading": "회차별 누적 열람",
+  "ui.work.chart-scale": "최대 열람 {{count}}",
+  "ui.work.chart-scroll": "회차별 열람 그래프 가로 스크롤",
+  "ui.work.chart-note": "막대는 각 회차의 누적 열람 기대값입니다. 가로로 스크롤해 전체 회차를 확인할 수 있습니다.",
+  "ui.work.funnel-over-100": "누적 열람을 비교하므로 연독률이 100%를 넘을 수 있습니다.",
+  "ui.contract.period-value": "{{start}}일차 ~ {{end}}일차",
+  "ui.contract.editor-value-unknown": "기록 없음",
+  "ui.contract.record-heading": "지금까지 겪은 일",
+  "ui.contract.record-settlements": "정산",
+  "ui.contract.record-delays": "정산 지연",
+  "ui.contract.record-promo": "프로모션",
+  "ui.contract.record-feedback": "피드백",
+  "ui.contract.record-pressure": "독촉",
+  "ui.contract.record-changes": "담당자 교체",
+  "ui.format.times": "{{count}}회"
 }

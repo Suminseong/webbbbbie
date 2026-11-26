@@ -2638,5 +2638,101 @@
     "group_id": "ui.work",
     "context": "직전 화 열람 기록이 없어 연독률을 계산할 수 없는 경우.",
     "constraints": "추정치처럼 보이지 않게."
+  },
+  "ui.work.funnel-first-partial": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "이전 저장에서 회차별 기록이 중간부터 시작한 작품의 1화 열람 숫자 옆 항목명. 기록 시작 이후 값만 표시하며 과거 전체 조회수는 알 수 없다.",
+    "constraints": "부분 기록임을 분명히 한다."
+  },
+  "ui.work.chart-heading": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세의 회차별 누적 열람 막대그래프 제목.",
+    "constraints": "짧은 제목."
+  },
+  "ui.work.chart-scale": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "현재 기록에 있는 회차 중 가장 높은 누적 열람 기대값. 막대 높이는 이 값을 기준으로 한다.",
+    "constraints": "변수 {{count}}를 유지한다."
+  },
+  "ui.work.chart-scroll": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "스크린리더와 키보드 사용자를 위한 회차별 막대그래프의 가로 스크롤 영역 이름.",
+    "constraints": "영역의 내용과 가로 스크롤 가능성을 유지한다."
+  },
+  "ui.work.chart-note": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "작품 상세의 그래프 아래. 회차별 집계 기대값을 보여 주고 많은 회차는 가로로 스크롤할 수 있다고 안내한다.",
+    "constraints": "숫자가 개인 독자 객체의 실측치가 아니라 집계 기대값임을 유지한다."
+  },
+  "ui.work.funnel-over-100": {
+    "category": "UI",
+    "group_id": "ui.work",
+    "context": "회차별 누적 열람을 직전 화 누적 열람으로 나눈 연독률 옆 안내. 서로 다른 시점에 독자가 합류하면 100%를 넘을 수 있다.",
+    "constraints": "100% 초과가 가능하다는 사실을 유지한다."
+  },
+  "ui.contract.period-value": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "계약 카드의 기간 항목에 표시되는 계약 시작일과 종료일.",
+    "constraints": "{{start}}와 {{end}}를 유지한다."
+  },
+  "ui.contract.editor-value-unknown": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "이전 저장에서 담당 편집자 정보가 기록되지 않은 계약의 항목 값.",
+    "constraints": "배정 여부가 아니라 기록이 없음을 표시한다."
+  },
+  "ui.contract.record-heading": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "계약자가 실제로 겪은 정산, 프로모션, 피드백과 담당자 관련 기록 묶음의 제목.",
+    "constraints": "숨겨진 성향을 아는 것처럼 표현하지 않는다."
+  },
+  "ui.contract.record-settlements": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "해당 계약에서 실제 처리된 정산 횟수의 항목명.",
+    "constraints": "짧은 항목명."
+  },
+  "ui.contract.record-delays": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "해당 계약에서 실제로 겪은 입금 지연 횟수의 항목명.",
+    "constraints": "짧은 항목명."
+  },
+  "ui.contract.record-promo": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "해당 계약의 프로모션 약속 이행 여부 항목명. 확인 전이면 확인 전이라고 표시한다.",
+    "constraints": "짧은 항목명."
+  },
+  "ui.contract.record-feedback": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "해당 계약에서 실제로 받은 편집 피드백 횟수의 항목명.",
+    "constraints": "짧은 항목명."
+  },
+  "ui.contract.record-pressure": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "해당 계약에서 실제로 받은 일정 또는 원고 독촉 횟수의 항목명.",
+    "constraints": "짧은 항목명."
+  },
+  "ui.contract.record-changes": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "해당 계약 중 실제 발생한 담당자 교체 횟수의 항목명.",
+    "constraints": "짧은 항목명."
+  },
+  "ui.format.times": {
+    "category": "UI",
+    "group_id": "ui.contract",
+    "context": "계약 카드에서 정산, 지연, 피드백, 독촉, 교체의 발생 횟수를 표시한다.",
+    "constraints": "변수 {{count}}를 유지한다."
   }
 }

@@ -165,6 +165,31 @@ function matches(
     case "workAge":
       actual = work ? day - work.startDay : undefined;
       break;
+    // Time-allocation keys read the slots actually spent yesterday.
+    case "sleepSlots":
+      actual = author.lastRoutine?.sleep ?? 0;
+      break;
+    case "restSlots":
+      actual = author.lastRoutine?.rest ?? 0;
+      break;
+    case "plotSlots":
+      actual = sum(Object.values(author.lastRoutine?.plot ?? {}));
+      break;
+    case "writingSlots":
+      actual = author.lastRoutine?.work ?? 0;
+      break;
+    case "hiatusWorks":
+      actual = state.works.filter((item) => item.status === "HIATUS").length;
+      break;
+    case "prep":
+      actual = work?.prep;
+      break;
+    case "consistency":
+      actual = work?.consistency;
+      break;
+    case "attachment":
+      actual = work?.attachment;
+      break;
   }
   if (rule.op === "eq") return actual === rule.value;
   if (typeof actual !== "number" || typeof rule.value !== "number")

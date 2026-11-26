@@ -637,5 +637,369 @@
         "amount": 3
       }
     ]
+  },
+  {
+    "id": "newbie-comment",
+    "category": "reader",
+    "title": "event.newbie-comment.title",
+    "text": "event.newbie-comment.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "favorites",
+        "op": "lte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "spoiler-leak",
+    "category": "reader",
+    "title": "event.spoiler-leak.title",
+    "text": "event.spoiler-leak.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 25
+      },
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "choices": [
+      {
+        "id": "delete",
+        "label": "event.spoiler-leak.choice.delete",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "joke",
+        "label": "event.spoiler-leak.choice.joke",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          },
+          {
+            "kind": "readerShock",
+            "amount": 0.01
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ending-demand",
+    "category": "reader",
+    "title": "event.ending-demand.title",
+    "text": "event.ending-demand.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 50
+      },
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "choices": [
+      {
+        "id": "extend",
+        "label": "event.ending-demand.choice.extend",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "attachment",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "wrap",
+        "label": "event.ending-demand.choice.wrap",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reader-survey",
+    "category": "reader",
+    "title": "event.reader-survey.title",
+    "text": "event.reader-survey.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "evidence",
+        "amount": 1
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "late-night-comment",
+    "category": "reader",
+    "title": "event.late-night-comment.title",
+    "text": "event.late-night-comment.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 35,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 55
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "reader-recommend",
+    "category": "reader",
+    "title": "event.reader-recommend.title",
+    "text": "event.reader-recommend.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 65
+      },
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 3
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "hiatus-comment",
+    "category": "reader",
+    "title": "event.hiatus-comment.title",
+    "text": "event.hiatus-comment.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["HIATUS"],
+    "choices": [
+      {
+        "id": "notice",
+        "label": "event.hiatus-comment.choice.notice",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "silent",
+        "label": "event.hiatus-comment.choice.silent",
+        "effects": [
+          {
+            "kind": "readerShock",
+            "amount": 0.02
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plot-hole-exposed",
+    "category": "reader",
+    "title": "event.plot-hole-exposed.title",
+    "text": "event.plot-hole-exposed.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "choices": [
+      {
+        "id": "fix",
+        "label": "event.plot-hole-exposed.choice.fix",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "event.plot-hole-exposed.choice.ignore",
+        "effects": [
+          {
+            "kind": "readerShock",
+            "amount": 0.05
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -1
+          }
+        ]
+      }
+    ]
   }
 ]

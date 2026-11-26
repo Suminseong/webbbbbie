@@ -513,5 +513,151 @@
         "days": 5
       }
     ]
+  },
+  {
+    "id": "meal-skip",
+    "category": "money",
+    "title": "event.meal-skip.title",
+    "text": "event.meal-skip.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 15,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 60000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -3
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "royalty-windfall",
+    "category": "money",
+    "title": "event.royalty-windfall.title",
+    "text": "event.royalty-windfall.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.5,
+    "cooldown": 180,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 50000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 250000
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "subscription-trap",
+    "category": "money",
+    "title": "event.subscription-trap.title",
+    "text": "event.subscription-trap.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 30000
+      }
+    ],
+    "choices": [
+      {
+        "id": "cancel",
+        "label": "event.subscription-trap.choice.cancel",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.subscription-trap.choice.keep",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -12000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "equipment-breakdown",
+    "category": "money",
+    "title": "event.equipment-breakdown.title",
+    "text": "event.equipment-breakdown.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.5,
+    "cooldown": 180,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 200000
+      }
+    ],
+    "choices": [
+      {
+        "id": "repair",
+        "label": "event.equipment-breakdown.choice.repair",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -120000
+          }
+        ]
+      },
+      {
+        "id": "workaround",
+        "label": "event.equipment-breakdown.choice.workaround",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      }
+    ]
   }
 ]

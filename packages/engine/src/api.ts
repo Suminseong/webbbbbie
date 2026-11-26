@@ -147,6 +147,7 @@ function copyForCommand(state: LifeState): LifeState {
 
 const LEGACY_HASH_030 = "ea70dee1";
 const LEGACY_HASH_031 = "3916f2ee";
+const LEGACY_HASH_032 = "1d93c10d";
 
 export function createEngine(
   content: Content = defaultContent,
@@ -366,7 +367,13 @@ export function createEngine(
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.1" &&
       version.contentHash === LEGACY_HASH_031;
-    const previous = fromV030 || fromV031;
+    // 0.3.2 saves differ only by the 150-event content set; every id they can
+    // reference (events, follow-ups, specials) still exists, so they load as is.
+    const fromV032 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.2" &&
+      version.contentHash === LEGACY_HASH_032;
+    const previous = fromV030 || fromV031 || fromV032;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }

@@ -25,7 +25,7 @@
 - `scope` AUTHOR·WORK·CONTRACT·NONE. WORK는 조건과 `statuses`로 적격 작품을 거른 뒤 가중 추첨하고, 대상은 선정 시 고정됩니다(T-08). `targetBias`(views·newest·stock)로 대상 가중을 바꿀 수 있습니다. CONTRACT는 활성 계약 하나를 대상으로 하며, 작품 효과는 그 계약 작품에만 적용됩니다.
 - `weight`, `cooldown`(일), `minDay`, `once`.
 - `title`, `text`, `choices[].label`은 `text.ko.json`의 `event.<event_id>.title`, `.body`, `.choice.<choice_id>`를 참조합니다. 효과가 있는 사건에는 기존 결과 포맷 `{{event_title}} · 결과 반영`을 `.result`로 등록합니다. 임시 문구도 안정 ID를 사용하며 최종 한국어 라이팅은 Gemini가 담당합니다.
-- `conditions`(모두 충족)과 `any`(하나 이상). 수치 키는 `gte`·`lte`·`eq`, 문자열 키(job·path·targetFlag·special)는 `eq`만 씁니다. `special`은 `"내글구려병:true"` 형식입니다. 작품 조건(favorites·quality·stock·contracted·workAge)은 WORK·CONTRACT 범위에서만 씁니다.
+- `conditions`(모두 충족)과 `any`(하나 이상). 수치 키는 `gte`·`lte`·`eq`, 문자열 키(job·path·targetFlag·special)는 `eq`만 씁니다. `special`은 `"내글구려병:true"` 형식입니다. 작품 조건(favorites·quality·stock·contracted·workAge·prep·consistency·attachment)은 WORK·CONTRACT 범위에서만 씁니다. 시간 배분 조건 sleepSlots·restSlots·plotSlots·writingSlots는 전날 실제 슬롯, hiatusWorks는 휴재 작품 수입니다(0.3.3). 선호작·지급액은 0.3 시장에서 분포가 낮으니(활성 작품 선호작 중앙값 1 미만) 문턱을 `npm run profile`의 coverage로 확인하세요.
 - `effects` 또는 `choices[].effects`(둘 중 하나). 효과 종류: condition, social, ability, special, clearSpecial, transition, stock, quality, consistency, attachment, readerShock, promotion, evidence, cash, job, createWork, contract(제안 사건만), flag, schedule(후속 예약), origin(0일차만).
 - 특수 상태 키는 `packages/content/specials.json`에 정의돼 있어야 합니다. 정의의 `writing`(집필 배율), `stressDaily`, `driveDaily`, `egoBonus`, `communityBonus`가 매일 적용됩니다(FR-STATE-002).
 

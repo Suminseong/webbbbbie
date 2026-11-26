@@ -313,6 +313,14 @@ const condition = z
       "contractSkill",
       "contractInterference",
       "contractWarmth",
+      "sleepSlots",
+      "restSlots",
+      "plotSlots",
+      "writingSlots",
+      "hiatusWorks",
+      "prep",
+      "consistency",
+      "attachment",
     ]),
     op: z.enum(["eq", "gte", "lte"]),
     value: z.union([finite, label]),
@@ -703,9 +711,16 @@ const contentSchema = z
         )
           issue("Contract condition without contract scope in " + entry.id);
         if (
-          ["favorites", "quality", "stock", "contracted", "workAge"].includes(
-            rule.key,
-          ) &&
+          [
+            "favorites",
+            "quality",
+            "stock",
+            "contracted",
+            "workAge",
+            "prep",
+            "consistency",
+            "attachment",
+          ].includes(rule.key) &&
           entry.scope !== "WORK" &&
           entry.scope !== "CONTRACT"
         )

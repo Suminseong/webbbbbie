@@ -582,5 +582,238 @@
         "amount": -1
       }
     ]
+  },
+  {
+    "id": "sleep-debt",
+    "category": "life",
+    "title": "event.sleep-debt.title",
+    "text": "event.sleep-debt.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "sleepSlots",
+        "op": "lte",
+        "value": 10
+      },
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 60
+      }
+    ],
+    "choices": [
+      {
+        "id": "nap",
+        "label": "event.sleep-debt.choice.nap",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -4
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -2
+          }
+        ]
+      },
+      {
+        "id": "coffee",
+        "label": "event.sleep-debt.choice.coffee",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -4500
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "well-rested",
+    "category": "life",
+    "title": "event.well-rested.title",
+    "text": "event.well-rested.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "sleepSlots",
+        "op": "gte",
+        "value": 14
+      },
+      {
+        "key": "health",
+        "op": "gte",
+        "value": 65
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      }
+    ]
+  },
+  {
+    "id": "neighbor-noise",
+    "category": "life",
+    "title": "event.neighbor-noise.title",
+    "text": "event.neighbor-noise.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "earplugs",
+        "label": "event.neighbor-noise.choice.earplugs",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -8000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "complain",
+        "label": "event.neighbor-noise.choice.complain",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rest-guilt",
+    "category": "life",
+    "title": "event.rest-guilt.title",
+    "text": "event.rest-guilt.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2.5,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "restSlots",
+        "op": "gte",
+        "value": 4
+      },
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "old-friend-call",
+    "category": "life",
+    "title": "event.old-friend-call.title",
+    "text": "event.old-friend-call.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 75,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 40
+      }
+    ],
+    "choices": [
+      {
+        "id": "talk",
+        "label": "event.old-friend-call.choice.talk",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -7
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "brief",
+        "label": "event.old-friend-call.choice.brief",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          }
+        ]
+      }
+    ]
   }
 ]

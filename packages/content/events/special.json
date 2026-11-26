@@ -365,5 +365,310 @@
         "amount": -4
       }
     ]
+  },
+  {
+    "id": "burnout-warning",
+    "category": "special",
+    "title": "event.burnout-warning.title",
+    "text": "event.burnout-warning.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 45
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 50
+      },
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "번아웃:false"
+      }
+    ],
+    "choices": [
+      {
+        "id": "rest",
+        "label": "event.burnout-warning.choice.rest",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -3
+          }
+        ]
+      },
+      {
+        "id": "push",
+        "label": "event.burnout-warning.choice.push",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          },
+          {
+            "kind": "schedule",
+            "id": "burnout-collapse",
+            "delay": 3,
+            "window": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "burnout-collapse",
+    "category": "special",
+    "title": "event.burnout-collapse.title",
+    "text": "event.burnout-collapse.body",
+    "tier": "FOLLOW_UP",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -15
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -5
+      }
+    ]
+  },
+  {
+    "id": "burnout-clinic",
+    "category": "special",
+    "title": "event.burnout-clinic.title",
+    "text": "event.burnout-clinic.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 40,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "번아웃:true"
+      }
+    ],
+    "choices": [
+      {
+        "id": "clinic",
+        "label": "event.burnout-clinic.choice.clinic",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -40000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -8
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -6
+          }
+        ]
+      },
+      {
+        "id": "tough",
+        "label": "event.burnout-clinic.choice.tough",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "depression-checkin",
+    "category": "special",
+    "title": "event.depression-checkin.title",
+    "text": "event.depression-checkin.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 25,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "우울:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "life-issue-shift",
+    "category": "special",
+    "title": "event.life-issue-shift.title",
+    "text": "event.life-issue-shift.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "현생이슈:true"
+      }
+    ],
+    "choices": [
+      {
+        "id": "shift",
+        "label": "event.life-issue-shift.choice.shift",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 50000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "label": "event.life-issue-shift.choice.home",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gear-fever",
+    "category": "special",
+    "title": "event.gear-fever.title",
+    "text": "event.gear-fever.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 4,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "장비병:true"
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 100000
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "event.gear-fever.choice.buy",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -90000
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "hold",
+        "label": "event.gear-fever.choice.hold",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "awakened-binge",
+    "category": "special",
+    "title": "event.awakened-binge.title",
+    "text": "event.awakened-binge.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "targetBias": "newest",
+    "weight": 4,
+    "cooldown": 20,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "각성:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 4
+      }
+    ]
   }
 ]

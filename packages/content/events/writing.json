@@ -592,5 +592,345 @@
         "amount": -3
       }
     ]
+  },
+  {
+    "id": "plot-ready-burst",
+    "category": "writing",
+    "title": "event.plot-ready-burst.title",
+    "text": "event.plot-ready-burst.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "prep",
+        "op": "gte",
+        "value": 70
+      },
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 1.5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "consistency",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "plot-hole-found",
+    "category": "writing",
+    "title": "event.plot-hole-found.title",
+    "text": "event.plot-hole-found.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "prep",
+        "op": "lte",
+        "value": 30
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "patch",
+        "label": "event.plot-hole-found.choice.patch",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 5
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "bury",
+        "label": "event.plot-hole-found.choice.bury",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": -3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          },
+          {
+            "kind": "schedule",
+            "id": "plot-hole-exposed",
+            "delay": 8,
+            "window": 20
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stale-middle",
+    "category": "writing",
+    "title": "event.stale-middle.title",
+    "text": "event.stale-middle.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 120
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 50
+      },
+      {
+        "key": "attachment",
+        "op": "lte",
+        "value": 60
+      }
+    ],
+    "choices": [
+      {
+        "id": "shake",
+        "label": "event.stale-middle.choice.shake",
+        "effects": [
+          {
+            "kind": "attachment",
+            "amount": 6
+          },
+          {
+            "kind": "consistency",
+            "amount": -3
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "steady",
+        "label": "event.stale-middle.choice.steady",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "parallel-draft-mixup",
+    "category": "writing",
+    "title": "event.parallel-draft-mixup.title",
+    "text": "event.parallel-draft-mixup.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "targetBias": "newest",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": -6
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "parallel-crossover",
+    "category": "writing",
+    "title": "event.parallel-crossover.title",
+    "text": "event.parallel-crossover.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "multitask",
+        "op": "gte",
+        "value": 60
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "attachment",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "multitask-overload",
+    "category": "writing",
+    "title": "event.multitask-overload.title",
+    "text": "event.multitask-overload.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 3,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 3
+      },
+      {
+        "key": "multitask",
+        "op": "lte",
+        "value": 40
+      },
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 55
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": -1
+      },
+      {
+        "kind": "consistency",
+        "amount": -4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "stock-overflow",
+    "category": "writing",
+    "title": "event.stock-overflow.title",
+    "text": "event.stock-overflow.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "choices": [
+      {
+        "id": "release",
+        "label": "event.stock-overflow.choice.release",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -2
+          },
+          {
+            "kind": "attachment",
+            "amount": 3
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "hold",
+        "label": "event.stock-overflow.choice.hold",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -459,5 +459,168 @@
         "amount": -6
       }
     ]
+  },
+  {
+    "id": "forced-sleep-crash",
+    "category": "forced",
+    "title": "event.forced-sleep-crash.title",
+    "text": "event.forced-sleep-crash.body",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 8,
+    "cooldown": 30,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 45
+      },
+      {
+        "key": "sleepSlots",
+        "op": "lte",
+        "value": 9
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 6
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": -10
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "forced-manuscript-ghost",
+    "category": "forced",
+    "title": "event.forced-manuscript-ghost.title",
+    "text": "event.forced-manuscript-ghost.body",
+    "tier": "FORCED",
+    "scope": "CONTRACT",
+    "weight": 7,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 72
+      },
+      {
+        "key": "stock",
+        "op": "lte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "transition",
+        "to": "HIATUS",
+        "days": 10
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": -3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -4
+      }
+    ]
+  },
+  {
+    "id": "forced-new-wave",
+    "category": "forced",
+    "title": "event.forced-new-wave.title",
+    "text": "event.forced-new-wave.body",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 6,
+    "cooldown": 60,
+    "minDay": 20,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "신작병:true"
+      },
+      {
+        "key": "activeWorks",
+        "op": "lte",
+        "value": 2
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      },
+      {
+        "key": "drive",
+        "op": "gte",
+        "value": 55
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "forced-ghost-account",
+    "category": "forced",
+    "title": "event.forced-ghost-account.title",
+    "text": "event.forced-ghost-account.body",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 5,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 82
+      },
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -8
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": -2
+      }
+    ]
   }
 ]

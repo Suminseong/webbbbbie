@@ -409,3 +409,163 @@ test("[FR-SAVE-001] imports a deployed 0.3.0 save and keeps its queued work", as
     first.getByRole("button", { name: text("ui.cmd.rush-cancel") }),
   ).toBeVisible();
 });
+
+test("shows actual chapter aggregates and public contract details on desktop and mobile", async ({
+  page,
+}, info) => {
+  const { contract, work } = JSON.parse(
+    readFileSync(
+      new URL("../fixtures/analytics-expected.json", import.meta.url),
+      "utf8",
+    ),
+  ) as {
+    contract: {
+      company: string;
+      title: string;
+      promise: string;
+      settlementCycle: number;
+      editor: { name: string } | null;
+      observed: { promo: string };
+    };
+    work: { id: string; funnel: { rows: { reads: number }[] } };
+  };
+
+  const errors: Error[] = [];
+  page.on("pageerror", (error) => errors.push(error));
+  await page.goto("/");
+  await page
+    .locator("#import-file")
+    .setInputFiles(
+      fileURLToPath(
+        new URL("../fixtures/save-v0.3.2-analytics.json", import.meta.url),
+      ),
+    );
+  await page.locator('button[data-action="tab"][data-tab="works"]').click();
+  const panel = page.locator(`[data-work="${work.id}"]`);
+  await panel
+    .getByRole("button", { name: text("ui.work.details-open") })
+    .click();
+  const graph = panel.locator(".chapter-chart");
+  const bars = graph.locator(".chapter-bar");
+  await expect(bars).toHaveCount(work.funnel.rows.length);
+  const max = Math.max(...work.funnel.rows.map((row) => row.reads));
+  const firstHeight = await bars
+    .first()
+    .locator("i")
+    .evaluate((bar) => Number.parseFloat((bar as HTMLElement).style.height));
+  expect(firstHeight).toBeCloseTo((work.funnel.rows[0].reads / max) * 100, 5);
+  await expect(graph).toContainText(text("ui.work.chart-heading"));
+  await graph.screenshot({ path: info.outputPath("chapter-graph.png") });
+
+  await page
+    .getByRole("button", { name: text("ui.tab.contracts"), exact: true })
+    .click();
+  const card = page
+    .locator(".contract-card")
+    .filter({ hasText: contract.company })
+    .first();
+  await expect(card).toContainText(contract.title);
+  await expect(card).toContainText(contract.promise);
+  await expect(card).toContainText(
+    text("ui.offer.cycle-value", { days: contract.settlementCycle }),
+  );
+  if (contract.editor) await expect(card).toContainText(contract.editor.name);
+  await expect(card).toContainText(text("ui.contract.record-heading"));
+  await expect(card).toContainText(contract.observed.promo);
+  expect(await card.innerText()).not.toMatch(
+    /payPunctuality|promoPower|interference|warmth/,
+  );
+  await card.screenshot({ path: info.outputPath("contract-card.png") });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page
+      .locator("html")
+      .evaluate((root) => root.scrollWidth <= root.clientWidth),
+  ).toBe(true);
+  await page.locator('button[data-action="tab"][data-tab="works"]').click();
+  await expect(panel.locator(".chapter-chart")).toBeVisible();
+  expect(
+    await page
+      .locator("html")
+      .evaluate((root) => root.scrollWidth <= root.clientWidth),
+  ).toBe(true);
+  const scroller = graph.getByRole("region", {
+    name: text("ui.work.chart-scroll"),
+  });
+  expect(await scroller.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
+    true,
+  );
+  await page
+    .getByRole("button", { name: text("ui.clock.play"), exact: true })
+    .click();
+  await scroller.focus();
+  await expect(page.getByTestId("phase")).toHaveText(text("ui.clock.paused"));
+  await page.keyboard.press("ArrowRight");
+  await expect
+    .poll(() => scroller.evaluate((el) => el.scrollLeft))
+    .toBeGreaterThan(0);
+  await graph.screenshot({ path: info.outputPath("chapter-graph-mobile.png") });
+  await page.setViewportSize({ width: 320, height: 700 });
+  expect(
+    await page
+      .locator("html")
+      .evaluate((root) => root.scrollWidth <= root.clientWidth),
+  ).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test("labels partial chapter histories and displays small values and rates over 100%", async ({
+  page,
+}) => {
+  const { savedAtDay } = JSON.parse(
+    readFileSync(
+      new URL("../fixtures/save-v0.3.2-partial.json", import.meta.url),
+      "utf8",
+    ),
+  ) as { savedAtDay: number };
+  await page.goto("/");
+  await page
+    .locator("#import-file")
+    .setInputFiles(
+      fileURLToPath(
+        new URL("../fixtures/save-v0.3.2-partial.json", import.meta.url),
+      ),
+    );
+  await page.locator('button[data-action="tab"][data-tab="works"]').click();
+  const panel = page.locator('[data-work="W-1"]');
+  await panel
+    .getByRole("button", { name: text("ui.work.details-open") })
+    .click();
+  await expect(panel).toContainText(text("ui.work.funnel-first-partial"));
+  await expect(panel).toContainText(
+    text("ui.work.funnel-partial", { day: savedAtDay + 1 }),
+  );
+  await expect(panel.locator(".funnel-rows")).toContainText("0.01");
+  await expect(panel.locator(".funnel-rows")).toContainText("200%");
+  await expect(
+    panel.locator(".chapter-bar").first().locator("i"),
+  ).toHaveAttribute("style", "height:0%");
+});
+
+test("shows a missing editor as an unknown record", async ({ page }) => {
+  const save = JSON.parse(
+    readFileSync(
+      new URL("../fixtures/save-v0.3.2-analytics.json", import.meta.url),
+      "utf8",
+    ),
+  ) as { state: { contracts: { editorId: string | null }[] } };
+  save.state.contracts[0].editorId = null;
+  await page.goto("/");
+  await page.locator("#import-file").setInputFiles({
+    name: "no-editor.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(save)),
+  });
+  await page
+    .getByRole("button", { name: text("ui.tab.contracts"), exact: true })
+    .click();
+  await expect(page.locator(".contract-card").first()).toContainText(
+    text("ui.contract.editor-value-unknown"),
+  );
+});

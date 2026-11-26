@@ -325,35 +325,86 @@ function renderSpark(history: { day: number; views: number }[]) {
     .join("")}</div>`;
 }
 
-/** Reader counts are expected values; small ones keep one decimal. */
+/** The aggregate chapter log retains expected counts to two decimal places. */
 const fraction = (amount: number) =>
   new Intl.NumberFormat("ko-KR", {
-    maximumFractionDigits: amount < 10 ? 1 : 0,
+    maximumFractionDigits: 2,
   }).format(amount);
 
 function renderFunnel(
   funnel: ReturnType<typeof getWorkViews>[number]["funnel"],
 ) {
-  const rows = funnel.rows
-    .map((row) => {
-      const rate =
-        row.chapter === 1
-          ? ui("ui.work.funnel-rate-none")
-          : row.rate === null
-            ? ui("ui.work.funnel-rate-unknown")
-            : ui("ui.work.funnel-rate", {
-                percent: count(row.rate * 100),
-                reads: fraction(row.reads),
-                previous: fraction(row.previous ?? 0),
-              });
-      return `<li>${ui("ui.work.funnel-row", { chapter: row.chapter, reads: fraction(row.reads), drops: fraction(row.drops), rate })}</li>`;
+  const rowText = (row: (typeof funnel.rows)[number]) => {
+    const rate =
+      row.chapter === 1
+        ? text("ui.work.funnel-rate-none")
+        : row.rate === null
+          ? text("ui.work.funnel-rate-unknown")
+          : text("ui.work.funnel-rate", {
+              percent: fraction(row.rate * 100),
+              reads: fraction(row.reads),
+              previous: fraction(row.previous ?? 0),
+            });
+    return ui("ui.work.funnel-row", {
+      chapter: row.chapter,
+      reads: fraction(row.reads),
+      drops: fraction(row.drops),
+      rate,
+    });
+  };
+  const rows = funnel.rows.map((row) => `<li>${rowText(row)}</li>`).join("");
+  const maxReads = Math.max(0, ...funnel.rows.map((row) => row.reads));
+  const chart = funnel.rows
+    .map((row, index) => {
+      const label = rowText(row);
+      const showChapter =
+        index === 0 ||
+        index === funnel.rows.length - 1 ||
+        row.chapter % 5 === 0;
+      const height = maxReads ? (row.reads / maxReads) * 100 : 0;
+      return `<div class="chapter-bar" data-chapter="${row.chapter}" title="${label}"><div class="chapter-bar-track"><i style="height:${height}%"></i></div><span>${showChapter ? row.chapter : ""}</span></div>`;
     })
     .join("");
   return `<div class="funnel"><h4>${ui("ui.work.funnel-title")}</h4>
-    <p><strong>${ui("ui.work.funnel-first")}</strong> ${funnel.firstReads === null ? ui("ui.work.funnel-first-unknown") : fraction(funnel.firstReads)}</p>
+    <p><strong>${ui(funnel.partial ? "ui.work.funnel-first-partial" : "ui.work.funnel-first")}</strong> ${funnel.firstReads === null ? ui("ui.work.funnel-first-unknown") : fraction(funnel.firstReads)}</p>
     ${funnel.partial && funnel.since !== null ? `<p class="small-muted">${ui("ui.work.funnel-partial", { day: funnel.since })}</p>` : ""}
-    ${funnel.known ? `<p class="small-muted">${ui("ui.work.funnel-note")}</p><ol class="funnel-rows">${rows}</ol>` : `<p class="small-muted">${ui("ui.work.funnel-empty")}</p>`}
+    ${
+      funnel.known
+        ? `<figure class="chapter-chart"><figcaption><strong>${ui("ui.work.chart-heading")}</strong><span>${ui("ui.work.chart-scale", { count: fraction(maxReads) })}</span></figcaption>
+          <div class="chapter-chart-scroll" role="region" aria-label="${ui("ui.work.chart-scroll")}" tabindex="0"><div class="chapter-bars" aria-hidden="true" style="width:max(100%, ${funnel.rows.length * 24}px)">${chart}</div></div>
+          <p class="small-muted">${ui("ui.work.chart-note")}</p></figure>
+          <p class="small-muted">${ui("ui.work.funnel-note")}</p><p class="small-muted">${ui("ui.work.funnel-over-100")}</p><ol class="funnel-rows">${rows}</ol>`
+        : `<p class="small-muted">${ui("ui.work.funnel-empty")}</p>`
+    }
   </div>`;
+}
+
+function contractPanel(contract: ReturnType<typeof getContractViews>[number]) {
+  const observed = contract.observed;
+  const times = (value: number) =>
+    ui("ui.format.times", { count: count(value) });
+  const item = (label: string, value: string) =>
+    `<div><dt>${ui(label)}</dt><dd>${value}</dd></div>`;
+  return `<article class="contract-card panel">
+    <header class="contract-head"><div><span class="section-label">${ui("ui.offer.company")}</span><h3>${escape(contract.company)}</h3><p>${escape(contract.title)}</p></div>
+      <span class="contract-status ${contract.status === "ACTIVE" ? "" : "muted"}">${ui(contract.status === "ACTIVE" ? "ui.contract.active" : contract.status === "EXPIRED" ? "ui.contract.expired" : "ui.contract.terminated")}</span></header>
+    <dl class="contract-terms">
+      ${item("ui.offer.share", `${count(contract.share * 100)}%`)}
+      ${item("ui.offer.advance", escape(won(contract.advance)))}
+      ${item("ui.offer.cycle", ui("ui.offer.cycle-value", { days: contract.settlementCycle }))}
+      ${item("ui.offer.duration", ui("ui.contract.period-value", { start: contract.signedDay, end: contract.expiresDay }))}
+    </dl>
+    <div class="contract-people"><div><span class="small-muted">${ui("ui.offer.editor")}</span>${contract.editor ? `<strong>${escape(contract.editor.name)}</strong><p>${escape(contract.editor.pitch)}</p>` : `<strong>${ui("ui.contract.editor-value-unknown")}</strong>`}</div>
+      <div><span class="small-muted">${ui("ui.offer.promise")}</span><strong>${escape(contract.promise)}</strong></div></div>
+    <div class="contract-record"><h4>${ui("ui.contract.record-heading")}</h4><dl>
+      ${item("ui.contract.record-settlements", times(observed.settlements))}
+      ${item("ui.contract.record-delays", times(observed.delays))}
+      ${item("ui.contract.record-promo", escape(observed.promo))}
+      ${item("ui.contract.record-feedback", times(observed.feedback))}
+      ${item("ui.contract.record-pressure", times(observed.pressure))}
+      ${item("ui.contract.record-changes", times(observed.editorChanges))}
+    </dl></div>
+  </article>`;
 }
 
 const cadenceOptions = (selected: number) =>
@@ -669,19 +720,7 @@ function tabContent() {
   if (tab === "contracts") {
     const contracts = getContractViews(state).slice().reverse();
     return contracts.length
-      ? `<div class="panel listing">${contracts
-          .map(
-            (contract) => `
-      <div class="list-row"><span class="small-muted">${ui(contract.status === "ACTIVE" ? "ui.contract.active" : contract.status === "EXPIRED" ? "ui.contract.expired" : "ui.contract.terminated")}</span>
-      <strong>${escape(contract.company)} · ${escape(contract.title)}</strong>
-      <span>${ui("ui.contract.terms", { share: count(contract.share * 100), advance: won(contract.advance), day: contract.expiresDay })}<br>
-      ${ui("ui.contract.dates", { start: contract.signedDay, end: contract.expiresDay })}<br>
-      ${ui("ui.contract.promise", { promise: contract.promise })}<br>
-      ${ui("ui.contract.cycle", { days: contract.settlementCycle })}<br>
-      ${contract.editor ? ui("ui.contract.editor", { name: contract.editor.name, pitch: contract.editor.pitch }) : ui("ui.contract.editor-unknown")}<br>
-      ${ui("ui.contract.observed", { settlements: contract.observed.settlements, delays: contract.observed.delays, promo: contract.observed.promo, feedback: contract.observed.feedback, pressure: contract.observed.pressure, changes: contract.observed.editorChanges })}</span></div>`,
-          )
-          .join("")}</div>`
+      ? `<div class="contract-list">${contracts.map(contractPanel).join("")}</div>`
       : empty(ui("ui.contract.empty"));
   }
   if (tab === "money") {
@@ -749,7 +788,9 @@ const editing = () => {
   return (
     active instanceof HTMLElement &&
     game.contains(active) &&
-    active.matches("input:not([type=checkbox]), select, textarea")
+    active.matches(
+      "input:not([type=checkbox]), select, textarea, .chapter-chart-scroll",
+    )
   );
 };
 
@@ -760,7 +801,7 @@ function render(force = true) {
   }
   dirty = false;
   const author = getAuthorView(state);
-  game.innerHTML = `${renderClock(author)}<div class="layout">
+  const layout = `<div class="layout">
     ${renderAuthor(author)}
     <div class="workspace">
       ${renderCurrentEvent()}
@@ -773,6 +814,26 @@ function render(force = true) {
       <section class="tab-content" aria-label="${escape(tabs.find(([id]) => id === tab)![1])}">${tabContent()}</section>
     </div>
   </div>`;
+  const clock = game.querySelector<HTMLElement>(".clock");
+  const previousLayout = game.querySelector<HTMLElement>(".layout");
+  if (!force && clock && previousLayout) {
+    const date = clock.querySelector(".clock-date h1");
+    if (date)
+      date.innerHTML = `${author.day}<span>${ui("ui.clock.day-unit")}</span>`;
+    const phase = clock.querySelector('[data-testid="phase"]');
+    const play = clock.querySelector<HTMLButtonElement>('[data-action="play"]');
+    if (phase)
+      phase.textContent = text(
+        timer === undefined ? "ui.clock.paused" : "ui.clock.running",
+      );
+    if (play)
+      play.textContent = text(
+        timer === undefined ? "ui.clock.play" : "ui.clock.paused",
+      );
+    previousLayout.outerHTML = layout;
+  } else {
+    game.innerHTML = renderClock(author) + layout;
+  }
 }
 
 function snapshot(): SavedLife {
@@ -989,10 +1050,10 @@ app.addEventListener("input", (event) => {
 });
 app.addEventListener("focusin", (event) => {
   const target = event.target;
-  if (!(
-    target instanceof HTMLInputElement || target instanceof HTMLSelectElement
-  ))
-    return;
+  if (!(target instanceof HTMLElement)) return;
+  const isField =
+    target instanceof HTMLInputElement || target instanceof HTMLSelectElement;
+  if (!(isField || target.classList.contains("chapter-chart-scroll"))) return;
   if (timer !== undefined && game.contains(target)) {
     stop();
     resumeAfterChoice = false;
@@ -1001,7 +1062,7 @@ app.addEventListener("focusin", (event) => {
     if (phase) phase.textContent = text("ui.clock.paused");
     if (play) play.textContent = text("ui.clock.play");
   }
-  if (target.dataset.life || target.dataset.spend) {
+  if (isField && (target.dataset.life || target.dataset.spend)) {
     const info = getLifeSettings(state);
     lifeDraft ??= {
       time: { ...info.time },

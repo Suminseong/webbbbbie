@@ -183,7 +183,9 @@ test("[FR-UI-002/004] renders independent works, aggregate readership, aptitude,
     .getByRole("button", { name: text("ui.tab.money"), exact: true })
     .click();
   await expect(
-    page.getByText(text("ui.money.cash"), { exact: true }),
+    page
+      .getByRole("region", { name: text("ui.tab.money"), exact: true })
+      .getByText(text("ui.money.cash"), { exact: true }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: text("ui.tab.log"), exact: true })

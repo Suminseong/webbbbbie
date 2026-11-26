@@ -91,8 +91,14 @@ describe("[17번 §2] chapter funnel", () => {
     const before = product.getWorkViews(state)[0].funnel;
     expect(before.known).toBe(false);
     expect(before.firstReads).toBeNull();
-    const next = product.advance(state, 5);
-    const view = product.getWorkViews(next.state)[0].funnel;
+    // Settle any waiting choice while advancing, so the test does not depend on
+    // which event the seed happens to select.
+    let next = state;
+    while (next.day < state.day + 5)
+      next = next.pending
+        ? pick(product, next)
+        : product.advance(next, state.day + 5 - next.day).state;
+    const view = product.getWorkViews(next)[0].funnel;
     expect(view.partial).toBe(true);
     expect(view.since).toBe(state.day + 1);
   });

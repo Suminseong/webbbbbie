@@ -598,5 +598,287 @@
         ]
       }
     ]
+  },
+  {
+    "id": "deadline-clash",
+    "category": "job",
+    "title": "event.deadline-clash.title",
+    "text": "event.deadline-clash.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 25,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      },
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 60
+      }
+    ],
+    "choices": [
+      {
+        "id": "crunch",
+        "label": "event.deadline-clash.choice.crunch",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 7
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "event.deadline-clash.choice.leave",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": -2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hours-cut",
+    "category": "job",
+    "title": "event.hours-cut.title",
+    "text": "event.hours-cut.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      }
+    ],
+    "choices": [
+      {
+        "id": "extra",
+        "label": "event.hours-cut.choice.extra",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 60000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "write",
+        "label": "event.hours-cut.choice.write",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 3
+          },
+          {
+            "kind": "cash",
+            "amount": -20000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "group-project",
+    "category": "job",
+    "title": "event.group-project.title",
+    "text": "event.group-project.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "student"
+      }
+    ],
+    "choices": [
+      {
+        "id": "lead",
+        "label": "event.group-project.choice.lead",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 5
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "ability",
+            "stat": "insight",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "free",
+        "label": "event.group-project.choice.free",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "freelance-drought",
+    "category": "job",
+    "title": "event.freelance-drought.title",
+    "text": "event.freelance-drought.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 45,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "freelance"
+      },
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 300000
+      }
+    ],
+    "choices": [
+      {
+        "id": "cold",
+        "label": "event.freelance-drought.choice.cold",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 40000
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "event.freelance-drought.choice.wait",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "colleague-reader",
+    "category": "job",
+    "title": "event.colleague-reader.title",
+    "text": "event.colleague-reader.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.5,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      },
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "choices": [
+      {
+        "id": "admit",
+        "label": "event.colleague-reader.choice.admit",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "social",
+            "stat": "fandom",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "deny",
+        "label": "event.colleague-reader.choice.deny",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
   }
 ]

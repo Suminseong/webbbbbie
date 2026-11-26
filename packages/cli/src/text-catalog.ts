@@ -92,6 +92,14 @@ const conditionNames: Record<Condition["key"], string> = {
   contractSkill: "대상 계약 담당자의 비공개 편집 역량",
   contractInterference: "대상 계약 담당자의 비공개 간섭 성향",
   contractWarmth: "대상 계약 담당자의 비공개 소통 성향",
+  sleepSlots: "전날 수면 슬롯",
+  restSlots: "전날 휴식 슬롯",
+  plotSlots: "전날 플롯 설정에 쓴 슬롯",
+  writingSlots: "전날 집필에 쓴 슬롯",
+  hiatusWorks: "휴재 중인 작품 수",
+  prep: "대상 작품 플롯 준비도",
+  consistency: "대상 작품 설정 일관성",
+  attachment: "대상 작품 독자 애착",
 };
 const workStatus = (key: string) =>
   sourceText("label.work-status." + key.toLowerCase().replaceAll("_", "-"));

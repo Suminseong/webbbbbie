@@ -123,6 +123,7 @@ function profile(seedCount = 100, days = 730, policy: ChoicePolicy = "mixed") {
   const categoryCount = new Map<string, number>();
   const tierCount = new Map<string, number>();
   const eventTotals = new Map<string, number>();
+  const eventSeeds = new Map<string, number>();
   const seedsWith = {
     multiwork: 0,
     forcedHiatus: 0,
@@ -213,6 +214,7 @@ function profile(seedCount = 100, days = 730, policy: ChoicePolicy = "mixed") {
       if (day === 0) continue;
       seen.set(id, (seen.get(id) ?? 0) + 1);
       eventTotals.set(id, (eventTotals.get(id) ?? 0) + 1);
+      if (seen.get(id) === 1) eventSeeds.set(id, (eventSeeds.get(id) ?? 0) + 1);
       const def = defaultContent.events.find((entry) => entry.id === id)!;
       tierCount.set(def.tier, (tierCount.get(def.tier) ?? 0) + 1);
       categoryCount.set(
@@ -309,6 +311,24 @@ function profile(seedCount = 100, days = 730, policy: ChoicePolicy = "mixed") {
           ]),
         ),
         topEvents,
+        // Coverage: events that never fired, and the rarest that did (seeds hit).
+        coverage: (() => {
+          const daily = defaultContent.events.filter(
+            (entry) => entry.tier !== "ORIGIN",
+          );
+          const never = daily
+            .filter((entry) => !eventTotals.has(entry.id))
+            .map((entry) => entry.id);
+          const rare = daily
+            .filter((entry) => eventTotals.has(entry.id))
+            .map((entry) => ({
+              id: entry.id,
+              seeds: eventSeeds.get(entry.id) ?? 0,
+            }))
+            .sort((a, b) => a.seeds - b.seeds)
+            .slice(0, 10);
+          return { fired: daily.length - never.length, never, rare };
+        })(),
       },
       null,
       2,

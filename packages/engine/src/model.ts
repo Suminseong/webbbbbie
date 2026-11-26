@@ -347,7 +347,7 @@ export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
 export const SCHEMA_VERSION = 3;
-export const RULES_VERSION = "0.3.2";
+export const RULES_VERSION = "0.3.3";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];

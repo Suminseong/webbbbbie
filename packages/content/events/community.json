@@ -753,5 +753,168 @@
         "amount": 3
       }
     ]
+  },
+  {
+    "id": "online-meetup",
+    "category": "community",
+    "title": "event.online-meetup.title",
+    "text": "event.online-meetup.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "social",
+        "stat": "recognition",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "ego-search-praise",
+    "category": "community",
+    "title": "event.ego-search-praise.title",
+    "text": "event.ego-search-praise.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      },
+      {
+        "kind": "social",
+        "stat": "fandom",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "time-sink-thread",
+    "category": "community",
+    "title": "event.time-sink-thread.title",
+    "text": "event.time-sink-thread.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 3,
+    "cooldown": 20,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "rival-author",
+    "category": "community",
+    "title": "event.rival-author.title",
+    "text": "event.rival-author.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "choices": [
+      {
+        "id": "cheer",
+        "label": "event.rival-author.choice.cheer",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "compete",
+        "label": "event.rival-author.choice.compete",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 5
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 4
+          }
+        ]
+      }
+    ]
   }
 ]

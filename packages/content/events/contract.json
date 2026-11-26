@@ -568,5 +568,267 @@
         ]
       }
     ]
+  },
+  {
+    "id": "bonus-chapter-request",
+    "category": "contract",
+    "title": "event.bonus-chapter-request.title",
+    "text": "event.bonus-chapter-request.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 40
+      },
+      {
+        "key": "contractWarmth",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "choices": [
+      {
+        "id": "accept",
+        "label": "event.bonus-chapter-request.choice.accept",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 80000
+          },
+          {
+            "kind": "stock",
+            "amount": -2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "event.bonus-chapter-request.choice.decline",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "exclusivity-warning",
+    "category": "contract",
+    "title": "event.exclusivity-warning.title",
+    "text": "event.exclusivity-warning.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "explain",
+        "label": "event.exclusivity-warning.choice.explain",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "hide",
+        "label": "event.exclusivity-warning.choice.hide",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 5
+          },
+          {
+            "kind": "schedule",
+            "id": "exclusivity-audit",
+            "delay": 10,
+            "window": 25
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "exclusivity-audit",
+    "category": "contract",
+    "title": "event.exclusivity-audit.title",
+    "text": "event.exclusivity-audit.body",
+    "tier": "FOLLOW_UP",
+    "scope": "CONTRACT",
+    "weight": 6,
+    "cooldown": 0,
+    "minDay": 1,
+    "choices": [
+      {
+        "id": "confess",
+        "label": "event.exclusivity-audit.choice.confess",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "deny",
+        "label": "event.exclusivity-audit.choice.deny",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": -5
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "revision-request",
+    "category": "contract",
+    "title": "event.revision-request.title",
+    "text": "event.revision-request.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 3,
+    "cooldown": 60,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "quality",
+        "op": "lte",
+        "value": 68
+      }
+    ],
+    "choices": [
+      {
+        "id": "revise",
+        "label": "event.revision-request.choice.revise",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 3
+          },
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "event.revision-request.choice.refuse",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "settlement-cheer",
+    "category": "contract",
+    "title": "event.settlement-cheer.title",
+    "text": "event.settlement-cheer.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 30000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "contract-quality-note",
+    "category": "contract",
+    "title": "event.contract-quality-note.title",
+    "text": "event.contract-quality-note.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "contractSkill",
+        "op": "gte",
+        "value": 60
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 1.5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
   }
 ]

@@ -440,5 +440,177 @@
         "effects": []
       }
     ]
+  },
+  {
+    "id": "hiatus-ping",
+    "category": "platform",
+    "title": "event.hiatus-ping.title",
+    "text": "event.hiatus-ping.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 1,
+    "statuses": ["HIATUS"],
+    "conditions": [
+      {
+        "key": "hiatusWorks",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "new-platform-invite",
+    "category": "platform",
+    "title": "event.new-platform-invite.title",
+    "text": "event.new-platform-invite.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 1.5,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 15
+      }
+    ],
+    "choices": [
+      {
+        "id": "try",
+        "label": "event.new-platform-invite.choice.try",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 30000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "event.new-platform-invite.choice.pass",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "platform-survey",
+    "category": "platform",
+    "title": "event.platform-survey.title",
+    "text": "event.platform-survey.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 120,
+    "minDay": 1,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 10000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "trend-tag",
+    "category": "platform",
+    "title": "event.trend-tag.title",
+    "text": "event.trend-tag.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 60,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "quality",
+        "op": "gte",
+        "value": 50
+      },
+      {
+        "key": "workAge",
+        "op": "lte",
+        "value": 90
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "review-hidden",
+    "category": "platform",
+    "title": "event.review-hidden.title",
+    "text": "event.review-hidden.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 40,
+    "minDay": 1,
+    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      }
+    ]
   }
 ]

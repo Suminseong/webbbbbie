@@ -158,6 +158,7 @@ export function createAuthor(seed: number, content: Content): Author {
   ) as Author["abilities"];
   const trait = (index: number) => Math.floor(20 + draw(index) * 66);
   return {
+    identity: null,
     penName: pick(world.penNames, draw(0)),
     startAge:
       life.ageMin + Math.floor(draw(1) * (life.ageMax - life.ageMin + 1)),
@@ -241,6 +242,7 @@ export function blankWork(
   return {
     id: "W-" + (state.works.length + 1),
     title: spec.title,
+    description: "",
     genre: spec.genre,
     material: spec.material,
     tags: [...spec.tags],

@@ -19,7 +19,7 @@ for (const width of [320, 390])
   }, info) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/");
-    await page.locator(".event-options button").first().click();
+    await page.locator('#start-form button[type="submit"]').click();
     for (let i = 0; i < 5; i++) {
       await page.locator('[data-action="step"]').click();
       if (await page.locator(".event-options button").count())

@@ -110,12 +110,58 @@ export function unlockedTagChapters(state: LifeState) {
 
 export type WorkPlan = {
   title: string;
+  description?: string;
   genre: string;
   material: string;
   tags: string[];
   platformId: string;
   perWeek: number;
 };
+
+export const identityLimits = {
+  penName: 30,
+  message: 160,
+  motive: 300,
+  description: 600,
+} as const;
+export type AuthorIdentity = {
+  penName: string;
+  message: string;
+  motive: string;
+};
+export type StartSetup = {
+  profile: AuthorIdentity;
+  choiceId: string;
+  work: WorkPlan;
+};
+const prose = (value: string) =>
+  value
+    .replace(/\r\n?/g, "\n")
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "")
+    .trim();
+export function validateIdentity(input: AuthorIdentity) {
+  if (
+    !input ||
+    typeof input.penName !== "string" ||
+    typeof input.message !== "string" ||
+    typeof input.motive !== "string"
+  )
+    return fail("E_INVALID_PLAN", "system.start.profile-invalid");
+  const profile = {
+    penName: prose(input.penName).replace(/\n/g, " "),
+    message: prose(input.message),
+    motive: prose(input.motive),
+  };
+  if (
+    !profile.penName ||
+    profile.penName.length > identityLimits.penName ||
+    profile.message.length > identityLimits.message ||
+    !profile.motive ||
+    profile.motive.length > identityLimits.motive
+  )
+    return fail("E_INVALID_PLAN", "system.start.profile-invalid");
+  return profile;
+}
 
 function validatePlan(
   plan: WorkPlan,
@@ -125,6 +171,13 @@ function validatePlan(
 ) {
   const options = planOptions(content);
   const title = clean(plan.title, content.balance.plan.maxTitle);
+  if (
+    plan.description !== undefined &&
+    (typeof plan.description !== "string" ||
+      plan.description.length > identityLimits.description)
+  )
+    return fail("E_INVALID_PLAN", "system.command.description-invalid");
+  const description = prose(plan.description ?? "");
   const tags = [...new Set(plan.tags)];
   if (!title) return fail("E_INVALID_PLAN", "system.command.title-empty");
   if (
@@ -154,7 +207,7 @@ function validatePlan(
     return fail("E_INVALID_PLAN", "system.command.platform-invalid");
   if (!cadences.some((item) => item.perWeek === plan.perWeek))
     return fail("E_INVALID_PLAN", "system.command.cadence-invalid");
-  return { title, tags };
+  return { title, tags, description };
 }
 
 export function planWork(plan: WorkPlan, path?: StartPath): Run {
@@ -189,6 +242,7 @@ export function planWork(plan: WorkPlan, path?: StartPath): Run {
         content,
       ),
     );
+    state.works[state.works.length - 1].description = checked.description;
     record(
       events,
       "COMMAND",
@@ -221,6 +275,7 @@ export function reviseWork(id: string, plan: WorkPlan): Run {
     const checked = validatePlan(plan, content, state, work.tags);
     if ("error" in checked) return checked;
     work.title = checked.title;
+    if (plan.description !== undefined) work.description = checked.description;
     work.manual = true;
     work.genre = plan.genre;
     work.material = plan.material;

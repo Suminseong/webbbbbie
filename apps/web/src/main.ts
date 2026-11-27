@@ -10,6 +10,8 @@ import {
   choose,
   conditionNames,
   createLife,
+  configureStart,
+  getStartSetup,
   deserialize,
   dropWork,
   extraWrite,
@@ -39,7 +41,12 @@ import {
   setTimePolicy,
   setWorkPolicy,
 } from "@webbbbbie/engine";
-import type { LifeState, SpendPolicy, TimePolicy } from "@webbbbbie/engine";
+import type {
+  AuthorIdentity,
+  LifeState,
+  SpendPolicy,
+  TimePolicy,
+} from "@webbbbbie/engine";
 import { getSlots, putSlot, slotIds } from "./storage";
 import type { SavedLife, SlotId } from "./storage";
 
@@ -97,6 +104,7 @@ let storageAvailable = true;
 type PlanDraft = {
   editing: string | null;
   title: string;
+  description: string;
   genre: string;
   material: string;
   tags: string[];
@@ -108,6 +116,13 @@ let confirmDrop: string | null = null;
 let confirmRetire = false;
 let dirty = false;
 let requiredWorkId: string | null = null;
+let startCandidate: LifeState | null = null;
+let startView: ReturnType<typeof getStartSetup> = null;
+let startDraft: {
+  profile: AuthorIdentity;
+  choiceId: string;
+  plan: PlanDraft;
+} | null = null;
 
 app.innerHTML = `
 <header class="top">
@@ -158,12 +173,89 @@ function feedbackText(text: string) {
   feedback.hidden = !text;
 }
 
+function prepareStart(candidate: LifeState) {
+  const view = getStartSetup(candidate);
+  if (!view) return;
+  startCandidate = candidate;
+  startView = view;
+  startDraft = {
+    profile: { ...view.profile },
+    choiceId: view.choices[0].id,
+    plan: {
+      ...view.defaultPlan,
+      tags: [...view.defaultPlan.tags],
+      editing: null,
+    },
+  };
+}
+
+function renderStart() {
+  if (!startView || !startDraft || !startCandidate) return "";
+  const info = startView,
+    a = info.author,
+    b = info.background;
+  const fact = (label: string, value: string) =>
+    `<div><dt>${ui(label)}</dt><dd>${escape(value)}</dd></div>`;
+  const identityField = (key: keyof AuthorIdentity, rows: number) =>
+    `<label class="field">${ui("ui.start." + (key === "penName" ? "pen-name" : key))}${key === "penName" ? `<input id="start-${key}" data-profile="${key}" required maxlength="${info.limits[key]}" value="${escape(startDraft!.profile[key])}">` : `<textarea id="start-${key}" data-profile="${key}" rows="${rows}" ${key === "motive" ? "required" : ""} maxlength="${info.limits[key]}" placeholder="${ui("ui.start." + key + "-placeholder")}">${escape(startDraft!.profile[key])}</textarea>`}</label>`;
+  return `<section class="start-page" aria-labelledby="start-title"><header class="start-heading"><div class="section-label">${ui("ui.start.eyebrow", { seed: a.seed })}</div><h1 id="start-title">${ui("ui.start.heading")}</h1><p>${ui("ui.start.intro")}</p></header>
+    <form id="start-form" class="start-layout" aria-labelledby="start-title">
+      <section class="panel plan-form start-profile"><h2>${ui("ui.start.profile-heading")}</h2><p id="start-profile-hint" class="small-muted">${ui("ui.start.profile-hint", { name: info.limits.penName, message: info.limits.message, motive: info.limits.motive })}</p>${identityField("penName", 1)}${identityField("message", 2)}${identityField("motive", 3)}</section>
+      <aside class="panel start-background" aria-labelledby="start-background-title"><h2 id="start-background-title">${ui("ui.start.background-heading")}</h2><p class="small-muted">${ui("ui.start.background-hint")}</p><dl class="start-facts">
+        ${fact("ui.start.age", text("ui.start.age-value", { age: a.age }))}${fact("ui.start.job", a.job)}${fact("ui.start.home", a.home)}${fact("ui.author.cash", won(a.cash))}${fact("ui.start.salary", won(b.jobIncome))}${fact("ui.start.living-expense", won(b.livingExpense))}${fact("ui.start.job-time", text("ui.start.hours", { hours: b.jobHours }))}${fact("ui.start.living-time", text("ui.start.hours", { hours: b.livingHours }))}${fact("ui.start.comfort", String(b.homeComfort))}
+      </dl><h3>${ui("ui.start.condition-heading")}</h3><dl class="start-scores">${Object.entries(
+        a.condition,
+      )
+        .map(
+          ([key, value]) =>
+            `<div><dt>${escape(conditionNames[key as keyof typeof conditionNames])}</dt><dd>${fraction(value)}</dd></div>`,
+        )
+        .join(
+          "",
+        )}</dl><h3>${ui("ui.start.abilities-heading")}</h3><dl class="start-scores">${Object.entries(
+        a.abilities,
+      )
+        .map(
+          ([key, value]) =>
+            `<div><dt>${escape(abilityNames[key as keyof typeof abilityNames])}</dt><dd>${count(value)}</dd></div>`,
+        )
+        .join(
+          "",
+        )}</dl><p class="small-muted">${ui("ui.start.hidden-note")}</p></aside>
+      <section class="panel plan-form start-work"><h2>${ui("ui.start.work-heading")}</h2><fieldset class="start-paths"><legend>${ui("ui.start.path")}</legend>${info.choices.map((c) => `<label class="chip"><input type="radio" name="start-path" data-origin="true" value="${escape(c.id)}" ${c.id === startDraft!.choiceId ? "checked" : ""}><span>${escape(c.label)}</span></label>`).join("")}</fieldset>${renderPlanFields(startDraft.plan, getPlanOptions(startCandidate))}</section>
+      <div class="start-actions"><p class="small-muted">${ui("ui.start.confirm-note")}</p><p id="start-error" class="notice" aria-live="polite"></p><div class="cmd-row"><button type="submit" class="primary">${ui("ui.start.begin")}</button>${state.works.length || state.day > 0 ? `<button type="button" data-action="start-cancel">${ui("ui.start.cancel")}</button>` : ""}<button type="button" data-action="import">${ui("ui.save.import")}</button></div></div>
+    </form></section>`;
+}
+
+function updateStartValidation() {
+  if (!startDraft || !startView) return;
+  const { profile: p, plan: w } = startDraft,
+    limits = startView.limits;
+  const valid =
+    !!p.penName.trim() &&
+    p.penName.length <= limits.penName &&
+    p.message.length <= limits.message &&
+    !!p.motive.trim() &&
+    p.motive.length <= limits.motive &&
+    !!w.title.trim() &&
+    w.description.length <= limits.description &&
+    w.tags.length > 0 &&
+    w.tags.length <= getPlanOptions().maxTags;
+  const button = game.querySelector<HTMLButtonElement>(
+    '#start-form button[type="submit"]',
+  );
+  if (button) button.disabled = !valid;
+  const error = game.querySelector("#start-error");
+  if (error) error.textContent = valid ? "" : text("ui.start.required");
+}
+
 function renderAuthor(author: ReturnType<typeof getAuthorView>) {
   return `<aside class="author panel">
     <div class="section-label">${ui("ui.author.heading")}</div>
     <h2>${escape(author.penName)}</h2>
     <p class="small-muted">${ui("ui.author.profile", { age: author.age, job: author.job, home: author.home })}</p>
-    <p class="motive">“${escape(author.motive)}”</p>
+    ${author.message ? `<p class="motive user-prose">“${escape(author.message)}”</p>` : ""}
+    <p class="author-reason user-prose"><span class="small-muted">${ui("ui.start.motive")}</span><br>${escape(author.motive)}</p>
     <dl class="conditions">${Object.entries(author.condition)
       .map(
         ([key, value]) => `
@@ -290,6 +382,7 @@ function workPanel(
       <span class="work-status ${isClosed || work.status === "HIATUS" ? "muted" : ""}">${escape(work.statusLabel)}${work.hiatusKind ? " · " + ui(work.hiatusKind === "STOCK" ? "ui.work.hiatus-stock" : "ui.work.hiatus-recover") : ""}${work.rush ? " · " + ui("ui.work.rush-badge", { days: work.rush }) : ""}</span>
     </div>
     <p class="tags">${escape(work.genre)} · ${escape(work.material)} ${work.tags.map((tag) => " <span>#" + escape(tag) + "</span>").join("")}</p>
+    ${work.description ? `<p class="work-description user-prose">${escape(work.description)}</p>` : ""}
     <dl class="work-stats">
       <div><dt>${ui("ui.work.chapter-progress")}</dt><dd>${ui("ui.work.chapter-progress-value", { published: work.published, target: work.target })}</dd></div>
       <div><dt>${ui("ui.work.stock")}</dt><dd>${ui("ui.format.chapter", { count: work.stock.toFixed(1) })}</dd></div>
@@ -543,6 +636,7 @@ function blankDraft(editing: string | null = null): PlanDraft {
   return {
     editing,
     title: "",
+    description: "",
     genre: options.genres[0].value,
     material: options.materials[0].value,
     tags: [],
@@ -551,12 +645,11 @@ function blankDraft(editing: string | null = null): PlanDraft {
   };
 }
 
-function renderPlanForm(required = false) {
-  if (getPendingNewWork(state) && !required) return "";
-  if (!planDraft) return "";
-  const options = getPlanOptions(state);
-  if (required) options.tags = options.tags.filter((tag) => tag.unlocked);
-  const draft = planDraft;
+function renderPlanFields(
+  draft: PlanDraft,
+  options: ReturnType<typeof getPlanOptions>,
+  required = false,
+) {
   const choices = (
     list: { value: string; label: string }[],
     selected: string,
@@ -567,10 +660,8 @@ function renderPlanForm(required = false) {
           `<option value="${escape(item.value)}" ${item.value === selected ? "selected" : ""}>${escape(item.label)}</option>`,
       )
       .join("");
-  return `<form id="${required ? "required-work-form" : "plan-form"}" class="panel plan-form" aria-label="${ui("ui.plan.heading")}">
-    <div class="section-label">${ui(draft.editing ? "ui.plan.edit-heading" : "ui.plan.heading")}</div>
-    <p class="small-muted">${ui("ui.plan.intro")}</p>
-    <label class="field">${ui("ui.plan.title")}<input id="plan-title" data-draft="title" type="text" maxlength="${options.maxTitle}" required value="${escape(draft.title)}" placeholder="${ui("ui.plan.title-placeholder")}"></label>
+  return `    <label class="field">${ui("ui.plan.title")}<input id="plan-title" data-draft="title" type="text" maxlength="${options.maxTitle}" required value="${escape(draft.title)}" placeholder="${ui("ui.plan.title-placeholder")}"></label>
+    <label class="field">${ui("ui.plan.description")}<textarea id="plan-description" data-draft="description" maxlength="${options.maxDescription}" rows="3" placeholder="${ui("ui.plan.description-placeholder")}">${escape(draft.description)}</textarea></label>
     ${required ? '<p id="required-title-error" class="notice" aria-live="polite"></p>' : ""}
     <div class="field-grid">
       <label class="field">${ui("ui.plan.genre")}<select id="plan-genre" data-draft="genre">${choices(options.genres, draft.genre)}</select></label>
@@ -584,6 +675,19 @@ function renderPlanForm(required = false) {
     </fieldset>
     ${required ? '<p id="required-tags-error" class="notice" aria-live="polite"></p>' : ""}
     <p class="small-muted">${ui("ui.plan.title-note")}</p>
+`;
+}
+
+function renderPlanForm(required = false) {
+  if (getPendingNewWork(state) && !required) return "";
+  if (!planDraft) return "";
+  const options = getPlanOptions(state);
+  if (required) options.tags = options.tags.filter((tag) => tag.unlocked);
+  const draft = planDraft;
+  return `<form id="${required ? "required-work-form" : "plan-form"}" class="panel plan-form" aria-label="${ui("ui.plan.heading")}">
+    <div class="section-label">${ui(draft.editing ? "ui.plan.edit-heading" : "ui.plan.heading")}</div>
+    <p class="small-muted">${ui("ui.plan.intro")}</p>
+    ${renderPlanFields(draft, options, required)}
     <div class="cmd-row"><button class="primary" type="submit">${ui(draft.editing ? "ui.plan.save" : "ui.plan.create")}</button>
     ${required ? "" : `<button type="button" data-action="plan-cancel">${ui("ui.plan.cancel")}</button>`}</div>
     ${required ? `<p id="required-work-error" class="notice" aria-live="polite"></p>` : ""}
@@ -632,6 +736,7 @@ function syncRequiredWork() {
   requiredWorkId = waiting.id;
   planDraft = {
     ...waiting.defaultPlan,
+    description: "",
     tags: [...waiting.defaultPlan.tags],
     editing: null,
   };
@@ -914,6 +1019,12 @@ const editing = () => {
 };
 
 function render(force = true) {
+  if (!startDraft && getStartSetup(state)) prepareStart(state);
+  if (startDraft) {
+    game.innerHTML = renderStart();
+    updateStartValidation();
+    return;
+  }
   if (getPendingNewWork(state)) stop();
   if (!force && editing()) {
     dirty = true;
@@ -1016,6 +1127,9 @@ function loadLife(text: string, label: string) {
   stop();
   resumeAfterChoice = false;
   state = loaded.state;
+  startCandidate = null;
+  startView = null;
+  startDraft = null;
   revision += 1;
   seedDraft = String(getAuthorView(state).seed);
   seedInput.value = seedDraft;
@@ -1028,17 +1142,14 @@ function loadLife(text: string, label: string) {
 }
 
 function startLife() {
+  if (requiredDialog.open) return;
   stop();
   resumeAfterChoice = false;
-  state = createLife(Number(seedDraft));
-  tab = "works";
-  selectedWork = null;
-  planDraft = null;
-  lifeDraft = null;
+  prepareStart(createLife(Number(seedDraft)));
   revision += 1;
   feedbackText("");
   render();
-  void saveSlot("auto");
+  game.querySelector<HTMLInputElement>("#start-penName")?.focus();
 }
 
 seedInput.addEventListener("input", () => {
@@ -1075,6 +1186,7 @@ function draftFromWork(id: string): PlanDraft | null {
   return {
     editing: id,
     title: work.title,
+    description: work.description,
     genre: work.rawGenre,
     material: work.rawMaterial,
     tags: [...work.rawTags],
@@ -1142,7 +1254,9 @@ function workAction(action: string, button: HTMLButtonElement) {
 app.addEventListener("input", (event) => {
   const target = event.target;
   if (!(
-    target instanceof HTMLInputElement || target instanceof HTMLSelectElement
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLSelectElement ||
+    target instanceof HTMLTextAreaElement
   ))
     return;
   if (target.dataset.journal) {
@@ -1155,12 +1269,20 @@ app.addEventListener("input", (event) => {
       ?.focus();
     return;
   }
-  if (target.dataset.draft && planDraft) {
+  if (target.dataset.profile && startDraft) {
+    startDraft.profile[target.dataset.profile as keyof AuthorIdentity] =
+      target.value;
+    revision += 1;
+  }
+  const activeDraft = startDraft?.plan ?? planDraft;
+  if (target.dataset.draft && activeDraft) {
+    if (startDraft) revision += 1;
     const key = target.dataset.draft as keyof PlanDraft;
-    if (key === "perWeek") planDraft.perWeek = Number(target.value);
-    else if (key !== "tags" && key !== "editing") planDraft[key] = target.value;
+    if (key === "perWeek") activeDraft.perWeek = Number(target.value);
+    else if (key !== "tags" && key !== "editing")
+      activeDraft[key] = target.value;
     if (key === "platformId") {
-      const info = getPlanOptions(state).platforms.find(
+      const info = getPlanOptions(startCandidate ?? state).platforms.find(
         (item) => item.id === target.value,
       );
       const note = document.querySelector("#plan-platform-tags");
@@ -1171,6 +1293,7 @@ app.addEventListener("input", (event) => {
     }
   }
   validateRequiredForm();
+  updateStartValidation();
   if (target.dataset.life && lifeDraft) {
     const key = target.dataset.life as keyof TimePolicy;
     lifeDraft.time[key] = Math.max(0, Math.floor(Number(target.value) || 0));
@@ -1193,7 +1316,9 @@ app.addEventListener("focusin", (event) => {
   const target = event.target;
   if (!(target instanceof HTMLElement)) return;
   const isField =
-    target instanceof HTMLInputElement || target instanceof HTMLSelectElement;
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLSelectElement ||
+    target instanceof HTMLTextAreaElement;
   if (!(isField || target.classList.contains("chapter-chart-scroll"))) return;
   if (timer !== undefined && game.contains(target)) {
     stop();
@@ -1216,19 +1341,26 @@ app.addEventListener("focusin", (event) => {
 app.addEventListener("change", (event) => {
   const target = event.target;
   if (!(target instanceof HTMLInputElement)) return;
-  if (target.dataset.tag && planDraft) {
+  if (target.dataset.origin && startDraft && target.checked) {
+    startDraft.choiceId = target.value;
+    revision += 1;
+  }
+  const activeDraft = startDraft?.plan ?? planDraft;
+  if (target.dataset.tag && activeDraft) {
+    if (startDraft) revision += 1;
     const max = getPlanOptions().maxTags;
     const tag = target.dataset.tag;
     if (target.checked) {
-      if (planDraft.tags.length >= max) {
+      if (activeDraft.tags.length >= max) {
         target.checked = false;
         feedbackText(text("system.command.tags-invalid"));
         return;
       }
-      planDraft.tags.push(tag);
-    } else planDraft.tags = planDraft.tags.filter((item) => item !== tag);
+      activeDraft.tags.push(tag);
+    } else activeDraft.tags = activeDraft.tags.filter((item) => item !== tag);
     feedbackText("");
     validateRequiredForm();
+    updateStartValidation();
   }
   if (target.id === "auto-plan") commit(setAutoPlan(state, target.checked));
 });
@@ -1241,6 +1373,28 @@ app.addEventListener("submit", (event) => {
   const form = event.target;
   if (!(form instanceof HTMLFormElement)) return;
   event.preventDefault();
+  if (form.id === "start-form" && startDraft && startCandidate) {
+    const result = configureStart(startCandidate, {
+      profile: startDraft.profile,
+      choiceId: startDraft.choiceId,
+      work: startDraft.plan,
+    });
+    if (!result.ok) {
+      game.querySelector("#start-error")!.textContent = result.reason;
+      return;
+    }
+    seedDraft = String(startCandidate.seed);
+    seedInput.value = seedDraft;
+    startCandidate = null;
+    startView = null;
+    startDraft = null;
+    planDraft = null;
+    lifeDraft = null;
+    selectedWork = null;
+    tab = "works";
+    commit(result);
+    return;
+  }
   if (form.id === "required-work-form" && planDraft && requiredWorkId) {
     const result = confirmNewWork(state, requiredWorkId, planDraft);
     if (!result.ok)
@@ -1289,6 +1443,7 @@ app.addEventListener("click", (event) => {
     case "random": {
       seedDraft = String(crypto.getRandomValues(new Uint32Array(1))[0]);
       seedInput.value = seedDraft;
+      if (startDraft) startLife();
       break;
     }
     case "step":
@@ -1324,6 +1479,14 @@ app.addEventListener("click", (event) => {
       break;
     case "plan-cancel":
       planDraft = null;
+      render();
+      break;
+    case "start-cancel":
+      startCandidate = null;
+      startView = null;
+      startDraft = null;
+      seedDraft = String(state.seed);
+      seedInput.value = seedDraft;
       render();
       break;
     case "purchase": {

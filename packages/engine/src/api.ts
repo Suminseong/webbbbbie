@@ -26,6 +26,8 @@ import {
   planWork as buildPlanWork,
   purchase as buildPurchase,
   prepareEnding as buildPrepareEnding,
+  identityLimits,
+  validateIdentity,
   resumeWork as buildResumeWork,
   retire as buildRetire,
   reviseWork as buildReviseWork,
@@ -36,7 +38,7 @@ import {
   setTimePolicy as buildSetTimePolicy,
   setWorkPolicy as buildSetWorkPolicy,
 } from "./commands";
-import type { WorkPlan, WorkPolicyPatch } from "./commands";
+import type { StartSetup, WorkPlan, WorkPolicyPatch } from "./commands";
 import { applyEvent, originEvent, selectEvent } from "./events";
 import { applyStateBehaviors, updateStates } from "./states";
 import {
@@ -57,7 +59,7 @@ import type {
 } from "./model";
 import { resolveAudience } from "./readership";
 import { fingerprint } from "./rng";
-import { cadences } from "./cadences";
+import { cadences, maskCadence } from "./cadences";
 import {
   aptitudeView,
   authorView,
@@ -86,7 +88,12 @@ export type {
 } from "./model";
 export { abilityNames, conditionNames, ledgerNames } from "./views";
 export { cadences } from "./commands";
-export type { WorkPlan, WorkPolicyPatch } from "./commands";
+export type {
+  AuthorIdentity,
+  StartSetup,
+  WorkPlan,
+  WorkPolicyPatch,
+} from "./commands";
 export type { PlayerCommandError, SpendPolicy, TimePolicy } from "./model";
 
 type ChoiceResult =
@@ -156,6 +163,7 @@ const LEGACY_HASH_033 = "9eb5a1e7";
 const LEGACY_HASH_035 = "0ead2bf0";
 const LEGACY_HASH_036 = "4a557dbd";
 const LEGACY_HASH_037 = "cae23b88";
+const LEGACY_HASH_038 = "19918655";
 
 export function createEngine(
   content: Content = defaultContent,
@@ -367,6 +375,88 @@ export function createEngine(
     return outcome;
   }
 
+  function getStartSetup(state: LifeState) {
+    if (
+      state.day !== 0 ||
+      state.phase !== "AWAITING_CHOICE" ||
+      state.pending?.tier !== "ORIGIN" ||
+      state.works.length
+    )
+      return null;
+    const pending = pendingView(state, content)!;
+    const preview = choose(state, pending.id, pending.choices[0].id);
+    if (!preview.ok) return null;
+    const work = preview.state.works[0];
+    const author = authorView(state, content);
+    const job = content.world.jobs.find(
+      (item) => item.id === state.author.jobId,
+    )!;
+    return {
+      author,
+      profile: {
+        penName: author.penName,
+        message: author.message,
+        motive: author.motive,
+      },
+      limits: { ...identityLimits },
+      choices: pending.choices,
+      background: {
+        jobIncome: job.income,
+        jobHours: (job.slots + job.irregularity) / 2,
+        livingHours: content.balance.time.living / 2,
+        homeComfort: state.author.home.comfort,
+        livingExpense: Math.floor(
+          content.balance.economy.livingExpense * state.author.home.expense,
+        ),
+      },
+      defaultPlan: {
+        title: workView(work, content).title,
+        description: work.description,
+        genre: work.genre,
+        material: work.material,
+        tags: [...work.tags],
+        platformId: work.platformId,
+        perWeek: maskCadence(work.mask),
+      },
+    };
+  }
+
+  function configureStart(
+    state: LifeState,
+    input: StartSetup,
+  ): ReturnType<typeof runCommand> {
+    if (!getStartSetup(state))
+      return {
+        ok: false,
+        state,
+        events: [],
+        error: "E_NOT_ALLOWED",
+        reason: text("system.start.already-started"),
+      };
+    const profile = validateIdentity(input.profile);
+    if ("error" in profile) return { ok: false, state, events: [], ...profile };
+    const selected = choose(state, state.pending!.id, input.choiceId);
+    if (!selected.ok)
+      return {
+        ok: false,
+        state,
+        events: [],
+        error: "E_INVALID_PLAN",
+        reason: text("system.start.choice-invalid"),
+      };
+    const planned = command(
+      selected.state,
+      buildReviseWork(selected.state.works[0].id, input.work),
+    );
+    if (!planned.ok) return { ...planned, state };
+    planned.state.author.identity = { ...profile };
+    return {
+      ok: true,
+      state: planned.state,
+      events: [...selected.events, ...planned.events],
+    };
+  }
+
   function serialize(state: LifeState) {
     return JSON.stringify({
       format: "webnovel-life-save",
@@ -434,6 +524,10 @@ export function createEngine(
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.7" &&
       version.contentHash === LEGACY_HASH_037;
+    const fromV038 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.8" &&
+      version.contentHash === LEGACY_HASH_038;
     const previous =
       fromV030 ||
       fromV031 ||
@@ -442,7 +536,8 @@ export function createEngine(
       fromV034 ||
       fromV035 ||
       fromV036 ||
-      fromV037;
+      fromV037 ||
+      fromV038;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }
@@ -556,6 +651,8 @@ export function createEngine(
 
   return {
     createLife,
+    getStartSetup,
+    configureStart,
     advance,
     choose,
     serialize,
@@ -633,6 +730,8 @@ export function createEngine(
 }
 
 export const {
+  getStartSetup,
+  configureStart,
   prepareEnding,
   confirmNewWork,
   getPendingNewWork,

@@ -352,6 +352,7 @@ describe("[17번] 95 authored event additions", () => {
     "pending-forced-multi.json",
     "pending-new-title-illness.json",
     "save-v0.3.5.json",
+    "save-v0.3.6.json",
   ])("migrates %s, advances 60 days and round-trips", (name) => {
     const loaded = product.deserialize(
       readFileSync(new URL("./fixtures/" + name, import.meta.url), "utf8"),

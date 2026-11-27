@@ -9,7 +9,10 @@
     "weight": 6,
     "cooldown": 4,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "egoUse",
@@ -46,7 +49,10 @@
     "weight": 1.68,
     "cooldown": 5,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "choices": [
       {
         "id": "take",
@@ -164,7 +170,10 @@
     "weight": 8,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "choices": [
       {
         "id": "admit",
@@ -249,7 +258,10 @@
     "weight": 2,
     "cooldown": 40,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "communityUse",
@@ -294,7 +306,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -630,7 +645,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -799,7 +817,10 @@
     "weight": 2,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "egoUse",
@@ -914,6 +935,414 @@
             "amount": 4
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "community-sources-thread",
+    "category": "community",
+    "title": "event.community-sources-thread.title",
+    "text": "event.community-sources-thread.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "community-spoiler-etiquette",
+    "category": "community",
+    "title": "event.community-spoiler-etiquette.title",
+    "text": "event.community-spoiler-etiquette.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "join",
+        "label": "event.community-spoiler-etiquette.choice.join",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 0.5
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "label": "event.community-spoiler-etiquette.choice.watch",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "community-resource-swap",
+    "category": "community",
+    "title": "event.community-resource-swap.title",
+    "text": "event.community-resource-swap.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "vocabulary",
+        "amount": 0.3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "community-feedback-boundary",
+    "category": "community",
+    "title": "event.community-feedback-boundary.title",
+    "text": "event.community-feedback-boundary.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "scope",
+        "label": "event.community-feedback-boundary.choice.scope",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "style",
+            "amount": 0.4
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "stop",
+        "label": "event.community-feedback-boundary.choice.stop",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "community-quiet-room",
+    "category": "community",
+    "title": "event.community-quiet-room.title",
+    "text": "event.community-quiet-room.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 35
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2.5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "community-old-guide",
+    "category": "community",
+    "title": "event.community-old-guide.title",
+    "text": "event.community-old-guide.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.3
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "community-pseudonym-boundary",
+    "category": "community",
+    "title": "event.community-pseudonym-boundary.title",
+    "text": "event.community-pseudonym-boundary.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "separate",
+        "label": "event.community-pseudonym-boundary.choice.separate",
+        "effects": [
+          {
+            "kind": "flag",
+            "key": "accounts_separated"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "announce",
+        "label": "event.community-pseudonym-boundary.choice.announce",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "community-critique-return",
+    "category": "community",
+    "title": "event.community-critique-return.title",
+    "text": "event.community-critique-return.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 80,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "reputation",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "style",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "id": "community-number-comparison",
+    "category": "community",
+    "title": "event.community-number-comparison.title",
+    "text": "event.community-number-comparison.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "choices": [
+      {
+        "id": "close",
+        "label": "event.community-number-comparison.choice.close",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -3
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "analyze",
+        "label": "event.community-number-comparison.choice.analyze",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "commercial",
+            "amount": 0.4
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "community-checkin-return",
+    "category": "community",
+    "title": "event.community-checkin-return.title",
+    "text": "event.community-checkin-return.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "hiatusWorks",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": 0.5
       }
     ]
   }

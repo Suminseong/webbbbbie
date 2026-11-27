@@ -356,7 +356,7 @@ function renderWorkJournal(work: ReturnType<typeof getWorkViews>[number]) {
   const filter = journalFilters.get(work.id) ?? "all";
   const types: Record<string, string[]> = {
     events: ["EFFECT_APPLIED"],
-    status: ["WORK_STATUS_CHANGED"],
+    status: ["WORK_STATUS_CHANGED", "STATE_CHANGED"],
     commands: ["COMMAND", "WORK_ORDER"],
     settlement: ["PAYOUT"],
     exposure: ["WORK_EXPOSURE"],

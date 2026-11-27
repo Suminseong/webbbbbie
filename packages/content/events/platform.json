@@ -39,7 +39,10 @@
     "weight": 4,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -74,7 +77,10 @@
     "weight": 3,
     "cooldown": 20,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -106,7 +112,10 @@
     "cooldown": 0,
     "minDay": 1,
     "once": true,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "workAge",
@@ -141,7 +150,10 @@
     "weight": 2,
     "cooldown": 120,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -190,7 +202,11 @@
     "weight": 6,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID",
+      "HIATUS"
+    ],
     "effects": [
       {
         "kind": "promotion",
@@ -218,7 +234,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "condition",
@@ -255,7 +274,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "choices": [
       {
         "id": "inquiry",
@@ -295,7 +317,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -330,7 +355,11 @@
     "weight": 3,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID",
+      "HIATUS"
+    ],
     "conditions": [
       {
         "key": "stock",
@@ -356,7 +385,10 @@
     "weight": 2,
     "cooldown": 120,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "cash",
@@ -410,7 +442,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -451,7 +486,9 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["HIATUS"],
+    "statuses": [
+      "HIATUS"
+    ],
     "conditions": [
       {
         "key": "hiatusWorks",
@@ -557,7 +594,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "quality",
@@ -592,7 +632,10 @@
     "weight": 2,
     "cooldown": 40,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -612,5 +655,401 @@
         "amount": 2
       }
     ]
+  },
+  {
+    "id": "platform-tag-audit",
+    "category": "platform",
+    "title": "event.platform-tag-audit.title",
+    "text": "event.platform-tag-audit.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 1.2
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "platform-weekly-roundup",
+    "category": "platform",
+    "title": "event.platform-weekly-roundup.title",
+    "text": "event.platform-weekly-roundup.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 70,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 14
+      },
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "platform-cover-readability",
+    "category": "platform",
+    "title": "event.platform-cover-readability.title",
+    "text": "event.platform-cover-readability.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "design",
+        "label": "event.platform-cover-readability.choice.design",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -15000
+          },
+          {
+            "kind": "promotion",
+            "days": 2
+          }
+        ]
+      },
+      {
+        "id": "simple",
+        "label": "event.platform-cover-readability.choice.simple",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "commercial",
+            "amount": 0.3
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "platform-resume-index",
+    "category": "platform",
+    "title": "event.platform-resume-index.title",
+    "text": "event.platform-resume-index.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "HIATUS"
+    ],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "flag",
+        "key": "resume_index_checked"
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "platform-accessibility-check",
+    "category": "platform",
+    "title": "event.platform-accessibility-check.title",
+    "text": "event.platform-accessibility-check.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 0.6
+      },
+      {
+        "kind": "ability",
+        "stat": "style",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "platform-complete-shelf",
+    "category": "platform",
+    "title": "event.platform-complete-shelf.title",
+    "text": "event.platform-complete-shelf.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "COMPLETED",
+      "RUSHED_END"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "effects": [
+      {
+        "kind": "promotion",
+        "days": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1.5
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "platform-broken-notice",
+    "category": "platform",
+    "title": "event.platform-broken-notice.title",
+    "text": "event.platform-broken-notice.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "social",
+        "stat": "reputation",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "platform-mini-interview",
+    "category": "platform",
+    "title": "event.platform-mini-interview.title",
+    "text": "event.platform-mini-interview.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 100,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 25
+      },
+      {
+        "key": "recognition",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "answer",
+        "label": "event.platform-mini-interview.choice.answer",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "recognition",
+            "amount": 1
+          },
+          {
+            "kind": "promotion",
+            "days": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "event.platform-mini-interview.choice.pass",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "platform-archive-correction",
+    "category": "platform",
+    "title": "event.platform-archive-correction.title",
+    "text": "event.platform-archive-correction.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 12
+      },
+      {
+        "key": "consistency",
+        "op": "lte",
+        "value": 65
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 2.2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "platform-schedule-card",
+    "category": "platform",
+    "title": "event.platform-schedule-card.title",
+    "text": "event.platform-schedule-card.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 7
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "schedule_card"
+      },
+      {
+        "kind": "social",
+        "stat": "completionTrust",
+        "amount": 0.7
+      }
+    ],
+    "once": true
   }
 ]

@@ -153,6 +153,7 @@ const LEGACY_HASH_031 = "3916f2ee";
 const LEGACY_HASH_032 = "1d93c10d";
 const LEGACY_HASH_033 = "9eb5a1e7";
 const LEGACY_HASH_035 = "0ead2bf0";
+const LEGACY_HASH_036 = "4a557dbd";
 
 export function createEngine(
   content: Content = defaultContent,
@@ -180,6 +181,7 @@ export function createEngine(
               [
                 "EFFECT_APPLIED",
                 "WORK_STATUS_CHANGED",
+                "STATE_CHANGED",
                 "COMMAND",
                 "WORK_ORDER",
                 "PAYOUT",
@@ -422,8 +424,18 @@ export function createEngine(
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.5" &&
       version.contentHash === LEGACY_HASH_035;
+    const fromV036 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.6" &&
+      version.contentHash === LEGACY_HASH_036;
     const previous =
-      fromV030 || fromV031 || fromV032 || fromV033 || fromV034 || fromV035;
+      fromV030 ||
+      fromV031 ||
+      fromV032 ||
+      fromV033 ||
+      fromV034 ||
+      fromV035 ||
+      fromV036;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }

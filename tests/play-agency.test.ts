@@ -316,7 +316,9 @@ describe("[16번 §3] player commands", () => {
     const product = createEngine();
     const loaded = product.deserialize(fixture);
     if (!loaded.ok) throw new Error(loaded.error);
-    expect(loaded.state.rulesVersion).toBe("0.3.4");
+    expect(loaded.state.rulesVersion).toBe(
+      createEngine().createLife(0).rulesVersion,
+    );
     expect(loaded.state.day).toBe(5);
     expect(loaded.state.works[0].rush).toBe(2);
     expect(loaded.state.works[0].extraWriting).toBe(false);

@@ -1,10 +1,18 @@
-import { channels, sourceText, tagUnlocks } from "@webbbbbie/content";
+import { channels, sourceText, tagUnlocks, text } from "@webbbbbie/content";
 import type { Content, Platform } from "@webbbbbie/content";
-import { blankSources, clamp, serial, sum, terminal } from "./author";
+import {
+  blankSources,
+  clamp,
+  serial,
+  sum,
+  terminal,
+  record,
+  workTitle,
+} from "./author";
 import { traitsOf } from "./contracts";
 import { accrue, activeContract } from "./economy";
 import { spendingEffect } from "./work";
-import type { LifeState, Work } from "./model";
+import type { EngineEvent, LifeState, Work } from "./model";
 import { rand, stream } from "./rng";
 
 const unlockedTagPlatforms = new Map(
@@ -253,6 +261,7 @@ export function resolveAudience(
   state: LifeState,
   content: Content,
   day: number,
+  events: EngineEvent[] = [],
 ) {
   const totals = new Map<string, number>();
   const planned = state.works.map((work, index) => {
@@ -284,6 +293,47 @@ export function resolveAudience(
     work.stats.totalViews += views;
     work.stats.latestViews = latest;
     work.stats.lost = lost;
+    const before = work.detail;
+    const exposed = ["HOT", "BEST"].filter(
+      (key) => result.fromSource[key as "HOT" | "BEST"] > 0,
+    );
+    for (const key of new Set([...(before?.exposure ?? []), ...exposed])) {
+      if (exposed.includes(key) === (before?.exposure.includes(key) ?? false))
+        continue;
+      record(
+        events,
+        "WORK_EXPOSURE",
+        day,
+        text("engine.log.exposure-change", {
+          work_title: workTitle(work),
+          channel: text("label.acquisition." + key.toLowerCase()),
+          change: text(
+            exposed.includes(key)
+              ? "label.exposure.enter"
+              : "label.exposure.leave",
+          ),
+        }),
+        work.id,
+      );
+    }
+    const expected =
+      serial(work) && !!(work.mask & (1 << ((day - 1) % 7))) ? 1 : 0;
+    work.detail = {
+      since: before?.since ?? day,
+      paidReads: (before?.paidReads ?? 0) + paidViews,
+      exposure: exposed,
+      journal: before?.journal ?? [],
+      history: [
+        ...(before?.history ?? []),
+        [day, work.quality, work.stats.publishedToday, expected, paidViews] as [
+          number,
+          number,
+          number,
+          number,
+          number,
+        ],
+      ].slice(-content.balance.plan.historyKeep),
+    };
     work.history.push([day, views, work.stats.newReaders]);
     if (work.history.length > content.balance.plan.historyKeep)
       work.history.shift();

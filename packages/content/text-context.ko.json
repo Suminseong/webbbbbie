@@ -2788,5 +2788,233 @@
     "group_id": "ui.new-work",
     "context": "상태에 의한 신작 요청 기록. 아직 작품이 생겼다고 표현하지 않음.",
     "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "system.command.ending-invalid": {
+    "category": "SYSTEM",
+    "group_id": "ui.work.detail",
+    "context": "남은 분량을 1~200화로 입력하고 현재 비축분 이상으로 정해 주세요. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "engine.log.ending-plan": {
+    "category": "SYSTEM",
+    "group_id": "ui.work.detail",
+    "context": "《{{work_title}}》 완결까지 {{chapters}}화를 남기고 플롯 준비에 무게를 두기로 했다. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "engine.log.exposure-change": {
+    "category": "SYSTEM",
+    "group_id": "ui.work.detail",
+    "context": "《{{work_title}}》 · {{channel}} 노출 {{change}} 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "label.exposure.enter": {
+    "category": "SYSTEM",
+    "group_id": "ui.work.detail",
+    "context": "진입 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "label.exposure.leave": {
+    "category": "SYSTEM",
+    "group_id": "ui.work.detail",
+    "context": "종료 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.duration": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "연재 기간 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.duration-value": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "{{start}}일차 시작 · {{days}}일 경과 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.paid-reads": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "유료 열람 누계 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.settlement": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "최근 작품 정산 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.settlement-value": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "{{day}}일차 · {{amount}} 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.settlement-empty": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "보관된 정산 없음 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.exposure": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "인기 노출 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.exposure-none": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "HOT·BEST 노출 없음 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.stability": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "최근 30일 연재 이행 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.stability-value": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "{{percent}}% · 예정 {{due}}일 중 {{kept}}일 등록 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.trend-14": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "최근 14일 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.detail-partial": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "유료 열람·품질·연재 이행 기록은 {{day}}일차부터 집계합니다. 이전 기록을 추정하지 않습니다. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.quality-trend": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "최근 30일 작품 품질 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.quality-point": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "{{day}}일차 · 품질 {{quality}} 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.quality-range": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "0~100 기준 · 첫 기록 {{first}} → 최근 {{last}} 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.detail-empty": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "아직 기록된 하루가 없습니다. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "작품 주요 이력 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-filter": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "이력 분류 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-all": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "전체 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-events": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "사건·독자 반응 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-status": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "연재 상태 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-commands": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "명령·수행 결과 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-settlement": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "정산 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-exposure": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "인기 노출 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.work.journal-summary": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "해당 이력 {{count}}건 · 최근 365일, 작품별 최대 200건 보관 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.contract-yes": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "계약 연결 있음 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.contract-no": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "계약 연결 없음 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.drop-impact": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "현재 {{status}}, 비축 {{stock}}화, {{contract}}. 연중 후 재개할 수 없으며 비축분은 등록되지 않습니다. 평판 -3, 멘헤라 +4가 적용됩니다. 기존 회차의 유입·수익과 계약 정산은 플랫폼·계약 규칙에 따릅니다. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.policy-cost": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "방침 변경 자체는 시간·현금을 소모하지 않습니다. 연참은 기존 비축 원고를 등록하며 새 원고를 만들지 않습니다. 휴재도 공통 생활 시간표를 사용하므로 회복하려면 휴식 시간을 확보하세요. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.ending-remaining": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "완결까지 남은 회차 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.prepare-ending": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "완결 준비 적용 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.ending-cost": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "1~{{max}}화, 현재 비축분 이상. 목표 회차를 조정하고 공통 플롯 시간 배분 가중치를 {{weight}}배로 바꿉니다. 원고·품질·보상은 즉시 생기지 않습니다. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.cmd.ending-target": {
+    "category": "UI",
+    "group_id": "ui.work.detail",
+    "context": "현재 완결 목표 {{chapter}}화. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
+    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
   }
 }

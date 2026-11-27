@@ -865,7 +865,8 @@ button.danger:hover:not(:disabled) {
 .funnel p {
   margin: 4px 0;
 }
-.funnel-rows {
+.funnel-rows,
+.journal-rows {
   max-height: 220px;
   overflow-y: auto;
   margin: 6px 0 0;
@@ -874,7 +875,8 @@ button.danger:hover:not(:disabled) {
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
-.funnel-rows li {
+.funnel-rows li,
+.journal-rows li {
   padding: 2px 0;
   overflow-wrap: anywhere;
 }

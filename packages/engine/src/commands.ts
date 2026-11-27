@@ -2,6 +2,7 @@ import type { Content, StartPath } from "@webbbbbie/content";
 import {
   displayName,
   oneTimeExpenses,
+  playerActionRules,
   sourceText,
   tagUnlocks,
   text,
@@ -307,6 +308,35 @@ export function rushWork(id: string, days: number): Run {
       work.id,
     );
     void content;
+  };
+}
+
+/** Completion still requires writing and releasing every remaining chapter. */
+export function prepareEnding(id: string, remaining: number): Run {
+  return (state, _content, events) => {
+    const work = findWork(state, id);
+    if (!work) return fail("E_NO_WORK", "system.command.no-work");
+    if (!serial(work) && work.status !== "HIATUS")
+      return fail("E_NOT_ALLOWED", "system.command.not-serial");
+    if (
+      !natural(remaining) ||
+      remaining < 1 ||
+      remaining > playerActionRules.endingMaxRemaining ||
+      remaining < Math.ceil(work.stock)
+    )
+      return fail("E_INVALID_PLAN", "system.command.ending-invalid");
+    work.targetChapters = work.published + remaining;
+    work.endingTarget = work.targetChapters;
+    record(
+      events,
+      "COMMAND",
+      state.day,
+      text("engine.log.ending-plan", {
+        work_title: workTitle(work),
+        chapters: remaining,
+      }),
+      work.id,
+    );
   };
 }
 

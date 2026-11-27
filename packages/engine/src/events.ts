@@ -177,7 +177,7 @@ function matches(
       actual = sum(Object.values(author.lastRoutine?.plot ?? {}));
       break;
     case "writingSlots":
-      actual = author.lastRoutine?.work ?? 0;
+      actual = sum(Object.values(author.lastRoutine?.writing ?? {}));
       break;
     case "hiatusWorks":
       actual = state.works.filter((item) => item.status === "HIATUS").length;

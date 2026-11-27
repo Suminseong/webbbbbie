@@ -315,6 +315,7 @@ export function planRoutine(
     1,
     (item) =>
       item.priority *
+      (item.endingTarget !== null ? playerActionRules.endingPlotWeight : 1) *
       (item.status === "PLANNING" ? 1.4 : 1) *
       (115 - item.prep),
   );

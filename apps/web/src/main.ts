@@ -27,6 +27,7 @@ import {
   hiatusWork,
   ledgerNames,
   planWork,
+  prepareEnding,
   purchase,
   resumeWork,
   retire,
@@ -91,6 +92,7 @@ let revision = 0;
 let slots: Partial<Record<SlotId, SavedLife>> = {};
 let seedDraft = "42";
 let selectedWork: string | null = null;
+const journalFilters = new Map<string, string>();
 let storageAvailable = true;
 type PlanDraft = {
   editing: string | null;
@@ -281,7 +283,6 @@ function workPanel(
   work: ReturnType<typeof getWorkViews>[number],
   expanded: boolean,
 ) {
-  const top = Math.max(1, ...work.newBySource.map((source) => source.count));
   const isClosed = !!work.end;
   return `<article class="work-card panel" data-work="${escape(work.id)}">
     <div class="work-head">
@@ -302,14 +303,20 @@ function workPanel(
       expanded
         ? `<div class="work-details">
       <dl class="work-extra">
+        <div><dt>${ui("ui.work.duration")}</dt><dd>${ui("ui.work.duration-value", { start: work.startDay, days: work.duration })}</dd></div>
+        <div><dt>${ui("ui.work.paid-reads")}</dt><dd>${work.detail.paidReads === null ? "–" : fraction(work.detail.paidReads)}</dd></div>
+        <div><dt>${ui("ui.work.settlement")}</dt><dd>${work.latestSettlement ? ui("ui.work.settlement-value", { day: work.latestSettlement.day, amount: won(work.latestSettlement.amount) }) : ui("ui.work.settlement-empty")}</dd></div>
+        <div><dt>${ui("ui.work.exposure")}</dt><dd>${work.exposure.length ? escape(work.exposure.join(", ")) : ui("ui.work.exposure-none")}</dd></div>
+        <div><dt>${ui("ui.work.stability")}</dt><dd>${work.detail.stability === null ? "–" : ui("ui.work.stability-value", { percent: fraction(work.detail.stability * 100), kept: work.detail.fulfilled, due: work.detail.expected })}</dd></div>
         <div><dt>${ui("ui.work.total-views")}</dt><dd>${count(work.totalViews)}</dd></div>
         <div><dt>${ui("ui.work.latest-views")}</dt><dd>${count(work.latestViews)}</dd></div>
         <div><dt>${ui("ui.work.lost")}</dt><dd>${ui("ui.format.reader", { count: count(work.lost) })}</dd></div>
         <div><dt>${ui("ui.work.paid")}</dt><dd>${escape(won(work.paid))}</dd></div>
-        <div><dt>${ui("ui.work.first-views")}</dt><dd>${count(work.inflow)}</dd></div>
+        <div><dt>${ui("ui.work.funnel-first")}</dt><dd>${work.funnel.firstReads === null ? "–" : fraction(work.funnel.firstReads)}</dd></div>
         <div><dt>${ui("ui.work.active-readers")}</dt><dd>${count(work.activeReaders)}</dd></div>
         <div><dt>${ui("ui.work.retention")}</dt><dd>${count(work.latestPerInflow * 100)}%</dd></div>
         <div><dt>${ui("ui.work.trend-7")}</dt><dd>${ui("ui.work.trend-value", { views: count(work.trend.d7.views), readers: count(work.trend.d7.newReaders) })}</dd></div>
+        <div><dt>${ui("ui.work.trend-14")}</dt><dd>${ui("ui.work.trend-value", { views: count(work.trend.d14.views), readers: count(work.trend.d14.newReaders) })}</dd></div>
         <div><dt>${ui("ui.work.trend-30")}</dt><dd>${ui("ui.work.trend-value", { views: count(work.trend.d30.views), readers: count(work.trend.d30.newReaders) })}</dd></div>
         <div><dt>${ui("ui.work.prep")}</dt><dd>${work.prep}</dd></div>
         <div><dt>${ui("ui.work.consistency")}</dt><dd>${work.consistency}</dd></div>
@@ -317,28 +324,54 @@ function workPanel(
         <div><dt>${ui("ui.work.quality")}</dt><dd>${count(work.quality)}</dd></div>
       </dl>
       ${renderSpark(work.history)}
+      ${work.detail.partial ? `<p class="small-muted">${ui("ui.work.detail-partial", { day: work.detail.since ?? state.day + 1 })}</p>` : ""}
+      <h4>${ui("ui.work.quality-trend")}</h4>
+      ${work.detail.history.length ? `<div class="spark" role="img" aria-label="${ui("ui.work.quality-trend")}">${work.detail.history.map((row) => `<i style="height:${row.quality}%" title="${ui("ui.work.quality-point", { day: row.day, quality: fraction(row.quality) })}"></i>`).join("")}</div><p class="small-muted">${ui("ui.work.quality-range", { first: fraction(work.detail.history[0].quality), last: fraction(work.detail.history.at(-1)!.quality) })}</p>` : `<p class="small-muted">${ui("ui.work.detail-empty")}</p>`}
       ${renderFunnel(work.funnel)}
       ${work.end ? "" : workCommands(work)}
+      ${renderWorkJournal(work)}
       ${work.end ? `<p class="small-muted">${ui("ui.work.ending", { day: work.end.day, reason: work.end.reason, chapters: work.end.chapters, favorites: count(work.end.favorites) })}</p>` : ""}
       ${work.missedReason ? `<p class="small-muted">${ui("ui.work.missed", { reason: text(work.missedReason === "HIATUS" ? "ui.work.miss-hiatus" : "ui.work.miss-stock") })}</p>` : ""}
       <div class="breakdown"><div><h4>${ui("ui.work.source-title")}</h4>
         ${
-          work.newBySource
+          work.sources
             .filter((source) => source.count > 0)
             .map(
               (source) =>
-                `<div class="source-row"><span>${escape(source.label)}</span><i style="width:${(source.count / top) * 100}%"></i><b>${count(source.count)}</b></div>`,
+                `<div class="source-row"><span>${escape(source.label)}</span><i style="width:${source.share * 100}%"></i><b>${fraction(source.share * 100)}%</b></div>`,
             )
             .join("") ||
           `<p class="small-muted">${ui("ui.work.source-empty")}</p>`
         }
       </div><div><h4>${ui("ui.work.age-title")}</h4>
-        ${work.newByAge.map((age) => `<div class="age-row"><span>${escape(age.label)}</span><b>${ui("ui.format.reader", { count: count(age.count) })}</b></div>`).join("")}
+        ${work.newByAge.map((age) => `<div class="age-row"><span>${escape(age.label)}</span><b>${fraction(age.share * 100)}%</b></div>`).join("")}
       </div></div>
     </div>`
         : ""
     }
   </article>`;
+}
+
+function renderWorkJournal(work: ReturnType<typeof getWorkViews>[number]) {
+  const filter = journalFilters.get(work.id) ?? "all";
+  const types: Record<string, string[]> = {
+    events: ["EFFECT_APPLIED"],
+    status: ["WORK_STATUS_CHANGED"],
+    commands: ["COMMAND", "WORK_ORDER"],
+    settlement: ["PAYOUT"],
+    exposure: ["WORK_EXPOSURE"],
+  };
+  const rows = work.journal.filter(
+    (row) => filter === "all" || types[filter]?.includes(row.type),
+  );
+  return `<section class="work-journal"><h4>${ui("ui.work.journal")}</h4><label>${ui("ui.work.journal-filter")}<select data-journal="${escape(work.id)}">${["all", ...Object.keys(types)].map((key) => `<option value="${key}" ${filter === key ? "selected" : ""}>${ui("ui.work.journal-" + key)}</option>`).join("")}</select></label><p class="small-muted">${ui("ui.work.journal-summary", { count: rows.length })}</p><ol class="journal-rows">${rows
+    .slice()
+    .reverse()
+    .map(
+      (row) =>
+        `<li>${ui("ui.format.day", { day: row.day })} · ${escape(row.message)}</li>`,
+    )
+    .join("")}</ol></section>`;
 }
 
 function renderSpark(history: { day: number; views: number }[]) {
@@ -448,11 +481,14 @@ function workCommands(work: ReturnType<typeof getWorkViews>[number]) {
     return `<p class="notice">${ui("system.command.choice-pending")}</p>`;
   if (confirmDrop === work.id)
     return `<div class="work-commands"><p>${ui("ui.cmd.drop-confirm", { title: work.title })}</p>
+      <p>${ui("ui.cmd.drop-impact", { status: work.statusLabel, stock: work.stock.toFixed(1), contract: text(work.contractId ? "ui.cmd.contract-yes" : "ui.cmd.contract-no") })}</p>
       <button class="danger" data-action="drop-yes" data-work-id="${id}">${ui("ui.cmd.drop-yes")}</button>
       <button data-action="drop-no">${ui("ui.cmd.drop-no")}</button></div>`;
   return `<div class="work-commands" data-commands="${id}">
     <h4>${ui("ui.cmd.heading")}</h4>
     <p class="small-muted">${ui("ui.cmd.extra-cost")}</p>
+    <p class="small-muted">${ui("ui.cmd.policy-cost")}</p>
+    ${work.canPrepareEnding ? `<div class="cmd-row"><label>${ui("ui.cmd.ending-remaining")}<input data-field="ending-remaining" type="number" min="${Math.max(1, Math.ceil(work.stock))}" max="${getPlanOptions().endingMaxRemaining}" value="${Math.min(getPlanOptions().endingMaxRemaining, Math.max(1, Math.ceil(work.stock), Math.min(20, work.target - work.published)))}"></label><button data-action="prepare-ending" data-work-id="${id}">${ui("ui.cmd.prepare-ending")}</button></div><p class="small-muted">${ui("ui.cmd.ending-cost", { max: getPlanOptions().endingMaxRemaining, weight: getPlanOptions().endingPlotWeight })}${work.endingTarget === null ? "" : " " + ui("ui.cmd.ending-target", { chapter: work.endingTarget })}</p>` : ""}
     ${(() => {
       const outcomes = getEventLog(state)
         .filter(
@@ -1035,6 +1071,14 @@ function workAction(action: string, button: HTMLButtonElement) {
   const id = button.dataset.workId!;
   const root = button.closest("[data-work]");
   switch (action) {
+    case "prepare-ending":
+      return commit(
+        prepareEnding(
+          state,
+          id,
+          Number(field(root, "ending-remaining")?.value),
+        ),
+      );
     case "rush":
       return commit(rushWork(state, id, Number(field(root, "rush")?.value)));
     case "rush-cancel":
@@ -1085,6 +1129,16 @@ app.addEventListener("input", (event) => {
     target instanceof HTMLInputElement || target instanceof HTMLSelectElement
   ))
     return;
+  if (target.dataset.journal) {
+    journalFilters.set(target.dataset.journal, target.value);
+    render();
+    app
+      .querySelector<HTMLSelectElement>(
+        '[data-journal="' + target.dataset.journal + '"]',
+      )
+      ?.focus();
+    return;
+  }
   if (target.dataset.draft && planDraft) {
     const key = target.dataset.draft as keyof PlanDraft;
     if (key === "perWeek") planDraft.perWeek = Number(target.value);
@@ -1271,6 +1325,7 @@ app.addEventListener("click", (event) => {
       break;
     case "rush":
     case "rush-cancel":
+    case "prepare-ending":
     case "extra-write":
     case "extra-write-cancel":
     case "hiatus":

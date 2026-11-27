@@ -66,9 +66,16 @@ function contracted(companyId: string, editorId: string | null, seed = 42) {
 
 describe("[17번 §2] chapter funnel", () => {
   it("records actual per-chapter reads with a clear numerator and denominator", () => {
-    const state = play(product, pick(product, product.createLife(42)), 90);
+    // A known incoming aggregate cohort exercises nonzero chapter reads;
+    // the low-volume market can legitimately round tiny observations to zero.
+    const begin = () => {
+      const state = pick(quiet, quiet.createLife(42));
+      state.works[0].readers[0] = [10];
+      return state;
+    };
+    const state = play(quiet, begin(), 90);
     const work = state.works.find((item) => item.published >= 5)!;
-    const view = product
+    const view = quiet
       .getWorkViews(state)
       .find((item) => item.id === work.id)!;
     expect(view.funnel.known).toBe(true);
@@ -81,8 +88,8 @@ describe("[17번 §2] chapter funnel", () => {
       expect(row.rate).toBeGreaterThanOrEqual(0);
       expect(row.rate).toBeCloseTo(row.reads / row.previous!, 10);
     }
-    const again = play(product, pick(product, product.createLife(42)), 90);
-    expect(product.serialize(again)).toBe(product.serialize(state));
+    const again = play(quiet, begin(), 90);
+    expect(quiet.serialize(again)).toBe(quiet.serialize(state));
   });
 
   it("reports unknown, not zero, for a work whose log predates the feature", () => {

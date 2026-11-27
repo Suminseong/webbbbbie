@@ -9,7 +9,10 @@
     "weight": 4,
     "cooldown": 8,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -40,7 +43,10 @@
     "weight": 12,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "path",
@@ -87,7 +93,10 @@
     "cooldown": 0,
     "minDay": 1,
     "once": true,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -119,7 +128,10 @@
     "cooldown": 0,
     "minDay": 1,
     "once": true,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -155,7 +167,10 @@
     "weight": 4,
     "cooldown": 14,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -185,7 +200,10 @@
     "weight": 3,
     "cooldown": 20,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -220,7 +238,10 @@
     "weight": 3,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -255,7 +276,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -290,7 +314,10 @@
     "weight": 2,
     "cooldown": 40,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -340,7 +367,10 @@
     "weight": 3,
     "cooldown": 21,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -399,7 +429,10 @@
     "weight": 3,
     "cooldown": 25,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "quality",
@@ -439,7 +472,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -476,7 +512,10 @@
     "weight": 6,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "choices": [
       {
         "id": "ignore",
@@ -552,7 +591,10 @@
     "weight": 2,
     "cooldown": 40,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -582,7 +624,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "fandom",
@@ -618,7 +663,10 @@
     "cooldown": 0,
     "minDay": 1,
     "once": true,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -648,7 +696,10 @@
     "weight": 3,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -684,7 +735,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -746,7 +800,10 @@
     "weight": 2,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -807,7 +864,10 @@
     "weight": 2,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -842,7 +902,10 @@
     "weight": 2,
     "cooldown": 35,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -878,7 +941,10 @@
     "weight": 2,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "quality",
@@ -913,7 +979,9 @@
     "weight": 2,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["HIATUS"],
+    "statuses": [
+      "HIATUS"
+    ],
     "choices": [
       {
         "id": "notice",
@@ -958,7 +1026,10 @@
     "weight": 6,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "choices": [
       {
         "id": "fix",
@@ -999,6 +1070,438 @@
             "amount": -1
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "reader-map-question",
+    "category": "reader",
+    "title": "event.reader-map-question.title",
+    "text": "event.reader-map-question.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "choices": [
+      {
+        "id": "answer",
+        "label": "event.reader-map-question.choice.answer",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 1.5
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          },
+          {
+            "kind": "flag",
+            "key": "map_answered"
+          },
+          {
+            "kind": "schedule",
+            "id": "reader-return-mark",
+            "delay": 5,
+            "window": 20
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "event.reader-map-question.choice.leave",
+        "effects": [
+          {
+            "kind": "attachment",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reader-return-mark",
+    "category": "reader",
+    "title": "event.reader-return-mark.title",
+    "text": "event.reader-return-mark.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "map_answered:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "attachment",
+        "amount": 1.5
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "chapter-navigation-note",
+    "category": "reader",
+    "title": "event.chapter-navigation-note.title",
+    "text": "event.chapter-navigation-note.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 20
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      },
+      {
+        "kind": "ability",
+        "stat": "diligence",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "small-favorite-milestone",
+    "category": "reader",
+    "title": "event.small-favorite-milestone.title",
+    "text": "event.small-favorite-milestone.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "favorites",
+        "op": "gte",
+        "value": 0.1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2.5
+      },
+      {
+        "kind": "attachment",
+        "amount": 1
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "reader-silent-page",
+    "category": "reader",
+    "title": "event.reader-silent-page.title",
+    "text": "event.reader-silent-page.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 10
+      },
+      {
+        "key": "favorites",
+        "op": "lte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "notice",
+        "label": "event.reader-silent-page.choice.notice",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 0.5
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "write",
+        "label": "event.reader-silent-page.choice.write",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reading-time-report",
+    "category": "reader",
+    "title": "event.reading-time-report.title",
+    "text": "event.reading-time-report.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      },
+      {
+        "kind": "attachment",
+        "amount": 0.8
+      }
+    ]
+  },
+  {
+    "id": "character-nickname-note",
+    "category": "reader",
+    "title": "event.character-nickname-note.title",
+    "text": "event.character-nickname-note.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 25
+      },
+      {
+        "key": "attachment",
+        "op": "gte",
+        "value": 40
+      }
+    ],
+    "effects": [
+      {
+        "kind": "attachment",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "reader-translation-query",
+    "category": "reader",
+    "title": "event.reader-translation-query.title",
+    "text": "event.reader-translation-query.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 100,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "choices": [
+      {
+        "id": "explain",
+        "label": "event.reader-translation-query.choice.explain",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "rewrite",
+        "label": "event.reader-translation-query.choice.rewrite",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 0.5
+          },
+          {
+            "kind": "ability",
+            "stat": "vocabulary",
+            "amount": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reader-hiatus-date",
+    "category": "reader",
+    "title": "event.reader-hiatus-date.title",
+    "text": "event.reader-hiatus-date.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "HIATUS"
+    ],
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 7
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      },
+      {
+        "kind": "attachment",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "reader-confused-link",
+    "category": "reader",
+    "title": "event.reader-confused-link.title",
+    "text": "event.reader-confused-link.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -0.5
       }
     ]
   }

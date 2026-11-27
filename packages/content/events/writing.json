@@ -9,7 +9,10 @@
     "weight": 4,
     "cooldown": 3,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "stock",
@@ -32,7 +35,10 @@
     "weight": 2.24,
     "cooldown": 12,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -79,7 +85,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -130,7 +139,10 @@
     "weight": 3,
     "cooldown": 25,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -160,7 +172,10 @@
     "weight": 2,
     "cooldown": 50,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -190,7 +205,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "consistency",
@@ -237,7 +255,10 @@
     "cooldown": 20,
     "minDay": 1,
     "targetBias": "stock",
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "condition",
@@ -261,7 +282,10 @@
     "weight": 2,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stock",
@@ -312,7 +336,10 @@
     "weight": 2,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "quality",
@@ -362,7 +389,10 @@
     "weight": 2,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -412,7 +442,10 @@
     "weight": 3,
     "cooldown": 25,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "choices": [
       {
         "id": "split",
@@ -450,7 +483,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -484,7 +520,10 @@
     "weight": 3,
     "cooldown": 14,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stock",
@@ -519,7 +558,10 @@
     "weight": 2,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "quality",
@@ -546,7 +588,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "effects": [
       {
         "kind": "quality",
@@ -573,7 +618,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -603,7 +651,10 @@
     "weight": 3,
     "cooldown": 25,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "prep",
@@ -642,7 +693,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "prep",
@@ -708,7 +762,10 @@
     "weight": 2,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "workAge",
@@ -774,7 +831,10 @@
     "weight": 3,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "activeWorks",
@@ -804,7 +864,10 @@
     "weight": 2,
     "cooldown": 45,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "activeWorks",
@@ -843,7 +906,10 @@
     "weight": 3,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "activeWorks",
@@ -887,7 +953,10 @@
     "weight": 2,
     "cooldown": 40,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stock",
@@ -932,5 +1001,532 @@
         ]
       }
     ]
+  },
+  {
+    "id": "voice-readback",
+    "category": "writing",
+    "title": "event.voice-readback.title",
+    "text": "event.voice-readback.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "plotSlots",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 1
+      },
+      {
+        "kind": "ability",
+        "stat": "style",
+        "amount": 0.4
+      }
+    ]
+  },
+  {
+    "id": "timeline-ledger",
+    "category": "writing",
+    "title": "event.timeline-ledger.title",
+    "text": "event.timeline-ledger.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "consistency",
+        "op": "lte",
+        "value": 60
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 4
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "unused-scene-box",
+    "category": "writing",
+    "title": "event.unused-scene-box.title",
+    "text": "event.unused-scene-box.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "keep",
+        "label": "event.unused-scene-box.choice.keep",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -0.5
+          },
+          {
+            "kind": "consistency",
+            "amount": 2
+          },
+          {
+            "kind": "attachment",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "trim",
+        "label": "event.unused-scene-box.choice.trim",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -1
+          },
+          {
+            "kind": "quality",
+            "amount": 1.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ending-seed-check",
+    "category": "writing",
+    "title": "event.ending-seed-check.title",
+    "text": "event.ending-seed-check.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 75,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 60
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 2
+      },
+      {
+        "kind": "attachment",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "reference-source-note",
+    "category": "writing",
+    "title": "event.reference-source-note.title",
+    "text": "event.reference-source-note.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "plotSlots",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.5
+      },
+      {
+        "kind": "consistency",
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "id": "one-viewpoint-rule",
+    "category": "writing",
+    "title": "event.one-viewpoint-rule.title",
+    "text": "event.one-viewpoint-rule.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 8
+      },
+      {
+        "key": "consistency",
+        "op": "lte",
+        "value": 70
+      }
+    ],
+    "choices": [
+      {
+        "id": "focus",
+        "label": "event.one-viewpoint-rule.choice.focus",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 3
+          },
+          {
+            "kind": "quality",
+            "amount": 0.7
+          }
+        ]
+      },
+      {
+        "id": "risk",
+        "label": "event.one-viewpoint-rule.choice.risk",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "talent",
+            "amount": 0.4
+          },
+          {
+            "kind": "consistency",
+            "amount": -1.5
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "buffer-labels",
+    "category": "writing",
+    "title": "event.buffer-labels.title",
+    "text": "event.buffer-labels.body",
+    "tier": "FOLLOW_UP",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "draft_backed_up:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 2.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "hiatus-outline-map",
+    "category": "writing",
+    "title": "event.hiatus-outline-map.title",
+    "text": "event.hiatus-outline-map.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "HIATUS"
+    ],
+    "conditions": [
+      {
+        "key": "plotSlots",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 3
+      },
+      {
+        "kind": "attachment",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "scene-distance",
+    "category": "writing",
+    "title": "event.scene-distance.title",
+    "text": "event.scene-distance.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "attachment",
+        "op": "gte",
+        "value": 80
+      },
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "cut",
+        "label": "event.scene-distance.choice.cut",
+        "effects": [
+          {
+            "kind": "stock",
+            "amount": -0.5
+          },
+          {
+            "kind": "quality",
+            "amount": 2
+          },
+          {
+            "kind": "attachment",
+            "amount": -3
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.scene-distance.choice.keep",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 1
+          },
+          {
+            "kind": "attachment",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "short-writing-window",
+    "category": "writing",
+    "title": "event.short-writing-window.title",
+    "text": "event.short-writing-window.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "writingSlots",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "writingSlots",
+        "op": "lte",
+        "value": 4
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": 0.25
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "chapter-entry-note",
+    "category": "writing",
+    "title": "event.chapter-entry-note.title",
+    "text": "event.chapter-entry-note.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 15
+      },
+      {
+        "key": "prep",
+        "op": "gte",
+        "value": 35
+      }
+    ],
+    "effects": [
+      {
+        "kind": "quality",
+        "amount": 0.8
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "draft-backup-rule",
+    "category": "writing",
+    "title": "event.draft-backup-rule.title",
+    "text": "event.draft-backup-rule.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 4
+      }
+    ],
+    "choices": [
+      {
+        "id": "backup",
+        "label": "event.draft-backup-rule.choice.backup",
+        "effects": [
+          {
+            "kind": "flag",
+            "key": "draft_backed_up"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          },
+          {
+            "kind": "flag",
+            "key": "draft_backed_up"
+          },
+          {
+            "kind": "schedule",
+            "id": "buffer-labels",
+            "delay": 5,
+            "window": 20
+          }
+        ]
+      },
+      {
+        "id": "polish",
+        "label": "event.draft-backup-rule.choice.polish",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 1.2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "once": true
   }
 ]

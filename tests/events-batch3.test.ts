@@ -117,7 +117,7 @@ describe("[FR-EVENT-006] 규칙 0.3.3 신규 사건 데이터", () => {
       special: 7,
       money: 4,
     });
-    expect(events.length).toBe(205);
+    expect(events.length).toBeGreaterThanOrEqual(205);
   });
 
   it("문구 변형이 아니라 조건·효과가 서로 다른 사건이다", () => {

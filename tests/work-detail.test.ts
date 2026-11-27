@@ -110,3 +110,25 @@ it("retains a bounded per-work journal independently of the small global log", (
     state,
   });
 });
+
+it("leaves previous states immutable and predicts the actual bounded drop cost", () => {
+  const state = play(5),
+    work = state.works[0];
+  work.status = "SERIAL_FREE";
+  state.author.social.reputation = 1;
+  state.author.condition.stress = 99;
+  const before = engine.serialize(state);
+  const impact = engine.getWorkView(state, work.id)!.dropImpact!;
+  const result = engine.dropWork(state, work.id);
+  expect(result.ok).toBe(true);
+  expect(engine.serialize(state)).toBe(before);
+  expect(
+    result.state.author.condition.stress - state.author.condition.stress,
+  ).toBe(impact.stress);
+  expect(
+    result.state.author.social.reputation - state.author.social.reputation,
+  ).toBe(impact.reputation);
+  const saved = engine.serialize(result.state);
+  engine.advance(result.state, 1);
+  expect(engine.serialize(result.state)).toBe(saved);
+});

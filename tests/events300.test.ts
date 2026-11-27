@@ -264,6 +264,10 @@ describe("[17번] 95 authored event additions", () => {
           choice?.id ?? null,
         ]);
         expect(state.eventCount["event:" + def.id]).toBe(1);
+        if (def.scope === "CONTRACT")
+          expect(log.find((row) => row.type === "EFFECT_APPLIED")?.workId).toBe(
+            target!.id,
+          );
         expect(state.author.cash - before.author.cash).toBe(
           fx.filter((e) => e.kind === "cash").reduce((n, e) => n + e.amount, 0),
         );
@@ -353,6 +357,7 @@ describe("[17번] 95 authored event additions", () => {
     "pending-new-title-illness.json",
     "save-v0.3.5.json",
     "save-v0.3.6.json",
+    "save-v0.3.7.json",
   ])("migrates %s, advances 60 days and round-trips", (name) => {
     const loaded = product.deserialize(
       readFileSync(new URL("./fixtures/" + name, import.meta.url), "utf8"),

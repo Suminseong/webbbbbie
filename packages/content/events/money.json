@@ -659,5 +659,419 @@
         ]
       }
     ]
+  },
+  {
+    "id": "money-emergency-envelope",
+    "category": "money",
+    "title": "event.money-emergency-envelope.title",
+    "text": "event.money-emergency-envelope.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 80,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 50000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1.5
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "money-library-fee",
+    "category": "money",
+    "title": "event.money-library-fee.title",
+    "text": "event.money-library-fee.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "plotSlots",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -1000
+      },
+      {
+        "kind": "ability",
+        "stat": "diligence",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "money-data-plan",
+    "category": "money",
+    "title": "event.money-data-plan.title",
+    "text": "event.money-data-plan.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 8
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "event.money-data-plan.choice.buy",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -3300
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "event.money-data-plan.choice.wait",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 0.5
+          },
+          {
+            "kind": "ability",
+            "stat": "diligence",
+            "amount": 0.2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "money-reference-refund",
+    "category": "money",
+    "title": "event.money-reference-refund.title",
+    "text": "event.money-reference-refund.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "plotSlots",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 4500
+      },
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.2
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "money-split-bill",
+    "category": "money",
+    "title": "event.money-split-bill.title",
+    "text": "event.money-split-bill.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 75,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "communityUse",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 10000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -8000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "money-cooking-batch",
+    "category": "money",
+    "title": "event.money-cooking-batch.title",
+    "text": "event.money-cooking-batch.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 80000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 2500
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "money-payment-message",
+    "category": "money",
+    "title": "event.money-payment-message.title",
+    "text": "event.money-payment-message.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.3
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "money-used-supplies",
+    "category": "money",
+    "title": "event.money-used-supplies.title",
+    "text": "event.money-used-supplies.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 15000
+      }
+    ],
+    "choices": [
+      {
+        "id": "buy",
+        "label": "event.money-used-supplies.choice.buy",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -7000
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1.5
+          }
+        ]
+      },
+      {
+        "id": "repair",
+        "label": "event.money-used-supplies.choice.repair",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "money-invoice-revisit",
+    "category": "money",
+    "title": "event.money-invoice-revisit.title",
+    "text": "event.money-invoice-revisit.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "freelance"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -1500
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "flag",
+        "key": "invoice_sorted"
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "money-cancel-window",
+    "category": "money",
+    "title": "event.money-cancel-window.title",
+    "text": "event.money-cancel-window.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 100,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 10000
+      }
+    ],
+    "choices": [
+      {
+        "id": "cancel",
+        "label": "event.money-cancel-window.choice.cancel",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -0.5
+          }
+        ]
+      },
+      {
+        "id": "renew",
+        "label": "event.money-cancel-window.choice.renew",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -9900
+          },
+          {
+            "kind": "ability",
+            "stat": "insight",
+            "amount": 0.4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "money-small-repair",
+    "category": "money",
+    "title": "event.money-small-repair.title",
+    "text": "event.money-small-repair.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 5000
+      },
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 75
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -4000
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
   }
 ]

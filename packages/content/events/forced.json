@@ -735,5 +735,51 @@
         "amount": 2
       }
     ]
+  },
+  {
+    "id": "forced-voice-rewrite",
+    "category": "forced",
+    "title": "event.forced-voice-rewrite.title",
+    "text": "event.forced-voice-rewrite.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "attachment",
+        "op": "gte",
+        "value": 75
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 80
+      },
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": -1
+      },
+      {
+        "kind": "consistency",
+        "amount": -3
+      },
+      {
+        "kind": "attachment",
+        "amount": 2
+      }
+    ]
   }
 ]

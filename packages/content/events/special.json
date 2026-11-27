@@ -9,7 +9,10 @@
     "weight": 3,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -80,7 +83,10 @@
     "weight": 2,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "insight",
@@ -162,7 +168,10 @@
     "weight": 3,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "published",
@@ -651,7 +660,10 @@
     "weight": 4,
     "cooldown": 20,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "special",
@@ -668,6 +680,304 @@
         "kind": "condition",
         "stat": "fatigue",
         "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "special-small-task",
+    "category": "special",
+    "title": "event.special-small-task.title",
+    "text": "event.special-small-task.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "우울:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "special-burnout-boundary",
+    "category": "special",
+    "title": "event.special-burnout-boundary.title",
+    "text": "event.special-burnout-boundary.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "번아웃:true"
+      },
+      {
+        "key": "restSlots",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "special-life-issue-list",
+    "category": "special",
+    "title": "event.special-life-issue-list.title",
+    "text": "event.special-life-issue-list.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "현생이슈:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1.5
+      },
+      {
+        "kind": "ability",
+        "stat": "diligence",
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "id": "special-newidea-parking",
+    "category": "special",
+    "title": "event.special-newidea-parking.title",
+    "text": "event.special-newidea-parking.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "신작병:true"
+      }
+    ],
+    "choices": [
+      {
+        "id": "park",
+        "label": "event.special-newidea-parking.choice.park",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -2
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -1
+          }
+        ]
+      },
+      {
+        "id": "connect",
+        "label": "event.special-newidea-parking.choice.connect",
+        "effects": [
+          {
+            "kind": "ability",
+            "stat": "insight",
+            "amount": 0.4
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "special-numbers-offline",
+    "category": "special",
+    "title": "event.special-numbers-offline.title",
+    "text": "event.special-numbers-offline.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "통계창 중독:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "special-art-translation",
+    "category": "special",
+    "title": "event.special-art-translation.title",
+    "text": "event.special-art-translation.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "예술병:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.3
+      },
+      {
+        "kind": "ability",
+        "stat": "style",
+        "amount": 0.2
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "special-gear-inventory",
+    "category": "special",
+    "title": "event.special-gear-inventory.title",
+    "text": "event.special-gear-inventory.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "장비병:true"
+      },
+      {
+        "key": "cash",
+        "op": "gte",
+        "value": 30000
+      }
+    ],
+    "choices": [
+      {
+        "id": "maintain",
+        "label": "event.special-gear-inventory.choice.maintain",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -5000
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "hold",
+        "label": "event.special-gear-inventory.choice.hold",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "special-self-compare",
+    "category": "special",
+    "title": "event.special-self-compare.title",
+    "text": "event.special-self-compare.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "내글구려병:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1.5
+      },
+      {
+        "kind": "ability",
+        "stat": "resilience",
+        "amount": 0.3
       }
     ]
   }

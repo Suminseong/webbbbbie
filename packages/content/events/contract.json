@@ -9,7 +9,10 @@
     "weight": 2.8,
     "cooldown": 6,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "demand",
@@ -285,7 +288,10 @@
     "weight": 1.5,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "favorites",
@@ -830,5 +836,412 @@
         "amount": 2
       }
     ]
+  },
+  {
+    "id": "contract-delivery-format",
+    "category": "contract",
+    "title": "event.contract-delivery-format.title",
+    "text": "event.contract-delivery-format.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 5
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "fatigue",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "contract-cover-credit",
+    "category": "contract",
+    "title": "event.contract-cover-credit.title",
+    "text": "event.contract-cover-credit.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 7
+      }
+    ],
+    "choices": [
+      {
+        "id": "check",
+        "label": "event.contract-cover-credit.choice.check",
+        "effects": [
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 0.5
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          },
+          {
+            "kind": "flag",
+            "key": "cover_credit_checked"
+          },
+          {
+            "kind": "schedule",
+            "id": "contract-version-ack",
+            "delay": 5,
+            "window": 20
+          }
+        ]
+      },
+      {
+        "id": "ask",
+        "label": "event.contract-cover-credit.choice.ask",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contract-tiny-statement",
+    "category": "contract",
+    "title": "event.contract-tiny-statement.title",
+    "text": "event.contract-tiny-statement.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "paid",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "contract-delay-log",
+    "category": "contract",
+    "title": "event.contract-delay-log.title",
+    "text": "event.contract-delay-log.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "contractDelays",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "flag",
+        "key": "delay_inquiry_log"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "ability",
+        "stat": "diligence",
+        "amount": 0.3
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "contract-promo-backup",
+    "category": "contract",
+    "title": "event.contract-promo-backup.title",
+    "text": "event.contract-promo-backup.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "contractPromoMissed",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "choices": [
+      {
+        "id": "request",
+        "label": "event.contract-promo-backup.choice.request",
+        "effects": [
+          {
+            "kind": "promotion",
+            "days": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "focus",
+        "label": "event.contract-promo-backup.choice.focus",
+        "effects": [
+          {
+            "kind": "quality",
+            "amount": 0.5
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contract-editor-calendar",
+    "category": "contract",
+    "title": "event.contract-editor-calendar.title",
+    "text": "event.contract-editor-calendar.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "stock",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "consistency",
+        "amount": 1.5
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "contract-comment-summary",
+    "category": "contract",
+    "title": "event.contract-comment-summary.title",
+    "text": "event.contract-comment-summary.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 15
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.4
+      },
+      {
+        "kind": "quality",
+        "amount": 0.6
+      }
+    ]
+  },
+  {
+    "id": "contract-end-proposal",
+    "category": "contract",
+    "title": "event.contract-end-proposal.title",
+    "text": "event.contract-end-proposal.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 70
+      }
+    ],
+    "choices": [
+      {
+        "id": "share",
+        "label": "event.contract-end-proposal.choice.share",
+        "effects": [
+          {
+            "kind": "consistency",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "label": "event.contract-end-proposal.choice.time",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contract-rights-note",
+    "category": "contract",
+    "title": "event.contract-rights-note.title",
+    "text": "event.contract-rights-note.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "workAge",
+        "op": "gte",
+        "value": 30
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.5
+      },
+      {
+        "kind": "flag",
+        "key": "rights_scope_checked"
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "contract-hiatus-handover",
+    "category": "contract",
+    "title": "event.contract-hiatus-handover.title",
+    "text": "event.contract-hiatus-handover.body",
+    "tier": "REGULAR",
+    "scope": "CONTRACT",
+    "statuses": ["HIATUS"],
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "hiatusWorks",
+        "op": "gte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1.5
+      },
+      {
+        "kind": "social",
+        "stat": "completionTrust",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "contract-version-ack",
+    "category": "contract",
+    "title": "event.contract-version-ack.title",
+    "text": "event.contract-version-ack.body",
+    "tier": "FOLLOW_UP",
+    "scope": "CONTRACT",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "cover_credit_checked:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      },
+      {
+        "kind": "attachment",
+        "amount": 0.5
+      }
+    ],
+    "once": true
   }
 ]

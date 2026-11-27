@@ -124,6 +124,7 @@ function copyForCommand(state: LifeState): LifeState {
       caughtUp: [...work.caughtUp],
       flags: [...work.flags],
       history: [...work.history],
+      detail: work.detail ? { ...work.detail } : null,
       end: work.end ? { ...work.end } : null,
     })),
     contracts: state.contracts.map((entry) => ({
@@ -154,6 +155,7 @@ const LEGACY_HASH_032 = "1d93c10d";
 const LEGACY_HASH_033 = "9eb5a1e7";
 const LEGACY_HASH_035 = "0ead2bf0";
 const LEGACY_HASH_036 = "4a557dbd";
+const LEGACY_HASH_037 = "cae23b88";
 
 export function createEngine(
   content: Content = defaultContent,
@@ -428,6 +430,10 @@ export function createEngine(
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.6" &&
       version.contentHash === LEGACY_HASH_036;
+    const fromV037 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.7" &&
+      version.contentHash === LEGACY_HASH_037;
     const previous =
       fromV030 ||
       fromV031 ||
@@ -435,7 +441,8 @@ export function createEngine(
       fromV033 ||
       fromV034 ||
       fromV035 ||
-      fromV036;
+      fromV036 ||
+      fromV037;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }

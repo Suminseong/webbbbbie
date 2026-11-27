@@ -8,7 +8,14 @@ import {
   text,
 } from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
-import { createWork, serial, sum, workTitle } from "./author";
+import {
+  changeCondition,
+  changeSocial,
+  createWork,
+  serial,
+  sum,
+  workTitle,
+} from "./author";
 import {
   cadences,
   maskCadence,
@@ -229,6 +236,20 @@ export function workView(work: Work, content: Content, state?: LifeState) {
       (row) => row.workId === work.id && row.kind === "PAYOUT",
     ) ?? [];
   const latestSettlement = settlements.at(-1);
+  let dropImpact = null;
+  if (state) {
+    const projected = {
+      ...state.author,
+      condition: { ...state.author.condition },
+      social: { ...state.author.social },
+    };
+    changeSocial(projected, "reputation", content.balance.plan.dropReputation);
+    changeCondition(projected, "stress", content.balance.plan.dropStress);
+    dropImpact = {
+      reputation: projected.social.reputation - state.author.social.reputation,
+      stress: projected.condition.stress - state.author.condition.stress,
+    };
+  }
   return {
     id: work.id,
     title: workTitle(work),
@@ -302,6 +323,7 @@ export function workView(work: Work, content: Content, state?: LifeState) {
     mask: work.mask,
     quality: work.quality,
     contractId: work.contractId,
+    dropImpact,
     paidFrom: work.paidFrom,
     newReaders: Math.floor(work.stats.newReaders),
     totalNew: Math.floor(work.stats.totalNew),

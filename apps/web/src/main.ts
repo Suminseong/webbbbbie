@@ -481,7 +481,7 @@ function workCommands(work: ReturnType<typeof getWorkViews>[number]) {
     return `<p class="notice">${ui("system.command.choice-pending")}</p>`;
   if (confirmDrop === work.id)
     return `<div class="work-commands"><p>${ui("ui.cmd.drop-confirm", { title: work.title })}</p>
-      <p>${ui("ui.cmd.drop-impact", { status: work.statusLabel, stock: work.stock.toFixed(1), contract: text(work.contractId ? "ui.cmd.contract-yes" : "ui.cmd.contract-no") })}</p>
+      <p>${ui("ui.cmd.drop-impact", { status: work.statusLabel, stock: work.stock.toFixed(1), contract: text(work.contractId ? "ui.cmd.contract-yes" : "ui.cmd.contract-no"), reputation: fraction(work.dropImpact?.reputation ?? 0), stress: fraction(work.dropImpact?.stress ?? 0) })}</p>
       <button class="danger" data-action="drop-yes" data-work-id="${id}">${ui("ui.cmd.drop-yes")}</button>
       <button data-action="drop-no">${ui("ui.cmd.drop-no")}</button></div>`;
   return `<div class="work-commands" data-commands="${id}">
@@ -571,6 +571,7 @@ function renderPlanForm(required = false) {
     <div class="section-label">${ui(draft.editing ? "ui.plan.edit-heading" : "ui.plan.heading")}</div>
     <p class="small-muted">${ui("ui.plan.intro")}</p>
     <label class="field">${ui("ui.plan.title")}<input id="plan-title" data-draft="title" type="text" maxlength="${options.maxTitle}" required value="${escape(draft.title)}" placeholder="${ui("ui.plan.title-placeholder")}"></label>
+    ${required ? '<p id="required-title-error" class="notice" aria-live="polite"></p>' : ""}
     <div class="field-grid">
       <label class="field">${ui("ui.plan.genre")}<select id="plan-genre" data-draft="genre">${choices(options.genres, draft.genre)}</select></label>
       <label class="field">${ui("ui.plan.material")}<select id="plan-material" data-draft="material">${choices(options.materials, draft.material)}</select></label>
@@ -581,6 +582,7 @@ function renderPlanForm(required = false) {
     <fieldset class="tag-picker"><legend>${ui("ui.plan.tags", { max: options.maxTags })}</legend>
       ${options.tags.map((tag, index) => `<label class="chip ${tag.unlocked || draft.tags.includes(tag.value) ? "" : "locked"}"><input type="checkbox" data-tag="${escape(tag.value)}" id="plan-tag-${index}" ${draft.tags.includes(tag.value) ? "checked" : ""} ${tag.unlocked || draft.tags.includes(tag.value) ? "" : "disabled"}><span>#${escape(tag.label)}${tag.unlocked || draft.tags.includes(tag.value) ? "" : " · " + ui("ui.plan.tag-locked", { chapters: tag.required })}</span></label>`).join("")}
     </fieldset>
+    ${required ? '<p id="required-tags-error" class="notice" aria-live="polite"></p>' : ""}
     <p class="small-muted">${ui("ui.plan.title-note")}</p>
     <div class="cmd-row"><button class="primary" type="submit">${ui(draft.editing ? "ui.plan.save" : "ui.plan.create")}</button>
     ${required ? "" : `<button type="button" data-action="plan-cancel">${ui("ui.plan.cancel")}</button>`}</div>
@@ -590,16 +592,30 @@ function renderPlanForm(required = false) {
 
 function validateRequiredForm() {
   if (!requiredDialog.open || !planDraft) return;
-  const valid =
+  const titleValid =
     !!planDraft.title.trim() &&
+    planDraft.title.length <= getPlanOptions(state).maxTitle;
+  const tagsValid =
     planDraft.tags.length > 0 &&
     planDraft.tags.length <= getPlanOptions(state).maxTags;
+  const valid = titleValid && tagsValid;
   requiredDialog.querySelector<HTMLButtonElement>(
     'button[type="submit"]',
   )!.disabled = !valid;
   requiredDialog.querySelector("#required-work-error")!.textContent = valid
     ? ""
     : text("ui.new-work.invalid");
+  requiredDialog.querySelector("#required-title-error")!.textContent =
+    titleValid ? "" : text("ui.new-work.title-invalid");
+  requiredDialog.querySelector("#required-tags-error")!.textContent = tagsValid
+    ? ""
+    : text("ui.new-work.tags-invalid");
+  const title = requiredDialog.querySelector<HTMLInputElement>("#plan-title")!;
+  title.setAttribute("aria-invalid", String(!titleValid));
+  title.setAttribute("aria-describedby", "required-title-error");
+  requiredDialog
+    .querySelector(".tag-picker")!
+    .setAttribute("aria-describedby", "required-tags-error");
 }
 
 function syncRequiredWork() {

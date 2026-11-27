@@ -2983,9 +2983,9 @@
   },
   "ui.cmd.drop-impact": {
     "category": "UI",
-    "group_id": "ui.work.detail",
-    "context": "현재 {{status}}, 비축 {{stock}}화, {{contract}}. 연중 후 재개할 수 없으며 비축분은 등록되지 않습니다. 평판 -3, 멘헤라 +4가 적용됩니다. 기존 회차의 유입·수익과 계약 정산은 플랫폼·계약 규칙에 따릅니다. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
-    "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+    "group_id": "ui.work.commands",
+    "context": "현재 {{status}}, 비축 {{stock}}화, {{contract}}. 연중 후 재개할 수 없으며 비축분은 등록되지 않습니다. 현재 상태에서는 평판 {{reputation}}, 멘헤라 +{{stress}}가 예상됩니다. 기존 회차의 유입·수익과 계약 정산은 플랫폼·계약 규칙에 따릅니다. 모달 필드 옆 오류 또는 연중 전 엔진 계산 예상 변화. 멘헤라는 내구도 배율·상한 반영.",
+    "constraints": "모든 변수를 유지. 최종 UX 라이팅은 Gemini 담당."
   },
   "ui.cmd.policy-cost": {
     "category": "UI",
@@ -3016,5 +3016,17 @@
     "group_id": "ui.work.detail",
     "context": "현재 완결 목표 {{chapter}}화. 실제 엔진 집계·명령 결과를 표시. 품질 기록은 30일, 이력은 365일/200건.",
     "constraints": "동적 변수를 유지. 최종 문구는 Gemini 담당."
+  },
+  "ui.new-work.title-invalid": {
+    "category": "UI",
+    "group_id": "ui.new-work",
+    "context": "작품 제목을 1~30자로 입력해 주세요. 모달 필드 옆 오류 또는 연중 전 엔진 계산 예상 변화. 멘헤라는 내구도 배율·상한 반영.",
+    "constraints": "모든 변수를 유지. 최종 UX 라이팅은 Gemini 담당."
+  },
+  "ui.new-work.tags-invalid": {
+    "category": "UI",
+    "group_id": "ui.new-work",
+    "context": "태그를 1~3개 선택해 주세요. 모달 필드 옆 오류 또는 연중 전 엔진 계산 예상 변화. 멘헤라는 내구도 배율·상한 반영.",
+    "constraints": "모든 변수를 유지. 최종 UX 라이팅은 Gemini 담당."
   }
 }

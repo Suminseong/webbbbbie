@@ -312,7 +312,7 @@ function workPanel(
         <div><dt>${ui("ui.work.latest-views")}</dt><dd>${count(work.latestViews)}</dd></div>
         <div><dt>${ui("ui.work.lost")}</dt><dd>${ui("ui.format.reader", { count: count(work.lost) })}</dd></div>
         <div><dt>${ui("ui.work.paid")}</dt><dd>${escape(won(work.paid))}</dd></div>
-        <div><dt>${ui("ui.work.first-views")}</dt><dd>${work.funnel.firstReads === null ? "–" : fraction(work.funnel.firstReads)}</dd></div>
+        <div><dt>${ui("ui.work.funnel-first")}</dt><dd>${work.funnel.firstReads === null ? "–" : fraction(work.funnel.firstReads)}</dd></div>
         <div><dt>${ui("ui.work.active-readers")}</dt><dd>${count(work.activeReaders)}</dd></div>
         <div><dt>${ui("ui.work.retention")}</dt><dd>${count(work.latestPerInflow * 100)}%</dd></div>
         <div><dt>${ui("ui.work.trend-7")}</dt><dd>${ui("ui.work.trend-value", { views: count(work.trend.d7.views), readers: count(work.trend.d7.newReaders) })}</dd></div>

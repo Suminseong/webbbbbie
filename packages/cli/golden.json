@@ -2,15 +2,15 @@
   {
     "seed": 42,
     "days": 180,
-    "sha256": "ac7b713b146383f7652178c5d542bd925e6cfcbd96d12027c7fbe2813232524e",
-    "rulesVersion": "0.3.5",
-    "reason": "0.3.5 작품별 실제 품질·유료 열람·연재 이력 집계 및 완결 준비 방침, writingSlots 실제 집필 배분 수정"
+    "sha256": "5f0a1874d9b2649252ad0e50aa5f663a6388f18d538982f9ab346822f57a25e4",
+    "rulesVersion": "0.3.6",
+    "reason": "0.3.6 생활·집필·독자 고유 사건 32건 및 3개 후속 경로 추가, 필터링 사건 풀 변경"
   },
   {
     "seed": 712,
     "days": 120,
-    "sha256": "497c695c04c66f2839cc8d20e24abf4648cfdbaa7ebfd286c3cc4f27bd865bce",
-    "rulesVersion": "0.3.5",
-    "reason": "0.3.5 작품별 실제 품질·유료 열람·연재 이력 집계 및 완결 준비 방침, writingSlots 실제 집필 배분 수정"
+    "sha256": "96f9955a6ad7adb2caacc7236f5b92ab53339fe2b3582aa1b8cbe87cde8225bc",
+    "rulesVersion": "0.3.6",
+    "reason": "0.3.6 생활·집필·독자 고유 사건 32건 및 3개 후속 경로 추가, 필터링 사건 풀 변경"
   }
 ]

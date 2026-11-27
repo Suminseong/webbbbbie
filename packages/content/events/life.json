@@ -743,7 +743,10 @@
     "weight": 2.5,
     "cooldown": 25,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "restSlots",
@@ -815,5 +818,411 @@
         ]
       }
     ]
+  },
+  {
+    "id": "desk-daylight",
+    "category": "life",
+    "title": "event.desk-daylight.title",
+    "text": "event.desk-daylight.body",
+    "tier": "FOLLOW_UP",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 0,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "targetFlag",
+        "op": "eq",
+        "value": "stretch_alarm:true"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      }
+    ],
+    "once": true
+  },
+  {
+    "id": "wrist-stretch-alarm",
+    "category": "life",
+    "title": "event.wrist-stretch-alarm.title",
+    "text": "event.wrist-stretch-alarm.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "health",
+        "op": "lte",
+        "value": 65
+      }
+    ],
+    "choices": [
+      {
+        "id": "timer",
+        "label": "event.wrist-stretch-alarm.choice.timer",
+        "effects": [
+          {
+            "kind": "flag",
+            "key": "stretch_alarm"
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": -1
+          },
+          {
+            "kind": "flag",
+            "key": "stretch_alarm"
+          },
+          {
+            "kind": "schedule",
+            "id": "desk-daylight",
+            "delay": 5,
+            "window": 20
+          }
+        ]
+      },
+      {
+        "id": "clinic",
+        "label": "event.wrist-stretch-alarm.choice.clinic",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -12000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blackout-evening",
+    "category": "life",
+    "title": "event.blackout-evening.title",
+    "text": "event.blackout-evening.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 70,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "restSlots",
+        "op": "lte",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "family-quiet-hour",
+    "category": "life",
+    "title": "event.family-quiet-hour.title",
+    "text": "event.family-quiet-hour.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "restSlots",
+        "op": "gte",
+        "value": 3
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "social",
+        "stat": "completionTrust",
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "id": "laundry-pile",
+    "category": "life",
+    "title": "event.laundry-pile.title",
+    "text": "event.laundry-pile.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 2
+      }
+    ],
+    "choices": [
+      {
+        "id": "self",
+        "label": "event.laundry-pile.choice.self",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -3
+          }
+        ]
+      },
+      {
+        "id": "service",
+        "label": "event.laundry-pile.choice.service",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -9000
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "night-window-air",
+    "category": "life",
+    "title": "event.night-window-air.title",
+    "text": "event.night-window-air.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 28,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "sleepSlots",
+        "op": "lte",
+        "value": 10
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": -1
+      }
+    ]
+  },
+  {
+    "id": "walking-route-note",
+    "category": "life",
+    "title": "event.walking-route-note.title",
+    "text": "event.walking-route-note.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "restSlots",
+        "op": "gte",
+        "value": 4
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "vocabulary",
+        "amount": 0.5
+      },
+      {
+        "kind": "condition",
+        "stat": "health",
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "id": "household-promise",
+    "category": "life",
+    "title": "event.household-promise.title",
+    "text": "event.household-promise.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "share",
+        "label": "event.household-promise.choice.share",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "label": "event.household-promise.choice.later",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phone-bedside",
+    "category": "life",
+    "title": "event.phone-bedside.title",
+    "text": "event.phone-bedside.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 2
+      },
+      {
+        "key": "sleepSlots",
+        "op": "lte",
+        "value": 12
+      }
+    ],
+    "choices": [
+      {
+        "id": "off",
+        "label": "event.phone-bedside.choice.off",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -3
+          },
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "read",
+        "label": "event.phone-bedside.choice.read",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 3
+          },
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "desk-clean-find",
+    "category": "life",
+    "title": "event.desk-clean-find.title",
+    "text": "event.desk-clean-find.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 100000
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": 3500
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -1
+      }
+    ],
+    "once": true
   }
 ]

@@ -185,7 +185,10 @@
     "weight": 2,
     "cooldown": 25,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "jobSlots",
@@ -876,6 +879,363 @@
             "kind": "condition",
             "stat": "stress",
             "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "job-lunch-notebook",
+    "category": "job",
+    "title": "event.job-lunch-notebook.title",
+    "text": "event.job-lunch-notebook.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 12
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "job-shift-swap",
+    "category": "job",
+    "title": "event.job-shift-swap.title",
+    "text": "event.job-shift-swap.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "part_time"
+      }
+    ],
+    "choices": [
+      {
+        "id": "take",
+        "label": "event.job-shift-swap.choice.take",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": 18000
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -1
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "event.job-shift-swap.choice.keep",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1.5
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": -0.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "job-client-scope",
+    "category": "job",
+    "title": "event.job-client-scope.title",
+    "text": "event.job-client-scope.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "freelance"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.4
+      }
+    ]
+  },
+  {
+    "id": "job-campus-library",
+    "category": "job",
+    "title": "event.job-campus-library.title",
+    "text": "event.job-campus-library.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 30,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "student"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "vocabulary",
+        "amount": 0.4
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "job-leave-checkpoint",
+    "category": "job",
+    "title": "event.job-leave-checkpoint.title",
+    "text": "event.job-leave-checkpoint.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "leave"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "cash",
+        "amount": -2000
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "job-portfolio-choice",
+    "category": "job",
+    "title": "event.job-portfolio-choice.title",
+    "text": "event.job-portfolio-choice.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 90,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "unemployed"
+      },
+      {
+        "key": "cash",
+        "op": "lte",
+        "value": 200000
+      }
+    ],
+    "choices": [
+      {
+        "id": "apply",
+        "label": "event.job-portfolio-choice.choice.apply",
+        "effects": [
+          {
+            "kind": "job",
+            "id": "part_time"
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "event.job-portfolio-choice.choice.wait",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "stress",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "job-author-boundary",
+    "category": "job",
+    "title": "event.job-author-boundary.title",
+    "text": "event.job-author-boundary.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "full_time_author"
+      },
+      {
+        "key": "restSlots",
+        "op": "lte",
+        "value": 2
+      }
+    ],
+    "effects": [
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": -2
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": -0.5
+      }
+    ]
+  },
+  {
+    "id": "job-workshop-handout",
+    "category": "job",
+    "title": "event.job-workshop-handout.title",
+    "text": "event.job-workshop-handout.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 75,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "job",
+        "op": "eq",
+        "value": "employee"
+      }
+    ],
+    "effects": [
+      {
+        "kind": "ability",
+        "stat": "insight",
+        "amount": 0.3
+      },
+      {
+        "kind": "ability",
+        "stat": "commercial",
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "id": "job-low-sleep-commute",
+    "category": "job",
+    "title": "event.job-low-sleep-commute.title",
+    "text": "event.job-low-sleep-commute.body",
+    "tier": "REGULAR",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "jobSlots",
+        "op": "gte",
+        "value": 8
+      },
+      {
+        "key": "sleepSlots",
+        "op": "lte",
+        "value": 10
+      }
+    ],
+    "choices": [
+      {
+        "id": "water",
+        "label": "event.job-low-sleep-commute.choice.water",
+        "effects": [
+          {
+            "kind": "cash",
+            "amount": -2500
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": 0.5
+          }
+        ]
+      },
+      {
+        "id": "push",
+        "label": "event.job-low-sleep-commute.choice.push",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 2
+          },
+          {
+            "kind": "condition",
+            "stat": "health",
+            "amount": -1.5
           }
         ]
       }

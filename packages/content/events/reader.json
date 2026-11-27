@@ -1504,5 +1504,60 @@
         "amount": -0.5
       }
     ]
+  },
+  {
+    "id": "reader-recap-request",
+    "category": "reader",
+    "title": "event.reader-recap-request.title",
+    "text": "event.reader-recap-request.body",
+    "tier": "REGULAR",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 45,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "published",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "choices": [
+      {
+        "id": "summary",
+        "label": "event.reader-recap-request.choice.summary",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "fatigue",
+            "amount": 1
+          },
+          {
+            "kind": "consistency",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "index",
+        "label": "event.reader-recap-request.choice.index",
+        "effects": [
+          {
+            "kind": "condition",
+            "stat": "drive",
+            "amount": 1
+          },
+          {
+            "kind": "social",
+            "stat": "reputation",
+            "amount": 0.5
+          }
+        ]
+      }
+    ]
   }
 ]

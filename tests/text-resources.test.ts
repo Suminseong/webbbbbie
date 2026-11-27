@@ -1,4 +1,3 @@
-import { settleWork } from "./auto-new-work";
 import { mkdtemp, rm, rmdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -197,22 +196,14 @@ describe("Applied Gemini copy", () => {
       "1,234,567",
       "-1,200,000",
     ]);
-    const { createLife, advance, choose, getPending, getEventLog } =
-      await import("@webbbbbie/engine");
-    let state = createLife(42);
-    while (state.day < 120) {
-      const { createEngine } = await import("@webbbbbie/engine");
-      state = settleWork(createEngine(), state);
-      const pending = getPending(state);
-      if (pending) {
-        const result = choose(state, pending.id, pending.choices[0].id);
-        if (!result.ok) throw new Error(result.error);
-        state = result.state;
-      } else state = advance(state, 120 - state.day).state;
-    }
-    const payouts = getEventLog(state).filter(
-      (entry) => entry.type === "PAYOUT",
-    );
+    const { createLife, choose } = await import("@webbbbbie/engine");
+    const { settle } = await import("../packages/engine/src/economy");
+    const initial = createLife(42);
+    const state = choose(initial, initial.pending!.id, "original").state;
+    state.works[0].revenue.accrued = 13048;
+    const events: import("@webbbbbie/engine").EngineEvent[] = [];
+    settle(state, defaultContent, 30, events);
+    const payouts = events.filter((entry) => entry.type === "PAYOUT");
     expect(payouts.length).toBeGreaterThan(0);
     for (const entry of payouts)
       expect(entry.message).toMatch(/ \d{1,3}(,\d{3})*원$/);

@@ -9,7 +9,10 @@
     "weight": 16,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "any": [
       {
         "key": "health",
@@ -45,7 +48,10 @@
     "weight": 8,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -89,7 +95,10 @@
     "weight": 6,
     "cooldown": 0,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -207,7 +216,10 @@
     "weight": 6,
     "cooldown": 40,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -257,7 +269,10 @@
     "weight": 5,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -304,7 +319,10 @@
     "weight": 5,
     "cooldown": 30,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "drive",
@@ -344,7 +362,11 @@
     "weight": 4,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID", "HIATUS"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID",
+      "HIATUS"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -385,7 +407,10 @@
     "weight": 4,
     "cooldown": 90,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "stress",
@@ -426,7 +451,10 @@
     "weight": 5,
     "cooldown": 60,
     "minDay": 1,
-    "statuses": ["SERIAL_FREE", "SERIAL_PAID"],
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
     "conditions": [
       {
         "key": "special",
@@ -620,6 +648,91 @@
         "kind": "social",
         "stat": "recognition",
         "amount": -2
+      }
+    ]
+  },
+  {
+    "id": "forced-annotation-spree",
+    "category": "forced",
+    "title": "event.forced-annotation-spree.title",
+    "text": "event.forced-annotation-spree.body",
+    "tier": "FORCED",
+    "scope": "WORK",
+    "weight": 2,
+    "cooldown": 80,
+    "minDay": 3,
+    "statuses": [
+      "SERIAL_FREE",
+      "SERIAL_PAID"
+    ],
+    "conditions": [
+      {
+        "key": "egoUse",
+        "op": "gte",
+        "value": 3
+      },
+      {
+        "key": "stress",
+        "op": "gte",
+        "value": 75
+      }
+    ],
+    "effects": [
+      {
+        "kind": "stock",
+        "amount": -0.5
+      },
+      {
+        "kind": "quality",
+        "amount": -1
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "forced-side-project",
+    "category": "forced",
+    "title": "event.forced-side-project.title",
+    "text": "event.forced-side-project.body",
+    "tier": "FORCED",
+    "scope": "AUTHOR",
+    "weight": 2,
+    "cooldown": 100,
+    "minDay": 3,
+    "conditions": [
+      {
+        "key": "special",
+        "op": "eq",
+        "value": "신작병:true"
+      },
+      {
+        "key": "activeWorks",
+        "op": "gte",
+        "value": 1
+      },
+      {
+        "key": "canAddWork",
+        "op": "eq",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "kind": "createWork"
+      },
+      {
+        "kind": "condition",
+        "stat": "stress",
+        "amount": 3
+      },
+      {
+        "kind": "condition",
+        "stat": "drive",
+        "amount": 2
       }
     ]
   }

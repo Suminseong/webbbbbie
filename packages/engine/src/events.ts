@@ -620,6 +620,7 @@ export function applyEvent(
   )!;
   const selected = definition.choices?.find((choice) => choice.id === choiceId);
   const effects = selected?.effects ?? definition.effects ?? [];
+  const workId = targetWork(state, instance.target)?.id ?? instance.target.id;
   if (selected)
     record(
       events,
@@ -629,7 +630,7 @@ export function applyEvent(
         "event." + definition.id + ".choice." + selected.id,
         selected.label,
       ),
-      instance.target.id,
+      workId,
     );
   for (const effect of effects)
     applyEffect(state, content, instance, effect, events);
@@ -648,7 +649,7 @@ export function applyEvent(
           ),
         },
       ),
-      instance.target.id,
+      workId,
     );
   }
   const resolved: EventInstance = {

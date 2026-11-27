@@ -280,6 +280,7 @@ export function workView(work: Work, content: Content, state?: LifeState) {
           [
             "EFFECT_APPLIED",
             "WORK_STATUS_CHANGED",
+            "STATE_CHANGED",
             "COMMAND",
             "WORK_ORDER",
             "PAYOUT",

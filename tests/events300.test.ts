@@ -358,6 +358,7 @@ describe("[17번] 95 authored event additions", () => {
     "save-v0.3.5.json",
     "save-v0.3.6.json",
     "save-v0.3.7.json",
+    "save-v0.3.8.json",
   ])("migrates %s, advances 60 days and round-trips", (name) => {
     const loaded = product.deserialize(
       readFileSync(new URL("./fixtures/" + name, import.meta.url), "utf8"),

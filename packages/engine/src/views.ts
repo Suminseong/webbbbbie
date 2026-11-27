@@ -20,6 +20,7 @@ import {
   cadences,
   maskCadence,
   maxFreeUnits,
+  identityLimits,
   planOptions,
   unlockedTagChapters,
 } from "./commands";
@@ -132,10 +133,13 @@ export function authorView(state: LifeState, content: Content) {
     seed: state.seed,
     day: state.day,
     phase: state.phase,
-    penName: displayName("entity.pen", author.penName),
+    penName:
+      author.identity?.penName ?? displayName("entity.pen", author.penName),
+    message: author.identity?.message ?? "",
     age:
       author.startAge + Math.floor(state.day / content.balance.life.yearDays),
-    motive: displayName("entity.motive", author.motive),
+    motive:
+      author.identity?.motive ?? displayName("entity.motive", author.motive),
     path: author.startPath ? pathNames[author.startPath] : null,
     job: displayName(
       "entity.job",
@@ -253,6 +257,7 @@ export function workView(work: Work, content: Content, state?: LifeState) {
   return {
     id: work.id,
     title: workTitle(work),
+    description: work.description,
     genre: displayName("entity.genre", work.genre),
     material: displayName("entity.material", work.material),
     tags: work.tags.map((tag) => displayName("entity.tag", tag)),
@@ -579,6 +584,7 @@ export function planOptionsView(content: Content, state?: LifeState) {
   const chapters = state ? unlockedTagChapters(state) : 0;
   return {
     endingMaxRemaining: playerActionRules.endingMaxRemaining,
+    maxDescription: identityLimits.description,
     endingPlotWeight: playerActionRules.endingPlotWeight,
     genres: options.genres.map((value) => ({
       value,

@@ -87,6 +87,10 @@ const aptitude = z.object({
   stage: z.enum(["UNKNOWN", "GUESS", "CERTAIN"]),
 });
 const author = z.object({
+  identity: z
+    .object({ penName: word, message: z.string(), motive: word })
+    .nullable()
+    .default(null),
   penName: word,
   startAge: natural,
   motive: word,
@@ -162,6 +166,7 @@ const history = z.tuple([natural, volume, volume]);
 const work = z.object({
   id: word,
   title: word,
+  description: z.string().default(""),
   genre: word,
   material: word,
   tags: z.array(word),
@@ -378,7 +383,7 @@ export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
 export const SCHEMA_VERSION = 3;
-export const RULES_VERSION = "0.3.8";
+export const RULES_VERSION = "0.3.9";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];

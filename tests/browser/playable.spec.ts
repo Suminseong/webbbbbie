@@ -25,18 +25,10 @@ test("[FR-UI-001/003/005] starts at day 0 and accepts choice, day and speed cont
   page.on("pageerror", (error) => errors.push(error));
   await page.goto("/");
   await expect(
-    page.getByRole("heading", {
-      name: 0 + text("ui.clock.day-unit"),
-      level: 1,
-    }),
+    page.getByRole("heading", { name: text("ui.start.heading") }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: text("event.origin.title") }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: text("ui.clock.step") }),
-  ).toBeDisabled();
-  await page.locator(".event-options button").first().click();
+  await expect(page.locator('[data-action="step"]')).toHaveCount(0);
+  await page.locator('#start-form button[type="submit"]').click();
   await expect(page.locator("[data-work]")).toHaveCount(1);
   await page.getByRole("button", { name: text("ui.clock.step") }).click();
   await expect(page.getByTestId("phase")).toHaveText(text("ui.clock.waiting"));
@@ -84,6 +76,10 @@ test("[FR-SAVE-001/002] saves a pending choice, restores across reload and prese
   page,
 }, info) => {
   await page.goto("/");
+  await page.locator('#start-form button[type="submit"]').click();
+  await page.locator('[data-action="step"]').click();
+  const heading = page.locator(".decision h2");
+  const title = await heading.innerText();
   await page
     .getByRole("button", { name: text("ui.tab.save"), exact: true })
     .click();
@@ -93,31 +89,15 @@ test("[FR-SAVE-001/002] saves a pending choice, restores across reload and prese
   await slot
     .getByRole("button", { name: text("ui.save.write"), exact: true })
     .click();
-  await expect(
-    slot.getByRole("button", { name: text("ui.save.load"), exact: true }),
-  ).toBeEnabled();
   await page.locator(".event-options button").first().click();
-  await page.getByRole("button", { name: text("ui.clock.step") }).click();
-  await page.locator(".event-options button").first().click();
-  await expect(
-    page.getByRole("heading", {
-      name: 1 + text("ui.clock.day-unit"),
-      level: 1,
-    }),
-  ).toBeVisible();
   await slot
     .getByRole("button", { name: text("ui.save.load"), exact: true })
     .click();
-  await expect(
-    page.getByRole("heading", { name: text("event.origin.title") }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: text("ui.clock.step") }),
-  ).toBeDisabled();
-
-  const downloadReady = page.waitForEvent("download");
-  await page.getByRole("button", { name: text("ui.save.export") }).click();
-  const download = await downloadReady;
+  await expect(heading).toHaveText(title);
+  await expect(page.locator('[data-action="step"]')).toBeDisabled();
+  const pendingDownload = page.waitForEvent("download");
+  await page.locator('[data-action="export"]').click();
+  const download = await pendingDownload;
   const exported = info.outputPath("life.json");
   await download.saveAs(exported);
   await page.reload();
@@ -125,34 +105,30 @@ test("[FR-SAVE-001/002] saves a pending choice, restores across reload and prese
     text("system.save.auto-restored"),
   );
   await page.locator(".event-options button").first().click();
-  await expect(
-    page.getByRole("heading", { name: text("event.origin.title") }),
-  ).toHaveCount(0);
+  await expect(heading).toHaveCount(0);
   await page.locator("#import-file").setInputFiles(exported);
-  await expect(
-    page.getByRole("heading", { name: text("event.origin.title") }),
-  ).toBeVisible();
+  await expect(heading).toHaveText(title);
   await expect(page.getByRole("status")).toContainText(
     text("system.save.imported"),
   );
-  await page.locator("#import-file").setInputFiles({
-    name: "invalid.json",
-    mimeType: "application/json",
-    buffer: Buffer.from("{"),
-  });
+  await page
+    .locator("#import-file")
+    .setInputFiles({
+      name: "invalid.json",
+      mimeType: "application/json",
+      buffer: Buffer.from("{"),
+    });
   await expect(page.getByRole("status")).toContainText(
     text("system.save.file-read-error"),
   );
-  await expect(
-    page.getByRole("heading", { name: text("event.origin.title") }),
-  ).toBeVisible();
+  await expect(heading).toHaveText(title);
 });
 
 test("[FR-UI-002/004] renders independent works, aggregate readership, aptitude, contract and cash", async ({
   page,
 }, info) => {
   await page.goto("/");
-  await page.locator(".event-options button").first().click();
+  await page.locator('#start-form button[type="submit"]').click();
   for (let day = 0; day < 32; day += 1) {
     const required = page.locator("#required-work[open]");
     if (await required.count())
@@ -207,7 +183,7 @@ test("[16번 §3,§10] plans a work with a free title, shows time policy and end
   page,
 }) => {
   await page.goto("/");
-  await page.locator(".event-options button").first().click();
+  await page.locator('#start-form button[type="submit"]').click();
   await page.getByRole("button", { name: text("ui.plan.open") }).click();
   await page.fill("#plan-title", "<i>자유 제목</i>");
   await page.locator("#plan-tag-0").check({ force: true });
@@ -233,7 +209,7 @@ test("[TC-UI-006] manages works, a shared schedule, orders, expenses and saved s
   const errors: Error[] = [];
   page.on("pageerror", (error) => errors.push(error));
   await page.goto("/");
-  await page.locator(".event-options button").first().click();
+  await page.locator('#start-form button[type="submit"]').click();
   await page.getByRole("button", { name: text("ui.plan.open") }).click();
   await page.locator("#plan-title").fill("직접 정한 새 작품");
   await page.locator("#plan-genre").selectOption({ index: 1 });
@@ -392,9 +368,6 @@ test("[FR-SAVE-001] imports a deployed 0.3.0 save and keeps its queued work", as
   page,
 }) => {
   await page.goto("/");
-  await page
-    .getByRole("button", { name: text("ui.tab.save"), exact: true })
-    .click();
   await page
     .locator("#import-file")
     .setInputFiles(

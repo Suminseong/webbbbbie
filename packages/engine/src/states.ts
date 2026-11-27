@@ -1,6 +1,12 @@
 import type { Content, SpecialDef } from "@webbbbbie/content";
 import { displayName, text } from "@webbbbbie/content";
-import { activeWork, createWork, record, serial, workTitle } from "./author";
+import {
+  activeWork,
+  requestNewWork,
+  record,
+  serial,
+  workTitle,
+} from "./author";
 import type { EngineEvent, LifeState } from "./model";
 import { rand, stream } from "./rng";
 import { transitionWork } from "./work";
@@ -130,18 +136,21 @@ export function applyStateBehaviors(
         content.balance.life.maxActiveWorks &&
       rand(state.seed, day, stream.EVENT, 700 + index) < def.newWorkChance
     ) {
-      const before = state.works.length;
-      createWork(state, content, day, author.startPath);
-      if (state.works.length > before)
+      if (
+        requestNewWork(
+          state,
+          content,
+          day,
+          author.startPath,
+          name,
+          "system.new-work.state",
+        )
+      )
         record(
           events,
           "STATE_CHANGED",
           day,
-          text("engine.log.forced-new-work", {
-            state_name: name,
-            work_title: workTitle(state.works[before]),
-          }),
-          state.works[before].id,
+          text("engine.log.new-work-request", { source: name }),
         );
     }
   }

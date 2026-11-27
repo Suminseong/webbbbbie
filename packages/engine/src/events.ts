@@ -6,6 +6,7 @@ import {
   changeSocial,
   clamp,
   createWork,
+  requestNewWork,
   learnAptitude,
   record,
   sum,
@@ -221,6 +222,16 @@ function eligibleTarget(
   target: Target,
   day: number,
 ) {
+  const effects =
+    def.effects ?? def.choices?.flatMap((choice) => choice.effects) ?? [];
+  if (
+    effects.some((effect) => effect.kind === "createWork") &&
+    (state.pendingNewWork ||
+      !state.author.startPath ||
+      state.works.filter(activeWork).length >=
+        content.balance.life.maxActiveWorks)
+  )
+    return false;
   const work = targetWork(state, target);
   if (
     def.scope !== target.scope ||
@@ -506,7 +517,18 @@ function applyEffect(
       }
       break;
     case "createWork":
-      if (author.startPath) createWork(state, content, day, "ORIGINAL");
+      if (author.startPath)
+        requestNewWork(
+          state,
+          content,
+          day,
+          "ORIGINAL",
+          matchingText(
+            "event." + instance.defId + ".title",
+            content.events.find((item) => item.id === instance.defId)!.title,
+          ),
+          "system.new-work.event",
+        );
       break;
     case "cash":
       transaction(state, day, "EVENT", effect.amount, instance.id, work?.id);

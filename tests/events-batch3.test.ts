@@ -1,3 +1,4 @@
+import { settleWork } from "./auto-new-work";
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { createEngine } from "@webbbbbie/engine";
@@ -60,7 +61,7 @@ function routine(
 }
 /** The event chosen for the next day: pending id, else the committed one. */
 function next(engine: ReturnType<typeof createEngine>, state: LifeState) {
-  const advanced = engine.advance(state, 1).state;
+  const advanced = settleWork(engine, engine.advance(state, 1).state);
   const id = advanced.pending
     ? advanced.pending.defId
     : advanced.archive[advanced.archive.length - 1][0];
@@ -571,12 +572,13 @@ describe("[FR-SAVE] 사건 확장 후 이전 저장 호환", () => {
   ])("%s 저장을 읽고 규칙 0.3.3으로 올려 계속 진행·왕복한다", (name) => {
     const loaded = product.deserialize(read(name));
     if (!loaded.ok) throw new Error(name + " " + loaded.error);
-    expect(loaded.state.rulesVersion).toBe("0.3.3");
+    expect(loaded.state.rulesVersion).toBe("0.3.4");
     const again = product.deserialize(product.serialize(loaded.state));
     expect(again.ok).toBe(true);
     let state = loaded.state;
     const start = state.day;
     while (state.day < start + 60) {
+      state = settleWork(product, state);
       if (state.pending) {
         const waiting = product.getPending(state)!;
         const resumed = product.deserialize(product.serialize(state));
@@ -625,7 +627,7 @@ describe("[FR-SAVE] 사건 확장 후 이전 저장 호환", () => {
     const run = (seed: number) => {
       let state = product.createLife(seed);
       while (state.day < 300)
-        state = state.pending
+        state = state.pendingNewWork ? settleWork(product, state) : state.pending
           ? choose(product, state, product.getPending(state)!.choices[0].id)
           : product.advance(state, 300 - state.day).state;
       return state;

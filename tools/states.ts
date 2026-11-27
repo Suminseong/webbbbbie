@@ -1,3 +1,4 @@
+import { getPendingNewWork, confirmNewWork } from "@webbbbbie/engine";
 import { advance, choose, createLife, getPending } from "@webbbbbie/engine";
 const N = Number(process.argv[2] ?? 40),
   DAYS = Number(process.argv[3] ?? 730);
@@ -10,6 +11,13 @@ for (let seed = 1; seed <= N; seed++) {
   let s = createLife(seed * 104729);
   const seen = new Set<string>();
   while (s.day < DAYS) {
+  const waiting = getPendingNewWork(s);
+  if (waiting) {
+    const made = confirmNewWork(s, waiting.id, waiting.defaultPlan);
+    if (!made.ok) throw new Error(made.reason);
+    s = made.state;
+    continue;
+  }
     const p = getPending(s);
     if (p) {
       const r = choose(

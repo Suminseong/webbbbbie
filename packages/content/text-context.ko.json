@@ -2734,5 +2734,59 @@
     "group_id": "ui.contract",
     "context": "계약 카드에서 정산, 지연, 피드백, 독촉, 교체의 발생 횟수를 표시한다.",
     "constraints": "변수 {{count}}를 유지한다."
+  },
+  "system.new-work.event": {
+    "category": "SYSTEM",
+    "group_id": "ui.new-work",
+    "context": "신작 생성 사건으로 하루를 확정한 뒤 설정 대기. 효과는 이미 하루에 한 번 반영됨.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "system.new-work.state": {
+    "category": "SYSTEM",
+    "group_id": "ui.new-work",
+    "context": "활성 특수 상태의 신작 행동. 시작 경로는 엔진이 정하고 변경 불가.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "system.new-work.auto": {
+    "category": "SYSTEM",
+    "group_id": "ui.new-work",
+    "context": "이전 작품 종료 후 반복 생활 방침에 따른 새 기획. 진행은 확정까지 멈춤.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "ui.new-work.auto-title": {
+    "category": "UI",
+    "group_id": "ui.new-work",
+    "context": "자동 신작 기획 대기 모달 제목.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "ui.new-work.path": {
+    "category": "UI",
+    "group_id": "ui.new-work",
+    "context": "엔진에서 결정한 창작·패러디·표절 경로. 모달에서 바꿀 수 없음.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "ui.new-work.invalid": {
+    "category": "UI",
+    "group_id": "ui.new-work",
+    "context": "강제 신작 모달의 입력 오류. 유효하지 않으면 생성 버튼 비활성.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "ui.new-work.export": {
+    "category": "UI",
+    "group_id": "ui.new-work",
+    "context": "모달을 닫지 않고 현재 대기를 JSON 저장으로 내보냄.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "system.command.no-new-work": {
+    "category": "SYSTEM",
+    "group_id": "ui.new-work",
+    "context": "대기 없음 또는 오래된 요청 ID로 확정 시도. 중복 생성 거부.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
+  },
+  "engine.log.new-work-request": {
+    "category": "SYSTEM",
+    "group_id": "ui.new-work",
+    "context": "상태에 의한 신작 요청 기록. 아직 작품이 생겼다고 표현하지 않음.",
+    "constraints": "변수 {{...}}와 실제 동작을 유지한다. 최종 문구는 Gemini 담당."
   }
 }

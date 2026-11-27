@@ -71,7 +71,7 @@ const path = z.enum(paths);
 const status = z.enum(statuses);
 const activeStatus = z.enum(["SERIAL_FREE", "SERIAL_PAID"]);
 const endStatus = z.enum(["COMPLETED", "RUSHED_END", "DROPPED", "TAKEN_DOWN"]);
-const phase = z.enum(["READY", "AWAITING_CHOICE", "ENDED"]);
+const phase = z.enum(["READY", "AWAITING_CHOICE", "AWAITING_WORK", "ENDED"]);
 const target = z.object({
   scope: z.enum(["AUTHOR", "WORK", "CONTRACT", "NONE"]),
   id: word.nullable(),
@@ -315,6 +315,16 @@ export const stateSchema = z.object({
   eventHistory: z.array(selectedEvent),
   archive: z.array(z.tuple([word, word.nullable(), word.nullable()])),
   pending: selectedEvent.nullable(),
+  pendingNewWork: z
+    .object({
+      id: word,
+      day: natural,
+      path,
+      sourceTitle: word,
+      reasonId: word,
+    })
+    .nullable()
+    .default(null),
   /** Set when the author ends their writing life (16번 §10). */
   ending: z.object({ day: natural, reason: z.literal("VOLUNTARY") }).nullable(),
   log: z.array(engineEvent),
@@ -347,11 +357,11 @@ export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
 export const SCHEMA_VERSION = 3;
-export const RULES_VERSION = "0.3.3";
+export const RULES_VERSION = "0.3.4";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];
-  stoppedReason: "DAYS_DONE" | "AWAITING_CHOICE" | "ENDED";
+  stoppedReason: "DAYS_DONE" | "AWAITING_CHOICE" | "AWAITING_WORK" | "ENDED";
 };
 export type CommandError =
   "E_NO_PENDING" | "E_INVALID_CHOICE" | "E_SAVE_CORRUPT" | "E_SAVE_VERSION";

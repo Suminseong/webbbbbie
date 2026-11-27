@@ -6,7 +6,7 @@ import {
   changeCondition,
   changeSocial,
   clamp,
-  createWork,
+  requestNewWork,
   learnAptitude,
   record,
   relevantAptitudes,
@@ -144,7 +144,14 @@ export function prepareWorks(
           );
     if (day >= lastEnd + rest) {
       const exposed = state.works.some((work) => work.status === "TAKEN_DOWN");
-      createWork(state, content, day, exposed ? "ORIGINAL" : author.startPath);
+      requestNewWork(
+        state,
+        content,
+        day,
+        exposed ? "ORIGINAL" : author.startPath,
+        text("ui.new-work.auto-title"),
+        "system.new-work.auto",
+      );
     }
   }
   for (const work of state.works) {

@@ -1,3 +1,4 @@
+import { settleWork } from "./auto-new-work";
 import { mkdtemp, rm, rmdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -200,6 +201,8 @@ describe("Applied Gemini copy", () => {
       await import("@webbbbbie/engine");
     let state = createLife(42);
     while (state.day < 120) {
+      const { createEngine } = await import("@webbbbbie/engine");
+      state = settleWork(createEngine(), state);
       const pending = getPending(state);
       if (pending) {
         const result = choose(state, pending.id, pending.choices[0].id);

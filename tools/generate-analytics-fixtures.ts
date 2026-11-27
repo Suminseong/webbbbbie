@@ -1,3 +1,4 @@
+import { getPendingNewWork, confirmNewWork } from "@webbbbbie/engine";
 import { readFileSync, writeFileSync } from "node:fs";
 import {
   advance,
@@ -13,6 +14,13 @@ import {
 // Product simulation with the first available choice, including an accepted offer.
 let life = createLife(1);
 while (life.day < 500 && !getContractViews(life).length) {
+  const waiting = getPendingNewWork(life);
+  if (waiting) {
+    const made = confirmNewWork(life, waiting.id, waiting.defaultPlan);
+    if (!made.ok) throw new Error(made.reason);
+    life = made.state;
+    continue;
+  }
   const pending = getPending(life);
   if (pending) {
     const choice = pending.offer

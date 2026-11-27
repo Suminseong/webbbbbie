@@ -7,6 +7,8 @@ import {
 } from "@webbbbbie/content";
 import {
   advance,
+  confirmNewWork,
+  getPendingNewWork,
   choose,
   createLife,
   deserialize,
@@ -37,7 +39,14 @@ function drive(
 ): LifeState {
   let state = initial;
   let index = 0;
-  while (state.day < days || state.pending?.day === 0) {
+  while (state.day < days || state.pending?.day === 0 || state.pendingNewWork) {
+    const newWork = getPendingNewWork(state);
+    if (newWork) {
+      const made = confirmNewWork(state, newWork.id, newWork.defaultPlan);
+      if (!made.ok) throw new Error(made.reason);
+      state = made.state;
+      continue;
+    }
     const waiting = getPending(state);
     if (waiting) {
       // "mixed" picks a reproducible option from the seed and day, so balance

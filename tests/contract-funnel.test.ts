@@ -1,3 +1,4 @@
+import { settleWork } from "./auto-new-work";
 import { describe, expect, it } from "vitest";
 import { createEngine } from "@webbbbbie/engine";
 import type { LifeState } from "@webbbbbie/engine";
@@ -19,7 +20,7 @@ function play(
 ) {
   let next = state;
   while (next.day < day)
-    next = next.pending
+    next = next.pendingNewWork ? settleWork(engine, next) : next.pending
       ? pick(engine, next)
       : engine.advance(next, day - next.day).state;
   return next;
@@ -95,7 +96,7 @@ describe("[17번 §2] chapter funnel", () => {
     // which event the seed happens to select.
     let next = state;
     while (next.day < state.day + 5)
-      next = next.pending
+      next = next.pendingNewWork ? settleWork(product, next) : next.pending
         ? pick(product, next)
         : product.advance(next, state.day + 5 - next.day).state;
     const view = product.getWorkViews(next)[0].funnel;

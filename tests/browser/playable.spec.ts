@@ -147,6 +147,8 @@ test("[FR-UI-002/004] renders independent works, aggregate readership, aptitude,
   await page.goto("/");
   await page.locator(".event-options button").first().click();
   for (let day = 0; day < 32; day += 1) {
+    const required = page.locator('#required-work[open]');
+    if (await required.count()) await required.locator('button[type="submit"]').click();
     const choice = page.locator(".event-options button").first();
     if (await choice.count()) await choice.click();
     await page.getByRole("button", { name: text("ui.clock.step") }).click();

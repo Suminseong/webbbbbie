@@ -1,3 +1,4 @@
+import { settleWork } from "./auto-new-work";
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
 import {
@@ -31,6 +32,7 @@ function ready(engine = product, seed = 42) {
 function play(engine: Engine, initial: LifeState, day: number) {
   let state = initial;
   while (state.day < day) {
+    state = settleWork(engine, state);
     state = state.pending
       ? select(engine, state)
       : engine.advance(state, day - state.day).state;
@@ -561,7 +563,7 @@ describe("content expansion and balance safeguards", () => {
       rewarded: true,
     };
     const fresh = quiet.advance(state, 1).state.works[0].stats.newReaders;
-    const old = quiet.advance(state, 400).state.works[0].stats.newReaders;
+    const old = play(quiet, state, 400).works[0].stats.newReaders;
     expect(fresh).toBeGreaterThan(0);
     expect(old).toBeLessThan(fresh * 0.3);
     const obscure = structuredClone(state);
@@ -606,7 +608,7 @@ describe("content expansion and balance safeguards", () => {
     };
     const { restMin, restMax } = defaultContent.balance.life;
     expect(quiet.advance(state, restMin - 1).state.works).toHaveLength(1);
-    expect(quiet.advance(state, restMax + 1).state.works).toHaveLength(2);
+    expect(settleWork(quiet, quiet.advance(state, restMax + 1).state).works).toHaveLength(2);
   });
 
   it("[FR-EVENT-004][T-08] never targets backlist works with serial-only events", () => {

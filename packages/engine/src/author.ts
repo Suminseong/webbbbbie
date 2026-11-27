@@ -339,6 +339,24 @@ export function createWork(
   );
 }
 
+/** One request per closed day; the first cause wins and reserves one active slot. */
+export function requestNewWork(
+  state: LifeState,
+  content: Content,
+  day: number,
+  path: StartPath,
+  sourceTitle: string,
+  reasonId: string,
+) {
+  if (
+    state.pendingNewWork ||
+    state.works.filter(activeWork).length >= content.balance.life.maxActiveWorks
+  )
+    return false;
+  state.pendingNewWork = { id: "NW-" + day, day, path, sourceTitle, reasonId };
+  return true;
+}
+
 export function relevantAptitudes(author: Author, work: Work) {
   const keys = assetAptitudes(work);
   return author.aptitudes.filter((aptitude) =>

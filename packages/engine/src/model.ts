@@ -189,6 +189,26 @@ const work = z.object({
   manual: z.boolean(),
   history: z.array(history),
   chapters: chapterLog.nullable().default(null),
+  detail: z
+    .object({
+      since: natural,
+      paidReads: volume,
+      exposure: z.array(word),
+      journal: z
+        .array(
+          z.object({
+            type: word,
+            day: natural,
+            message: z.string(),
+            workId: word.nullable(),
+          }),
+        )
+        .default([]),
+      history: z.array(z.tuple([natural, score, natural, natural, volume])),
+    })
+    .nullable()
+    .default(null),
+  endingTarget: natural.nullable().default(null),
   hiatusUntil: natural.nullable(),
   /** Forced rest has a minimum duration; a voluntary hiatus may end early. */
   hiatusLockedUntil: natural.nullable().default(null),
@@ -270,6 +290,7 @@ const engineEvent = z.object({
     "STATE_CHANGED",
     "COMMAND",
     "WORK_ORDER",
+    "WORK_EXPOSURE",
     "PAYOUT",
     "DAY_CLOSED",
   ]),
@@ -357,7 +378,7 @@ export type SocialStat = (typeof socialKeys)[number];
 export type LifeEndPolicy = (state: Readonly<LifeState>) => boolean;
 export const neverEnd: LifeEndPolicy = () => false;
 export const SCHEMA_VERSION = 3;
-export const RULES_VERSION = "0.3.4";
+export const RULES_VERSION = "0.3.5";
 export type AdvanceResult = {
   state: LifeState;
   events: EngineEvent[];

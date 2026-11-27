@@ -1,6 +1,7 @@
 import {
   displayName,
   oneTimeExpenses,
+  playerActionRules,
   matchingText,
   sourceText,
   tagUnlocks,
@@ -211,13 +212,23 @@ export function chapterFunnel(work: Work) {
   };
 }
 
-export function workView(work: Work, content: Content) {
+export function workView(work: Work, content: Content, state?: LifeState) {
   const platform = content.platforms.find(
     (candidate) => candidate.id === work.platformId,
   )!;
   const sources = Object.entries(work.stats.newBySource);
   const bySource = distribute(sources.map(([, value]) => value));
   const byAge = distribute(work.stats.newByAge);
+  const detail = work.detail;
+  const expected = sum(detail?.history.map((row) => row[3]) ?? []);
+  const fulfilled = sum(
+    detail?.history.map((row) => Math.min(row[2], row[3])) ?? [],
+  );
+  const settlements =
+    state?.ledger.filter(
+      (row) => row.workId === work.id && row.kind === "PAYOUT",
+    ) ?? [];
+  const latestSettlement = settlements.at(-1);
   return {
     id: work.id,
     title: workTitle(work),
@@ -237,6 +248,53 @@ export function workView(work: Work, content: Content) {
     status: work.status,
     statusLabel: statusNames[work.status],
     startDay: work.startDay,
+    duration: Math.max(
+      0,
+      (work.end?.day ?? state?.day ?? work.startDay) - work.startDay,
+    ),
+    endingTarget: work.endingTarget,
+    detail: {
+      since: detail?.since ?? null,
+      partial: !detail || detail.since > work.startDay,
+      paidReads: detail?.paidReads ?? null,
+      stability: expected > 0 ? fulfilled / expected : null,
+      expected,
+      fulfilled,
+      history:
+        detail?.history.map(([day, quality, posted, expected, paidReads]) => ({
+          day,
+          quality,
+          posted,
+          expected,
+          paidReads,
+        })) ?? [],
+    },
+    latestSettlement: latestSettlement
+      ? { day: latestSettlement.day, amount: latestSettlement.amount }
+      : null,
+    journal: (
+      detail?.journal ??
+      (state?.log ?? []).filter(
+        (row) =>
+          row.workId === work.id &&
+          [
+            "EFFECT_APPLIED",
+            "WORK_STATUS_CHANGED",
+            "COMMAND",
+            "WORK_ORDER",
+            "PAYOUT",
+            "WORK_EXPOSURE",
+          ].includes(row.type),
+      )
+    ).map((row) => ({ ...row })),
+    exposure: (detail?.exposure ?? []).map(
+      (key) => sourceNames[key as keyof typeof sourceNames],
+    ),
+    sources: sources.map(([key, value]) => ({
+      label: sourceNames[key as keyof typeof sourceNames],
+      count: value,
+      share: work.stats.newReaders > 0 ? value / work.stats.newReaders : 0,
+    })),
     target: work.targetChapters,
     published: work.published,
     stock: work.stock,
@@ -251,7 +309,14 @@ export function workView(work: Work, content: Content) {
     latestViews: Math.floor(work.stats.latestViews),
     favorites: Math.floor(work.stats.favorites),
     lost: Math.floor(work.stats.lost),
-    newByAge: ageLabels.map((label, index) => ({ label, count: byAge[index] })),
+    newByAge: ageLabels.map((label, index) => ({
+      label,
+      count: byAge[index],
+      share:
+        work.stats.newReaders > 0
+          ? work.stats.newByAge[index] / work.stats.newReaders
+          : 0,
+    })),
     newBySource: sources.map(([key], index) => ({
       label: sourceNames[key as keyof typeof sourceNames],
       count: bySource[index],
@@ -276,6 +341,7 @@ export function workView(work: Work, content: Content) {
       serial(work) || (work.status === "HIATUS" && work.hiatusKind === "STOCK"),
     canHiatus: serial(work),
     canResume: work.status === "HIATUS",
+    canPrepareEnding: serial(work) || work.status === "HIATUS",
     canDrop:
       serial(work) || work.status === "HIATUS" || work.status === "PLANNING",
     inflow: Math.floor(work.stats.totalNew),
@@ -489,6 +555,8 @@ export function planOptionsView(content: Content, state?: LifeState) {
   const options = planOptions(content);
   const chapters = state ? unlockedTagChapters(state) : 0;
   return {
+    endingMaxRemaining: playerActionRules.endingMaxRemaining,
+    endingPlotWeight: playerActionRules.endingPlotWeight,
     genres: options.genres.map((value) => ({
       value,
       label: displayName("entity.genre", value),

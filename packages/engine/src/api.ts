@@ -25,6 +25,7 @@ import {
   lifeSummary,
   planWork as buildPlanWork,
   purchase as buildPurchase,
+  prepareEnding as buildPrepareEnding,
   resumeWork as buildResumeWork,
   retire as buildRetire,
   reviseWork as buildReviseWork,
@@ -168,6 +169,29 @@ export function createEngine(
   const keep = content.balance.events;
   function addLog(state: LifeState, events: readonly EngineEvent[]) {
     state.log = state.log.concat(events).slice(-keep.logKeep);
+    for (const work of state.works) {
+      if (!work.detail) continue;
+      work.detail.journal = work.detail.journal
+        .concat(
+          events.filter(
+            (row) =>
+              row.workId === work.id &&
+              [
+                "EFFECT_APPLIED",
+                "WORK_STATUS_CHANGED",
+                "COMMAND",
+                "WORK_ORDER",
+                "PAYOUT",
+                "WORK_EXPOSURE",
+              ].includes(row.type),
+          ),
+        )
+        .filter(
+          (row) =>
+            row.day >= state.day - content.balance.economy.ledgerKeepDays,
+        )
+        .slice(-200);
+    }
   }
 
   function createLife(seed: number): LifeState {
@@ -236,7 +260,7 @@ export function createEngine(
       );
     const posted = writeAndPublish(state, content, time, day, events);
     updateContracts(state, content, day, events);
-    const gained = resolveAudience(state, content, day);
+    const gained = resolveAudience(state, content, day, events);
     settle(state, content, day, events);
     compactLedger(state, content, day);
     finishWorks(state, content, day, events);
@@ -389,7 +413,11 @@ export function createEngine(
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.3" &&
       version.contentHash === LEGACY_HASH_033;
-    const previous = fromV030 || fromV031 || fromV032 || fromV033;
+    const fromV034 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.4" &&
+      version.contentHash === LEGACY_HASH_033;
+    const previous = fromV030 || fromV031 || fromV032 || fromV033 || fromV034;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }
@@ -509,6 +537,8 @@ export function createEngine(
     deserialize,
     confirmNewWork: (state: LifeState, id: string, plan: WorkPlan) =>
       command(state, buildConfirmNewWork(id, plan), true),
+    prepareEnding: (state: LifeState, id: string, remaining: number) =>
+      command(state, buildPrepareEnding(id, remaining)),
     getPendingNewWork: (state: LifeState) => newWorkView(state, content),
     planWork: (state: LifeState, plan: WorkPlan) =>
       command(state, buildPlanWork(plan)),
@@ -544,10 +574,10 @@ export function createEngine(
     getLifeSettings: (state: LifeState) => lifeSettingsView(state, content),
     getAuthorView: (state: LifeState) => authorView(state, content),
     getWorkViews: (state: LifeState) =>
-      state.works.map((work) => workView(work, content)),
+      state.works.map((work) => workView(work, content, state)),
     getWorkView: (state: LifeState, id: string) => {
       const work = state.works.find((candidate) => candidate.id === id);
-      return work ? workView(work, content) : undefined;
+      return work ? workView(work, content, state) : undefined;
     },
     getPending: (state: LifeState) => pendingView(state, content),
     getEventLog: (
@@ -578,6 +608,7 @@ export function createEngine(
 }
 
 export const {
+  prepareEnding,
   confirmNewWork,
   getPendingNewWork,
   planWork,

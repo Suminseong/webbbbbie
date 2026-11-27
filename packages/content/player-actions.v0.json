@@ -5,5 +5,7 @@
   "stressRiskStart": 85,
   "driveRiskStart": 10,
   "stressFailureScale": 0.025,
-  "driveFailureScale": 0.04
+  "driveFailureScale": 0.04,
+  "endingMaxRemaining": 200,
+  "endingPlotWeight": 1.5
 }

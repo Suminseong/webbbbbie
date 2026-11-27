@@ -137,6 +137,8 @@ export const playerActionRules = z
     driveRiskStart: natural.max(100),
     stressFailureScale: probability,
     driveFailureScale: probability,
+    endingMaxRemaining: days,
+    endingPlotWeight: finite.positive(),
   })
   .strict()
   .parse(playerActionData);

@@ -2,15 +2,15 @@
   {
     "seed": 42,
     "days": 180,
-    "sha256": "92a37f6b866c49ff0ba1ac3e01ea5b7d1c5b056546c5fc60ebf38757babd89dd",
-    "rulesVersion": "0.3.4",
-    "reason": "규칙 0.3.4: 후속 신작은 하루 확정 후 설정 대기, 자동 도구는 결정적 기본 기획으로 확정"
+    "sha256": "ac7b713b146383f7652178c5d542bd925e6cfcbd96d12027c7fbe2813232524e",
+    "rulesVersion": "0.3.5",
+    "reason": "0.3.5 작품별 실제 품질·유료 열람·연재 이력 집계 및 완결 준비 방침, writingSlots 실제 집필 배분 수정"
   },
   {
     "seed": 712,
     "days": 120,
-    "sha256": "a3194c6428c0b0123a61b3a55925038962d9f7d7e3f9cd6bb24e84f2f3b6637c",
-    "rulesVersion": "0.3.4",
-    "reason": "규칙 0.3.4: 후속 신작은 하루 확정 후 설정 대기, 자동 도구는 결정적 기본 기획으로 확정"
+    "sha256": "497c695c04c66f2839cc8d20e24abf4648cfdbaa7ebfd286c3cc4f27bd865bce",
+    "rulesVersion": "0.3.5",
+    "reason": "0.3.5 작품별 실제 품질·유료 열람·연재 이력 집계 및 완결 준비 방침, writingSlots 실제 집필 배분 수정"
   }
 ]

@@ -572,7 +572,9 @@ describe("[FR-SAVE] 사건 확장 후 이전 저장 호환", () => {
   ])("%s 저장을 읽고 규칙 0.3.3으로 올려 계속 진행·왕복한다", (name) => {
     const loaded = product.deserialize(read(name));
     if (!loaded.ok) throw new Error(name + " " + loaded.error);
-    expect(loaded.state.rulesVersion).toBe("0.3.4");
+    expect(loaded.state.rulesVersion).toBe(
+      createEngine().createLife(0).rulesVersion,
+    );
     const again = product.deserialize(product.serialize(loaded.state));
     expect(again.ok).toBe(true);
     let state = loaded.state;
@@ -627,9 +629,11 @@ describe("[FR-SAVE] 사건 확장 후 이전 저장 호환", () => {
     const run = (seed: number) => {
       let state = product.createLife(seed);
       while (state.day < 300)
-        state = state.pendingNewWork ? settleWork(product, state) : state.pending
-          ? choose(product, state, product.getPending(state)!.choices[0].id)
-          : product.advance(state, 300 - state.day).state;
+        state = state.pendingNewWork
+          ? settleWork(product, state)
+          : state.pending
+            ? choose(product, state, product.getPending(state)!.choices[0].id)
+            : product.advance(state, 300 - state.day).state;
       return state;
     };
     const a = run(9);

@@ -17,7 +17,9 @@ for (const width of [1440, 390, 320])
       .allTextContents();
     expect(conditions).toHaveLength(12);
     const original = await background.innerText();
-    await page.locator("#start-penName").fill("<b>나의 필명</b>");
+    const penName =
+      width === 320 ? "abcdefghijklmnopqrstuvwxyzABCD" : "<b>나의 필명</b>";
+    await page.locator("#start-penName").fill(penName);
     await page.locator("#start-message").fill("오늘도 한 문장.\n<img src=x>");
     await page
       .locator("#start-motive")
@@ -47,7 +49,12 @@ for (const width of [1440, 390, 320])
     await start.locator('button[type="submit"]').click();
     await expect(start).toHaveCount(0);
     await expect(page.locator("[data-work]")).toHaveCount(1);
-    await expect(page.locator(".author h2")).toHaveText("<b>나의 필명</b>");
+    await expect(page.locator(".author h2")).toHaveText(penName);
+    expect(
+      await page
+        .locator("html")
+        .evaluate((el) => el.scrollWidth <= el.clientWidth),
+    ).toBe(true);
     await expect(page.locator(".author .motive")).toContainText("<img src=x>");
     await expect(page.locator(".work-description")).toContainText(
       "<b>소개는 수치와 무관</b>",
@@ -71,7 +78,7 @@ for (const width of [1440, 390, 320])
         ...Object.values(save.state.author.abilities),
       ].map(Number),
     ).toEqual(conditions.map(Number));
-    expect(save.state.author.identity.penName).toBe("<b>나의 필명</b>");
+    expect(save.state.author.identity.penName).toBe(penName);
     expect(save.state.works[0]).toMatchObject({
       description: "첫 작품의 줄거리\n<b>소개는 수치와 무관</b>",
       platformId: "nopia",
@@ -79,7 +86,7 @@ for (const width of [1440, 390, 320])
     expect(save.state.works[0].tags).toHaveLength(2);
     await page.reload();
     await expect(page.locator("#start-form")).toHaveCount(0);
-    await expect(page.locator(".author h2")).toHaveText("<b>나의 필명</b>");
+    await expect(page.locator(".author h2")).toHaveText(penName);
     await expect(page.locator(".work-description")).toContainText(
       "첫 작품의 줄거리",
     );

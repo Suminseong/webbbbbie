@@ -1,4 +1,4 @@
-import type { Content } from "@webbbbbie/content";
+import type { Content, StartPath } from "@webbbbbie/content";
 import {
   displayName,
   oneTimeExpenses,
@@ -49,6 +49,7 @@ export function runCommand(
   copy: LifeState,
   content: Content,
   run: Run,
+  allowNewWork = false,
 ): CommandOutcome {
   if (original.phase === "ENDED")
     return {
@@ -58,7 +59,10 @@ export function runCommand(
       error: "E_ENDED",
       reason: text("system.command.ended"),
     };
-  if (original.phase === "AWAITING_CHOICE")
+  if (
+    original.phase === "AWAITING_CHOICE" ||
+    (original.phase === "AWAITING_WORK" && !allowNewWork)
+  )
     return {
       ok: false,
       state: original,
@@ -152,7 +156,7 @@ function validatePlan(
   return { title, tags };
 }
 
-export function planWork(plan: WorkPlan): Run {
+export function planWork(plan: WorkPlan, path?: StartPath): Run {
   return (state, content, events) => {
     if (!state.author.startPath)
       return fail("E_NOT_ALLOWED", "system.command.no-path");
@@ -170,7 +174,7 @@ export function planWork(plan: WorkPlan): Run {
       blankWork(
         state,
         state.day,
-        state.author.startPath,
+        path ?? state.author.startPath,
         {
           title: checked.title,
           genre: plan.genre,
@@ -191,6 +195,18 @@ export function planWork(plan: WorkPlan): Run {
       text("engine.log.cmd-plan", { work_title: checked.title }),
       state.works[state.works.length - 1].id,
     );
+  };
+}
+
+export function confirmNewWork(id: string, plan: WorkPlan): Run {
+  return (state, content, events) => {
+    const waiting = state.pendingNewWork;
+    if (state.phase !== "AWAITING_WORK" || !waiting || waiting.id !== id)
+      return fail("E_NOT_ALLOWED", "system.command.no-new-work");
+    const failure = planWork(plan, waiting.path)(state, content, events);
+    if (failure) return failure;
+    state.pendingNewWork = null;
+    state.phase = "READY";
   };
 }
 

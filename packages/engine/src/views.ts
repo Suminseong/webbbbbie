@@ -7,7 +7,7 @@ import {
   text,
 } from "@webbbbbie/content";
 import type { Content } from "@webbbbbie/content";
-import { serial, sum, workTitle } from "./author";
+import { createWork, serial, sum, workTitle } from "./author";
 import {
   cadences,
   maskCadence,
@@ -77,6 +77,29 @@ const pathNames = {
   PARODY: text("label.creation-path.parody"),
   PLAGIARISM: text("label.creation-path.plagiarism"),
 };
+
+export function newWorkView(state: LifeState, content: Content) {
+  const waiting = state.pendingNewWork;
+  if (!waiting) return null;
+  const preview = { ...state, works: [...state.works] };
+  createWork(preview, content, waiting.day, waiting.path);
+  const work = preview.works[preview.works.length - 1];
+  return {
+    id: waiting.id,
+    day: waiting.day,
+    title: waiting.sourceTitle,
+    reason: text(waiting.reasonId),
+    path: pathNames[waiting.path],
+    defaultPlan: {
+      title: workTitle(work),
+      genre: work.genre,
+      material: work.material,
+      tags: [...work.tags],
+      platformId: work.platformId,
+      perWeek: maskCadence(work.mask),
+    },
+  };
+}
 const ageLabels = [
   text("label.readers-age.teens"),
   text("label.readers-age.twenties"),

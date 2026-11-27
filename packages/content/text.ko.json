@@ -1302,5 +1302,14 @@
   "event.equipment-breakdown.body": "작업하던 장비가 갑자기 꺼졌다. 다시 켜도 상태가 이상하다.",
   "event.equipment-breakdown.choice.repair": "수리한다",
   "event.equipment-breakdown.choice.workaround": "버텨 본다",
-  "event.equipment-breakdown.result": "{{event_title}} · 결과 반영"
+  "event.equipment-breakdown.result": "{{event_title}} · 결과 반영",
+  "system.new-work.event": "신작을 시작하기로 했습니다. 작품 설정을 마치면 다음 날로 진행할 수 있습니다.",
+  "system.new-work.state": "신작을 쓰고 싶은 충동이 생겼습니다. 작품 설정을 마쳐 주세요.",
+  "system.new-work.auto": "다음 작품을 시작할 때가 됐습니다. 새 작품의 설정을 정해 주세요.",
+  "ui.new-work.auto-title": "다음 작품의 시작",
+  "ui.new-work.path": "집필 경로 · {{path}}",
+  "ui.new-work.invalid": "제목을 입력하고 태그를 1~3개 선택해 주세요.",
+  "ui.new-work.export": "설정 대기 상태 내보내기",
+  "system.command.no-new-work": "확정할 신작 설정이 없습니다.",
+  "engine.log.new-work-request": "{{source}} · 신작 설정 대기"
 }

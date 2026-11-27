@@ -19,6 +19,7 @@ import {
 } from "./economy";
 import {
   dropWork as buildDropWork,
+  confirmNewWork as buildConfirmNewWork,
   extraWrite as buildExtraWrite,
   hiatusWork as buildHiatusWork,
   lifeSummary,
@@ -65,6 +66,7 @@ import {
   ledgerView,
   pendingView,
   workView,
+  newWorkView,
 } from "./views";
 import {
   finishWorks,
@@ -148,6 +150,7 @@ function copyForCommand(state: LifeState): LifeState {
 const LEGACY_HASH_030 = "ea70dee1";
 const LEGACY_HASH_031 = "3916f2ee";
 const LEGACY_HASH_032 = "1d93c10d";
+const LEGACY_HASH_033 = "9eb5a1e7";
 
 export function createEngine(
   content: Content = defaultContent,
@@ -193,6 +196,7 @@ export function createEngine(
       eventHistory: [],
       archive: [],
       pending: null,
+      pendingNewWork: null,
       ending: null,
       log: [],
       summaries: [],
@@ -254,6 +258,7 @@ export function createEngine(
     });
     if (state.summaries.length > keep.summaryKeep) state.summaries.shift();
     if (lifeEnd(state)) state.phase = "ENDED";
+    else if (state.pendingNewWork) state.phase = "AWAITING_WORK";
     record(events, "DAY_CLOSED", day, text("engine.log.day-closed", { day }));
   }
 
@@ -320,8 +325,15 @@ export function createEngine(
   function command(
     state: LifeState,
     run: Parameters<typeof runCommand>[3],
+    allowNewWork = false,
   ): ReturnType<typeof runCommand> {
-    const outcome = runCommand(state, copyForCommand(state), content, run);
+    const outcome = runCommand(
+      state,
+      copyForCommand(state),
+      content,
+      run,
+      allowNewWork,
+    );
     if (outcome.ok) addLog(outcome.state, outcome.events);
     return outcome;
   }
@@ -373,7 +385,11 @@ export function createEngine(
       version.schemaVersion === 3 &&
       version.rulesVersion === "0.3.2" &&
       version.contentHash === LEGACY_HASH_032;
-    const previous = fromV030 || fromV031 || fromV032;
+    const fromV033 =
+      version.schemaVersion === 3 &&
+      version.rulesVersion === "0.3.3" &&
+      version.contentHash === LEGACY_HASH_033;
+    const previous = fromV030 || fromV031 || fromV032 || fromV033;
     if (!current && !previous) {
       return { ok: false, error: "E_SAVE_VERSION" };
     }
@@ -418,6 +434,12 @@ export function createEngine(
       (state.phase === "ENDED") !== !!state.ending ||
       (state.phase === "AWAITING_CHOICE") !== !!agenda ||
       !!pending !== !!agenda ||
+      (state.phase === "AWAITING_WORK") !== !!state.pendingNewWork ||
+      (state.pendingNewWork !== null &&
+        (state.pendingNewWork.day !== state.day ||
+          state.pendingNewWork.id !== "NW-" + state.day ||
+          state.works.filter((work) => !work.end).length >=
+            content.balance.life.maxActiveWorks)) ||
       state.archive.length !==
         (pending?.tier === "ORIGIN" ? 0 : state.day + 1) ||
       works.size !== state.works.length ||
@@ -485,6 +507,9 @@ export function createEngine(
     choose,
     serialize,
     deserialize,
+    confirmNewWork: (state: LifeState, id: string, plan: WorkPlan) =>
+      command(state, buildConfirmNewWork(id, plan), true),
+    getPendingNewWork: (state: LifeState) => newWorkView(state, content),
     planWork: (state: LifeState, plan: WorkPlan) =>
       command(state, buildPlanWork(plan)),
     reviseWork: (state: LifeState, id: string, plan: WorkPlan) =>
@@ -553,6 +578,8 @@ export function createEngine(
 }
 
 export const {
+  confirmNewWork,
+  getPendingNewWork,
   planWork,
   reviseWork,
   setWorkPolicy,

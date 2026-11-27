@@ -4,6 +4,8 @@ import "./style.css";
 import {
   abilityNames,
   advance,
+  confirmNewWork,
+  getPendingNewWork,
   cadences,
   choose,
   conditionNames,
@@ -103,6 +105,7 @@ let planDraft: PlanDraft | null = null;
 let confirmDrop: string | null = null;
 let confirmRetire = false;
 let dirty = false;
+let requiredWorkId: string | null = null;
 
 app.innerHTML = `
 <header class="top">
@@ -119,6 +122,30 @@ app.innerHTML = `
 <main id="game" class="shell"></main>
 <input id="import-file" type="file" accept=".json,application/json" hidden>
 <div id="feedback" class="feedback" role="status" hidden></div>`;
+app.insertAdjacentHTML(
+  "beforeend",
+  `<dialog id="required-work" role="dialog" aria-modal="true" aria-labelledby="required-work-title" aria-describedby="required-work-reason"></dialog>`,
+);
+const requiredDialog =
+  document.querySelector<HTMLDialogElement>("#required-work")!;
+requiredDialog.addEventListener("cancel", (event) => event.preventDefault());
+requiredDialog.addEventListener("keydown", (event) => {
+  if (event.key !== "Tab") return;
+  const inputs = Array.from(
+    requiredDialog.querySelectorAll<HTMLElement>(
+      "input:not(:disabled), select:not(:disabled), button:not(:disabled)",
+    ),
+  );
+  const first = inputs[0],
+    last = inputs[inputs.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last?.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first?.focus();
+  }
+});
 const game = document.querySelector<HTMLElement>("#game")!;
 const feedback = document.querySelector<HTMLElement>("#feedback")!;
 const seedInput = document.querySelector<HTMLInputElement>("#seed")!;
@@ -488,9 +515,11 @@ function blankDraft(editing: string | null = null): PlanDraft {
   };
 }
 
-function renderPlanForm() {
+function renderPlanForm(required = false) {
+  if (getPendingNewWork(state) && !required) return "";
   if (!planDraft) return "";
   const options = getPlanOptions(state);
+  if (required) options.tags = options.tags.filter((tag) => tag.unlocked);
   const draft = planDraft;
   const choices = (
     list: { value: string; label: string }[],
@@ -502,7 +531,7 @@ function renderPlanForm() {
           `<option value="${escape(item.value)}" ${item.value === selected ? "selected" : ""}>${escape(item.label)}</option>`,
       )
       .join("");
-  return `<form id="plan-form" class="panel plan-form" aria-label="${ui("ui.plan.heading")}">
+  return `<form id="${required ? "required-work-form" : "plan-form"}" class="panel plan-form" aria-label="${ui("ui.plan.heading")}">
     <div class="section-label">${ui(draft.editing ? "ui.plan.edit-heading" : "ui.plan.heading")}</div>
     <p class="small-muted">${ui("ui.plan.intro")}</p>
     <label class="field">${ui("ui.plan.title")}<input id="plan-title" data-draft="title" type="text" maxlength="${options.maxTitle}" required value="${escape(draft.title)}" placeholder="${ui("ui.plan.title-placeholder")}"></label>
@@ -518,8 +547,46 @@ function renderPlanForm() {
     </fieldset>
     <p class="small-muted">${ui("ui.plan.title-note")}</p>
     <div class="cmd-row"><button class="primary" type="submit">${ui(draft.editing ? "ui.plan.save" : "ui.plan.create")}</button>
-    <button type="button" data-action="plan-cancel">${ui("ui.plan.cancel")}</button></div>
+    ${required ? "" : `<button type="button" data-action="plan-cancel">${ui("ui.plan.cancel")}</button>`}</div>
+    ${required ? `<p id="required-work-error" class="notice" aria-live="polite"></p>` : ""}
   </form>`;
+}
+
+function validateRequiredForm() {
+  if (!requiredDialog.open || !planDraft) return;
+  const valid =
+    !!planDraft.title.trim() &&
+    planDraft.tags.length > 0 &&
+    planDraft.tags.length <= getPlanOptions(state).maxTags;
+  requiredDialog.querySelector<HTMLButtonElement>(
+    'button[type="submit"]',
+  )!.disabled = !valid;
+  requiredDialog.querySelector("#required-work-error")!.textContent = valid
+    ? ""
+    : text("ui.new-work.invalid");
+}
+
+function syncRequiredWork() {
+  const waiting = getPendingNewWork(state);
+  if (!waiting) {
+    if (requiredDialog.open) requiredDialog.close();
+    requiredDialog.innerHTML = "";
+    requiredWorkId = null;
+    return;
+  }
+  stop();
+  resumeAfterChoice = false;
+  if (requiredWorkId === waiting.id && requiredDialog.open) return;
+  requiredWorkId = waiting.id;
+  planDraft = {
+    ...waiting.defaultPlan,
+    tags: [...waiting.defaultPlan.tags],
+    editing: null,
+  };
+  requiredDialog.innerHTML = `<h2 id="required-work-title">${escape(waiting.title)}</h2><p id="required-work-reason">${escape(waiting.reason)}</p><p class="small-muted">${ui("ui.new-work.path", { path: waiting.path })}</p>${renderPlanForm(true)}<button type="button" data-action="export">${ui("ui.new-work.export")}</button>`;
+  requiredDialog.showModal();
+  requiredDialog.querySelector<HTMLInputElement>("#plan-title")!.focus();
+  validateRequiredForm();
 }
 
 function renderLife() {
@@ -795,6 +862,7 @@ const editing = () => {
 };
 
 function render(force = true) {
+  if (getPendingNewWork(state)) stop();
   if (!force && editing()) {
     dirty = true;
     return;
@@ -834,6 +902,7 @@ function render(force = true) {
   } else {
     game.innerHTML = renderClock(author) + layout;
   }
+  syncRequiredWork();
 }
 
 function snapshot(): SavedLife {
@@ -882,6 +951,7 @@ function auto() {
 }
 
 function loadLife(text: string, label: string) {
+  if (state.pendingNewWork && requiredDialog.open) return;
   const loaded = deserialize(text);
   if (!loaded.ok) {
     feedbackText(
@@ -1030,6 +1100,7 @@ app.addEventListener("input", (event) => {
         });
     }
   }
+  validateRequiredForm();
   if (target.dataset.life && lifeDraft) {
     const key = target.dataset.life as keyof TimePolicy;
     lifeDraft.time[key] = Math.max(0, Math.floor(Number(target.value) || 0));
@@ -1087,6 +1158,7 @@ app.addEventListener("change", (event) => {
       planDraft.tags.push(tag);
     } else planDraft.tags = planDraft.tags.filter((item) => item !== tag);
     feedbackText("");
+    validateRequiredForm();
   }
   if (target.id === "auto-plan") commit(setAutoPlan(state, target.checked));
 });
@@ -1099,6 +1171,18 @@ app.addEventListener("submit", (event) => {
   const form = event.target;
   if (!(form instanceof HTMLFormElement)) return;
   event.preventDefault();
+  if (form.id === "required-work-form" && planDraft && requiredWorkId) {
+    const result = confirmNewWork(state, requiredWorkId, planDraft);
+    if (!result.ok)
+      requiredDialog.querySelector("#required-work-error")!.textContent =
+        result.reason;
+    else {
+      planDraft = null;
+      requiredWorkId = null;
+      commit(result);
+    }
+    return;
+  }
   if (form.id === "plan-form" && planDraft) {
     const { editing: target, ...plan } = planDraft;
     const done = commit(

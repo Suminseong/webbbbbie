@@ -1,5 +1,7 @@
 # Engine view contract
 
+Rules 0.3.4: `getPendingNewWork(state)` exposes a mandatory request and deterministic `defaultPlan`; `confirmNewWork(state, requestId, plan)` validates the plan and creates exactly one work. Daily event effects are already committed when phase becomes `AWAITING_WORK`, so confirmation never replays them. Event, state and automatic next-work requests on one day merge into the first request. All later automatic works, including a restart after takedown, use this path. The day-zero origin retains its existing first planning work and pre-publication editing screen. The modal permits JSON export, blocks background navigation and cannot be dismissed. Headless drivers explicitly confirm the default plan; `advance` itself always stops. Saves from 0.3.0–0.3.3 load with no pending work.
+
 Source: T-11 and NFR-006/009. All commands accept the current opaque LifeState from the previous result. The browser reads the following selectors.
 
 | API                                                      | Public data                                                                                                                                                                                                                                                                                                               |

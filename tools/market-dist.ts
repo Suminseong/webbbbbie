@@ -1,3 +1,4 @@
+import { getPendingNewWork, confirmNewWork } from "@webbbbbie/engine";
 import {
   advance,
   choose,
@@ -11,6 +12,13 @@ const rows: { views: number; ch: number; end?: string }[] = [];
 for (let seed = 1; seed <= N; seed++) {
   let s = createLife(seed * 7919);
   while (s.day < DAYS && s.phase !== "ENDED") {
+  const waiting = getPendingNewWork(s);
+  if (waiting) {
+    const made = confirmNewWork(s, waiting.id, waiting.defaultPlan);
+    if (!made.ok) throw new Error(made.reason);
+    s = made.state;
+    continue;
+  }
     const p = getPending(s);
     if (p) {
       const r = choose(

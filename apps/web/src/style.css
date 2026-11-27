@@ -347,6 +347,7 @@ button.icon {
 }
 .author h2 {
   margin: 0.27rem 0 0.14rem;
+  overflow-wrap: anywhere;
 }
 .small-muted,
 dt {
